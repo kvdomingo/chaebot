@@ -53,7 +53,7 @@ List of commands:
 """
 
 
-class MyClient(discord.Client):
+class ItzyClient(discord.Client):
     async def on_ready(self):
         print(f'Logged in as {self.user}')
 
@@ -73,17 +73,17 @@ class MyClient(discord.Client):
             if query.upper() in ACCOUNTS.keys() or query.upper() == 'RANDOM':
                 if query.upper() == 'RANDOM':
                     account_keys = list(ACCOUNTS.keys())
-                    account_cat = ACCOUNTS[account_keys[random.randint(0, len(account_keys))]]
+                    account_cat = ACCOUNTS[account_keys[random.randint(0, len(account_keys)-1)]]
                 else:
                     account_cat = ACCOUNTS[query.upper()]
-                tl = api.GetUserTimeline(screen_name=account_cat[random.randint(0, len(account_cat))])
-                media_post = tl[random.randint(0, len(tl))].media
+                tl = api.GetUserTimeline(screen_name=account_cat[random.randint(0, len(account_cat)-1)])
+                media_post = tl[random.randint(0, len(tl)-1)].media
                 while media_post == None or len(media_post) == 0:
-                    media_post = tl[random.randint(0, len(tl))].media
+                    media_post = tl[random.randint(0, len(tl)-1)].media
                 links = [media.media_url_https for media in media_post]
                 for link in links:
                     await message.channel.send(link)
 
 
-client = MyClient()
+client = ItzyClient()
 client.run(os.environ['DISCORD_TOKEN'])
