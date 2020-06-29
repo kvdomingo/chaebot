@@ -84,10 +84,10 @@ async def media_handler(ctx, member, **kwargs):
 
     video_info = media_post[0].video_info
     if video_info is not None:
-        if len(video_info['variants']) > 1:
-            link = video_info['variants'][1]['url']
-        else:
-            link = video_info['variants'][0]['url']
+        for i, vid in enumerate(video_info['variants']):
+            if '.m3u8' not in vid['url']:
+                link = vid['url']
+                break
         await ctx.send(link)
     else:
         links = [media.media_url_https for media in media_post]
