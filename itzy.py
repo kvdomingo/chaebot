@@ -8,15 +8,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 ALIASES = {
-    'RANDOM': [
-        'sisi',
-        'bayan ko',
-        'bayan',
-        'mahusay',
-        'bayan',
-        'husay',
-        'huhusay',
-    ],
     'RYUJIN': [
         'ryujin',
         'joanne',
@@ -135,8 +126,7 @@ async def itz(ctx, person):
                 member = key
                 break
         if member is None:
-            ctx.send("Sorry, I don't recognize that member or alias :cry:")
-            return
+            member = random.choice(ITZY_ACCOUNTS.keys())
         await media_handler(ctx, member)
 
 @client.command(aliases=['get-aliases'], help='Get a list of member aliases')
