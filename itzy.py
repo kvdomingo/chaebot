@@ -3,11 +3,9 @@ import random
 import twitter
 import discord
 from discord.ext import commands, tasks
-from itertools import cycle
 from dotenv import load_dotenv
 
 load_dotenv()
-
 
 ITZY_ACCOUNTS = {
     'ALL': [
@@ -76,6 +74,9 @@ async def ping(ctx):
 
 @client.command()
 async def itz(ctx, member):
+    if member is None or member.upper() not in ITZY_ACCOUNTS:
+        await ctx.send("That's not a member of ITZY :cry:")
+        return
     account_cat = ITZY_ACCOUNTS[member.upper()]
     tl = api.GetUserTimeline(screen_name=random.choice(account_cat))
     media_post = (random.choice(tl)).media
@@ -89,6 +90,7 @@ async def itz(ctx, member):
 async def clear(ctx, amount):
     if amount == None or amount < 1:
         await ctx.send('Please specify a positive number.')
+        return
     await ctx.channel.purge(limit=amount)
 
 @tasks.loop(seconds=60*60)
