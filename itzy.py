@@ -111,9 +111,9 @@ async def ping(ctx):
 
 
 @client.command(help='Get a random pic of the specified member')
-async def itz(ctx, person):
+async def itz(ctx, person, *args):
     if person is None:
-        member = random.choice(ITZY_ACCOUNTS.keys())
+        member = random.choice(list(ITZY_ACCOUNTS.keys()))
         await media_handler(ctx, member)
 
     if person.upper() in ITZY_ACCOUNTS.keys():
@@ -126,7 +126,7 @@ async def itz(ctx, person):
                 member = key
                 break
         if member is None:
-            member = random.choice(ITZY_ACCOUNTS.keys())
+            member = random.choice(list(ITZY_ACCOUNTS.keys()))
         await media_handler(ctx, member)
 
 @client.command(aliases=['get-aliases'], help='Get a list of member aliases')
