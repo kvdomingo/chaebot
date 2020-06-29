@@ -167,7 +167,7 @@ async def hourly_itzy():
     print(f'Connected to channel {channel}')
 
     member = random.choice(list(ITZY_ACCOUNTS.keys()))
-    media_handler(channel, member)
+    await media_handler(channel, member)
 
 
 client.run(os.environ['DISCORD_TOKEN'])
