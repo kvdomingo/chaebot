@@ -67,9 +67,9 @@ client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
 
 @client.event
 async def on_ready():
-    await client.change_presence(status=discord.Status.idle, activity=discord.Game(name='ITZY fancams'))
     print(f'Logged in as {client.user}')
     hourly_itzy.start()
+    hourly_blackpink.start()
 
 
 @client.command(aliases=['wake'], help='Check server response time')
@@ -101,8 +101,18 @@ async def clear(ctx, amount):
 async def hourly_itzy():
     group = 'itzy'
     channel = client.get_channel(int(os.environ['ITZY_CHANNEL']))
-    print(f'Connected to channel {channel}')
+    print(f'Connected to ITZY channel {channel}')
     await media_handler(channel, group, member=None, hourly=True)
+    await client.change_presence(status=discord.Status.idle, activity=discord.Game(name='ITZY fancams'))
+
+
+@tasks.loop(hours=1)
+async def hourly_blackpink():
+    group = 'blackpink'
+    channel = client.get_channel(int(os.environ['BLACKPINK_CHANNEL']))
+    print(f'Connected to BLACKPINK channel {channel}')
+    await media_handler(channel, group, member=None, hourly=True)
+    await client.change_presence(status=discord.Status.idle, activity=discord.Game(name='BLACKPINK fancams'))
 
 
 @hourly_itzy.before_loop
@@ -112,7 +122,20 @@ async def itzy_hour00():
         delta_min = 60 - now.minute
         print(f'Waiting for {delta_min} minutes to start hourly ITZY update...')
         await asyncio.sleep(delta_min * 60)
-        print('Starting hourly update...')
+        print('Starting hourly ITZY update...')
+
+
+@hourly_blackpink.before_loop
+async def blackpink_hour30():
+    now = datetime.now()
+    if now.minute != 30:
+        if now.minute < 30:
+            delta_min = 30 - now.minute
+        elif now.minute > 30:
+            delta_min = 90 - now.minute
+        print(f'Waiting for {delta_min} minutes to start hourly BLACKPINK update...')
+        await asyncio.sleep(delta_min * 60)
+        print('Starting hourly BLACKPINK update...')
 
 
 client.run(os.environ['DISCORD_TOKEN'])
