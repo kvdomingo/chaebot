@@ -1,0 +1,72 @@
+{
+    "ALL": {
+        "accounts": [
+            "archiveitzy",
+            "ITZYofficial"
+        ],
+        "aliases": []
+    },
+    "RYUJIN": {
+        "accounts": [
+            "ryujinpics",
+            "shinryujinpic",
+            "hourlyryu"
+        ],
+        "aliases": [
+            "ryujin",
+            "joanne",
+            "shin"
+        ]
+    },
+    "LIA": {
+        "accounts": [
+            "hourlylia",
+            "liarchive"
+        ],
+        "aliases": [
+            "lia",
+            "julia",
+            "jisu",
+            "jisoo",
+            "choi"
+        ]
+    },
+    "YUNA": {
+        "accounts": [
+            "yuna",
+            "yunaspics",
+            "yunasarchive",
+            "picyuna",
+            "littIeyuna"
+        ],
+        "aliases": [
+            "hussey",
+            "shin"
+        ]
+    },
+    "YEJI": {
+        "accounts": [
+            "hourlyyeji",
+            "yejigallery",
+            "yejiarchives"
+        ],
+        "aliases": [
+            "yeji",
+            "lucy",
+            "hwang"
+        ]
+    },
+    "CHAERYEONG": {
+        "accounts": [
+            "chaerpics"
+        ],
+        "aliases": [
+            "chaeryeong",
+            "chae",
+            "chaer",
+            "ryeong",
+            "judy",
+            "lee"
+        ]
+    }
+}

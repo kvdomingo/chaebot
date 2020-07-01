@@ -1,0 +1,56 @@
+{
+    "JENNIE": {
+        "accounts": [
+            "jenniesarchive",
+            "jenniexpics",
+            "kimjenniepics"
+        ],
+        "aliases": [
+            "jennie",
+            "jen",
+            "ruby",
+            "jane",
+            "kim"
+        ]
+    },
+    "JISOO": {
+        "accounts": [
+            "archivejisoo",
+            "jisoosjpg",
+            "jisooarchives"
+        ],
+        "aliases": [
+            "jisoo",
+            "kim"
+        ]
+    },
+    "LISA": {
+        "accounts": [
+            "milkylisapics",
+            "lisapics_",
+            "BLACKPINK_LISA"
+        ],
+        "aliases": [
+            "lisa",
+            "lalisa",
+            "pranpriya",
+            "manoban"
+        ]
+    },
+    "ROSE": {
+        "accounts": [
+            "archivesrosie",
+            "roseyarchive",
+            "rosesarchive"
+        ],
+        "aliases": [
+            "rose",
+            "rosé",
+            "roseanne",
+            "anne",
+            "park",
+            "chaeyoung",
+            "chaeng"
+        ]
+    }
+}

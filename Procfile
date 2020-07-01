@@ -1,1 +1,1 @@
-worker: python itzy.py
+worker: python kbot.py
