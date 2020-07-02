@@ -33,13 +33,13 @@
     },
     "YUNA": {
         "accounts": [
-            "yuna",
             "yunaspics",
             "yunasarchive",
             "picyuna",
             "littIeyuna"
         ],
         "aliases": [
+            "yuna",
             "hussey",
             "shin"
         ]
