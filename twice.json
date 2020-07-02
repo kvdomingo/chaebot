@@ -1,0 +1,124 @@
+{
+    "NAYEON": {
+        "accounts": [
+            "nayeonpics",
+            "imnayeonarchive",
+            "archivenayeon",
+            "nayeonarchives"
+        ],
+        "aliases": [
+            "nayeon",
+            "nayeonie",
+            "nayeonnie",
+            "im",
+            "nabong"
+        ]
+    },
+    "JEONGYEON": {
+        "accounts": [
+            "myjeongarchives",
+            "1101_yjy",
+            "TWICE_JYY",
+            "yjyworld"
+        ],
+        "aliases": [
+            "jeongyeon",
+            "jeongyeonie",
+            "jeongyeonnie",
+            "yoo"
+        ]
+    },
+    "MOMO": {
+        "accounts": [
+            "dailyhiraimomo",
+            "hiraimomopics",
+            "momosarchives",
+            "hiraidotjpg"
+        ],
+        "aliases": [
+            "momo",
+            "hirai",
+            "dance machine"
+        ]
+    },
+    "SANA": {
+        "accounts": [
+            "sanapics",
+            "sanaarchive",
+            "sanaspics",
+            "sanarchives"
+        ],
+        "aliases": [
+            "sana",
+            "sanake",
+            "minatozaki",
+            "gae"
+        ]
+    },
+    "JIHYO": {
+        "accounts": [
+            "jihyopictures",
+            "jihyosarchive",
+            "loopjihyo",
+            "jihyospic"
+        ],
+        "aliases": [
+            "jihyo",
+            "jisoo",
+            "park"
+        ]
+    },
+    "MINA": {
+        "accounts": [
+            "minapics",
+            "archivemina",
+            "minajpgs",
+            "myouipics"
+        ],
+        "aliases": [
+            "mina",
+            "myoui"
+        ]
+    },
+    "DAHYUN": {
+        "accounts": [
+            "dubupics",
+            "dahyunniepics",
+            "loopsdubu",
+            "bestofdahyun"
+        ],
+        "aliases": [
+            "dahyun",
+            "dahyunnie",
+            "dubu",
+            "kim"
+        ]
+    },
+    "CHAEYOUNG": {
+        "accounts": [
+            "chaeyoungpic",
+            "chaeypics",
+            "loopschaeng",
+            "chaengspic"
+        ],
+        "aliases": [
+            "chae",
+            "chaeng",
+            "son"
+        ]
+    },
+    "TZUYU": {
+        "accounts": [
+            "tzuyudotjpg",
+            "ctzuyupics",
+            "tzuyu",
+            "tzuyuzones"
+        ],
+        "aliases": [
+            "tzuyu",
+            "chou",
+            "maknae",
+            "chewy"
+        ]
+    }
+}

@@ -89,6 +89,12 @@ async def pink(ctx, *person):
     await media_handler(ctx, group, person)
 
 
+@client.command(help='Get a random pic of the specified TWICE member')
+async def more(ctx, *person):
+    group = 'twice'
+    await media_handler(ctx, group, person)
+
+
 @client.command(help='Clear the specified amount of latest messages')
 async def clear(ctx, amount):
     if amount == None or int(amount) < 1:

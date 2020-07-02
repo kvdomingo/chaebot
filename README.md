@@ -4,6 +4,7 @@ A Discord bot to pull random ~~ITZY~~ k-pop idol pics from public fan accounts o
 ## Supported groups/idols
 - ITZY
 - BLACKPINK
+- TWICE
 
 ## Usage
 The bot is currently in `beta` phase. Shoot me an email to request access!
