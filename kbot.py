@@ -72,24 +72,46 @@ async def on_ready():
     hourly_blackpink.start()
 
 
-@client.command(aliases=['wake'], help='Check server response time')
+@client.command(help='Check server response time')
 async def ping(ctx):
-    await ctx.send(f'I am awake! ({round(client.latency*1000)} ms)')
+    await ctx.send(f'Pong {round(client.latency*1000)}')
 
 
-@client.command(help='Get a random pic of the specified ITZY member')
+@client.command(help='(Re)start all hourly tasks')
+async def wake(ctx):
+    if hourly_itzy.is_running() and hourly_blackpink.is_running():
+        ctx.send('I am already awake!')
+    else:
+        print('Starting all hourly tasks...')
+        hourly_itzy.start()
+        hourly_blackpink.start()
+        print('All scheduled tasks successfully started.')
+        await ctx.send('I am awake! :sunrise:')
+
+
+@client.command(help='Stop all hourly tasks')
+async def sleep(ctx):
+    print('Stopping all hourly tasks...')
+    hourly_itzy.cancel()
+    hourly_blackpink.cancel()
+    print('All scheduled tasks successfully stopped.')
+    await ctx.send('Going to sleep :sleeping:')
+    await client.change_presence(status=discord.Status.offline)
+
+
+@client.command(aliases=['itzy'], help='Get a random pic of the specified ITZY member')
 async def itz(ctx, *person):
     group = 'itzy'
     await media_handler(ctx, group, person)
 
 
-@client.command(help='Get a random pic of the specified BLACKPINK member')
+@client.command(aliases=['blackpink'], help='Get a random pic of the specified BLACKPINK member')
 async def pink(ctx, *person):
     group = 'blackpink'
     await media_handler(ctx, group, person)
 
 
-@client.command(help='Get a random pic of the specified TWICE member')
+@client.command(aliases=['twice'], help='Get a random pic of the specified TWICE member')
 async def more(ctx, *person):
     group = 'twice'
     await media_handler(ctx, group, person)
