@@ -79,24 +79,28 @@ async def ping(ctx):
 
 @client.command(help='(Re)start all hourly tasks')
 async def wake(ctx):
-    if hourly_itzy.is_running() and hourly_blackpink.is_running():
-        ctx.send('I am already awake!')
-    else:
-        print('Starting all hourly tasks...')
+    print('Starting all hourly tasks...')
+    try:
         hourly_itzy.start()
         hourly_blackpink.start()
-        print('All scheduled tasks successfully started.')
-        await ctx.send('I am awake! :sunrise:')
+    except commands.errors.CommandInvokeError:
+        await ctx.send('Already awake!')
+    print('All scheduled tasks successfully started.')
+    await ctx.send('I am awake! :sunrise:')
+    await client.change_presence(status=discord.Status.online)
 
 
 @client.command(help='Stop all hourly tasks')
 async def sleep(ctx):
-    print('Stopping all hourly tasks...')
-    hourly_itzy.cancel()
-    hourly_blackpink.cancel()
-    print('All scheduled tasks successfully stopped.')
-    await ctx.send('Going to sleep :sleeping:')
-    await client.change_presence(status=discord.Status.offline)
+    if not (hourly_itzy.get_task() and hourly_blackpink.get_task()):
+        await ctx.send('Already sleeping :sleeping:')
+    else:
+        print('Stopping all hourly tasks...')
+        hourly_itzy.cancel()
+        hourly_blackpink.cancel()
+        print('All scheduled tasks successfully stopped.')
+        await ctx.send('Going to sleep :sleeping:')
+        await client.change_presence(status=discord.Status.idle)
 
 
 @client.command(aliases=['itzy'], help='Get a random pic of the specified ITZY member')
@@ -131,7 +135,7 @@ async def hourly_itzy():
     channel = client.get_channel(int(os.environ['ITZY_CHANNEL']))
     print(f'Connected to ITZY channel {channel}')
     await media_handler(channel, group, member=None, hourly=True)
-    await client.change_presence(status=discord.Status.idle, activity=discord.Game(name='ITZY fancams'))
+    await client.change_presence(status=discord.Status.online, activity=discord.Game(name='ITZY fancams'))
 
 
 @tasks.loop(hours=1)
@@ -140,7 +144,7 @@ async def hourly_blackpink():
     channel = client.get_channel(int(os.environ['BLACKPINK_CHANNEL']))
     print(f'Connected to BLACKPINK channel {channel}')
     await media_handler(channel, group, member=None, hourly=True)
-    await client.change_presence(status=discord.Status.idle, activity=discord.Game(name='BLACKPINK fancams'))
+    await client.change_presence(status=discord.Status.online, activity=discord.Game(name='BLACKPINK fancams'))
 
 
 @hourly_itzy.before_loop
