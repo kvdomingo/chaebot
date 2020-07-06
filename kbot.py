@@ -65,7 +65,7 @@ async def media_handler(ctx, group, member=None, hourly=False):
                     if res.status != 200:
                         return
                     data = io.BytesIO(await res.read())
-                    file = discord.File(data, 'image_0.gif')
+                    file = discord.File(data, 'image_0.mp4')
                     message = await ctx.send(file=file)
         else:
             for i, vid in enumerate(video_info['variants']):
