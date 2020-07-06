@@ -8,7 +8,7 @@ import discord
 import asyncio
 import aiohttp
 from discord.ext import commands, tasks
-from datetime import datetime
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 
@@ -110,12 +110,15 @@ async def ping(ctx):
 
 @client.command(help='Get dyno metadata')
 async def meta(ctx):
+    created = os.environ['HEROKU_RELEASE_CREATED_AT']
+    created = datetime.strptime(created, '%Y-%m-%dT%H:%M:%SZ')
+    created += timedelta(hours=8)
     message = f"""
 ```
 Latest release:
     {os.environ['HEROKU_RELEASE_VERSION']}
     {os.environ['HEROKU_SLUG_DESCRIPTION']}
-    {os.environ['HEROKU_RELEASE_CREATED_AT']}
+    {created}
 ```
     """
     await ctx.send(message)
