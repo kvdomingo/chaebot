@@ -1,10 +1,12 @@
 import os
 import re
+import io
 import json
 import random
 import twitter
 import discord
 import asyncio
+import aiohttp
 from discord.ext import commands, tasks
 from datetime import datetime
 from dotenv import load_dotenv
@@ -59,12 +61,25 @@ async def media_handler(ctx, group, member=None, hourly=False):
         for i, vid in enumerate(video_info['variants']):
             if '.m3u8' not in vid['url']:
                 link = vid['url']
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(link) as res:
+                        if res.status != 200:
+                            return
+                        data = io.BytesIO(await res.read())
+                        file = discord.File(data, 'video_0.mp4')
+                        await ctx.send(file=file)
                 break
-        await ctx.send(link)
     else:
         links = [media.media_url_https for media in media_post]
-        for link in links:
-            await ctx.send(link)
+        files = []
+        async with aiohttp.ClientSession() as session:
+            for i, link in enumerate(links):
+                async with session.get(link) as res:
+                    if res.status != 200:
+                        return
+                    data = io.BytesIO(await res.read())
+                    files.append(discord.File(data, f'image_{i}.jpg'))
+            await ctx.send(files=files)
 
 
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
@@ -88,8 +103,9 @@ async def meta(ctx):
     message = f"""
 ```
 Latest release:
+    {os.environ['HEROKU_RELEASE_VERSION']}
+    {os.environ['HEROKU_SLUG_DESCRIPTION']}
     {os.environ['HEROKU_RELEASE_CREATED_AT']}
-    {os.environ['HEROKU_RELEASE_VERSION']} ({os.environ['HEROKU_SLUG_DESCRIPTION']})
 ```
     """
     await ctx.send(message)
