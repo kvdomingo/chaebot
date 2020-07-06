@@ -80,7 +80,19 @@ async def on_ready():
 
 @client.command(help='Check server response time')
 async def ping(ctx):
-    await ctx.send(f'Pong {round(client.latency*1000)}')
+    await ctx.send(f'Pong ({round(client.latency*1000)}ms)')
+
+
+@client.command(help='Get dyno metadata')
+async def meta(ctx):
+    message = f"""
+```
+Latest release:
+    {os.environ['HEROKU_RELEASE_CREATED_AT']}
+    {os.environ['HEROKU_RELEASE_VERSION']} ({os.environ['HEROKU_SLUG_DESCRIPTION']})
+```
+    """
+    await ctx.send(message)
 
 
 @client.command(help='(Re)start all hourly tasks')
