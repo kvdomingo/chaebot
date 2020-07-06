@@ -66,7 +66,7 @@ async def media_handler(ctx, group, member=None, hourly=False):
                         return
                     data = io.BytesIO(await res.read())
                     file = discord.File(data, 'image_0.gif')
-                    await ctx.send(file=file)
+                    message = await ctx.send(file=file)
         else:
             for i, vid in enumerate(video_info['variants']):
                 if '.m3u8' not in vid['url']:
@@ -77,7 +77,7 @@ async def media_handler(ctx, group, member=None, hourly=False):
                                 return
                             data = io.BytesIO(await res.read())
                             file = discord.File(data, 'video_0.mp4')
-                            await ctx.send(file=file)
+                            message = await ctx.send(file=file)
                     break
     else:
         links = [media.media_url_https for media in media_post]
@@ -89,7 +89,17 @@ async def media_handler(ctx, group, member=None, hourly=False):
                         return
                     data = io.BytesIO(await res.read())
                     files.append(discord.File(data, f'image_{i}.jpg'))
-            await ctx.send(files=files)
+            message = await ctx.send(files=files)
+
+    reactions = [
+        '♥', '💘', '💖', '💗', '💓',
+        '💙', '💚', '💛', '💜', '🧡',
+        '💝', '💞', '💟', '🖤', '❤',
+        '❣', '🤎', '🤍', '😍', '🥰',
+    ]
+    for react in reactions:
+        await message.add_reaction(react)
+        asyncio.sleep(1)
 
 
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
