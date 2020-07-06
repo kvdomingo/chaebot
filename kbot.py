@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import random
 import twitter
@@ -19,30 +20,34 @@ api = twitter.Api(
 )
 
 
-async def media_handler(ctx, group, member=None, hourly=False):
+def alias_matcher(member, group, hourly):
     with open(f'{group}.json', 'r') as f:
         ACCOUNTS = json.load(f)
 
     if hourly:
         member = random.choice(list(ACCOUNTS.keys()))
-    else:
-        member = (''.join(member)).lower()
+        return ACCOUNTS[member]['accounts']
 
-        if member is None or len(member) == 0:
-            member = random.choice(list(ACCOUNTS.keys()))
+    member = ' '.join(member)
 
-        if member.upper() in ACCOUNTS.keys():
-            member = member.upper()
-        else:
-            person = None
-            for key in ACCOUNTS.keys():
-                if member in ACCOUNTS[key]['aliases']:
-                    person, member = key, key
-                    break
-            if person is None:
-                member = random.choice(list(ACCOUNTS.keys()))
+    if member is None or len(member) == 0:
+        member = random.choice(list(ACCOUNTS.keys()))
+        return ACCOUNTS[member]['accounts']
 
-    account_cat = ACCOUNTS[member.upper()]['accounts']
+    for key in ACCOUNTS.keys():
+        if re.search(member, key, re.I) or re.search(key, member, re.I):
+            return ACCOUNTS[key]['accounts']
+
+        for alias in ACCOUNTS[key]['aliases']:
+            if re.search(alias, member, re.I) or re.search(member, alias, re.I):
+                return ACCOUNTS[key]['accounts']
+
+    member = random.choice(list(ACCOUNTS.keys()))
+    return ACCOUNTS[member]['accounts']
+
+
+async def media_handler(ctx, group, member=None, hourly=False):
+    account_cat = alias_matcher(member, group, hourly)
     tl = api.GetUserTimeline(screen_name=random.choice(account_cat))
 
     media_post = (random.choice(tl)).media
@@ -70,6 +75,7 @@ async def on_ready():
     print(f'Logged in as {client.user}')
     hourly_itzy.start()
     hourly_blackpink.start()
+    await client.change_presence(status=discord.Status.online, activity=discord.Game(name='ITZY fancams'))
 
 
 @client.command(help='Check server response time')
@@ -135,7 +141,6 @@ async def hourly_itzy():
     channel = client.get_channel(int(os.environ['ITZY_CHANNEL']))
     print(f'Connected to ITZY channel {channel}')
     await media_handler(channel, group, member=None, hourly=True)
-    await client.change_presence(status=discord.Status.online, activity=discord.Game(name='ITZY fancams'))
 
 
 @tasks.loop(hours=1)
@@ -144,11 +149,10 @@ async def hourly_blackpink():
     channel = client.get_channel(int(os.environ['BLACKPINK_CHANNEL']))
     print(f'Connected to BLACKPINK channel {channel}')
     await media_handler(channel, group, member=None, hourly=True)
-    await client.change_presence(status=discord.Status.online, activity=discord.Game(name='BLACKPINK fancams'))
 
 
 @hourly_itzy.before_loop
-async def itzy_hour00():
+async def itzy_hour():
     now = datetime.now()
     if now.minute != 0:
         delta_min = 60 - now.minute
@@ -158,13 +162,10 @@ async def itzy_hour00():
 
 
 @hourly_blackpink.before_loop
-async def blackpink_hour30():
+async def blackpink_hour():
     now = datetime.now()
-    if now.minute != 30:
-        if now.minute < 30:
-            delta_min = 30 - now.minute
-        elif now.minute > 30:
-            delta_min = 90 - now.minute
+    if now.minute != 0:
+        delta_min = 60 - now.minute
         print(f'Waiting for {delta_min} minutes to start hourly BLACKPINK update...')
         await asyncio.sleep(delta_min * 60)
         print('Starting hourly BLACKPINK update...')
