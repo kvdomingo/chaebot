@@ -58,17 +58,27 @@ async def media_handler(ctx, group, member=None, hourly=False):
 
     video_info = media_post[0].video_info
     if video_info is not None:
-        for i, vid in enumerate(video_info['variants']):
-            if '.m3u8' not in vid['url']:
-                link = vid['url']
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(link) as res:
-                        if res.status != 200:
-                            return
-                        data = io.BytesIO(await res.read())
-                        file = discord.File(data, 'video_0.mp4')
-                        await ctx.send(file=file)
-                break
+        if len(video_info['variants']) == 1:
+            link = video_info['variants'][0]['url']
+            async with aiohttp.ClientSession() as session:
+                async with session.get(link) as res:
+                    if res.status != 200:
+                        return
+                    data = io.BytesIO(await res.read())
+                    file = discord.File(data, 'image_0.gif')
+                    await ctx.send(file=file)
+        else:
+            for i, vid in enumerate(video_info['variants']):
+                if '.m3u8' not in vid['url']:
+                    link = vid['url']
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(link) as res:
+                            if res.status != 200:
+                                return
+                            data = io.BytesIO(await res.read())
+                            file = discord.File(data, 'video_0.mp4')
+                            await ctx.send(file=file)
+                    break
     else:
         links = [media.media_url_https for media in media_post]
         files = []
