@@ -115,7 +115,7 @@ async def itz(ctx, *person):
     await media_handler(ctx, group, person)
 
 
-@client.command(aliases=['blackpink', 'mink'], help='Get a random pic of the specified BLACKPINK member')
+@client.command(aliases=['blackpink', 'mink', 'bp'], help='Get a random pic of the specified BLACKPINK member')
 async def pink(ctx, *person):
     group = 'blackpink'
     await media_handler(ctx, group, person)
@@ -124,6 +124,12 @@ async def pink(ctx, *person):
 @client.command(aliases=['twice'], help='Get a random pic of the specified TWICE member')
 async def more(ctx, *person):
     group = 'twice'
+    await media_handler(ctx, group, person)
+
+
+@client.command(aliases=['red-velvet', 'velvet', 'rv'], help='Get a random pic of the specified RED VELVET member')
+async def red(ctx, *person):
+    group = 'redvelvet'
     await media_handler(ctx, group, person)
 
 
