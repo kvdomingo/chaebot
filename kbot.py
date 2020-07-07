@@ -110,7 +110,6 @@ async def on_ready():
     print(f'Logged in as {client.user}')
     hourly_itzy.start()
     hourly_blackpink.start()
-    await client.change_presence(status=discord.Status.online, activity=discord.Game(name='ITZY fancams'))
 
 
 @client.command(help='Check server response time')
@@ -198,6 +197,7 @@ async def hourly_itzy():
     channel = client.get_channel(int(os.environ['ITZY_CHANNEL']))
     print(f'Connected to ITZY channel {channel}')
     await media_handler(channel, group, member=None, hourly=True)
+    await client.change_presence(status=discord.Status.online, activity=discord.Game(name='ITZY fancams'))
 
 
 @tasks.loop(hours=1)
@@ -206,6 +206,7 @@ async def hourly_blackpink():
     channel = client.get_channel(int(os.environ['BLACKPINK_CHANNEL']))
     print(f'Connected to BLACKPINK channel {channel}')
     await media_handler(channel, group, member=None, hourly=True)
+    await client.change_presence(status=discord.Status.online, activity=discord.Game(name='BLACKPINK fancams'))
 
 
 @hourly_itzy.before_loop
