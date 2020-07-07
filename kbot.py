@@ -221,8 +221,11 @@ async def itzy_hour():
 @hourly_blackpink.before_loop
 async def blackpink_hour():
     now = datetime.now()
-    if now.minute != 0:
-        delta_min = 60 - now.minute
+    if now.minute != 30:
+        if now.minute < 30:
+            delta_min = 30 - now.minute
+        else:
+            delta_min = 90 - now.minute
         print(f'Waiting for {delta_min} minutes to start hourly BLACKPINK update...')
         await asyncio.sleep(delta_min * 60)
         print('Starting hourly BLACKPINK update...')
