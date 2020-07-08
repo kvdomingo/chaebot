@@ -12,7 +12,7 @@ import discord
 import asyncio
 from discord.ext import commands, tasks
 from datetime import datetime, timedelta
-from backend.utils import alias_matcher, media_handler
+from backend.utils import alias_matcher, media_handler, bombard_hearts
 
 
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
@@ -71,30 +71,6 @@ async def sleep(ctx):
         await client.change_presence(status=discord.Status.idle)
 
 
-@client.command(aliases=['itzy'], help='Get a random pic of the specified ITZY member')
-async def itz(ctx, *person):
-    group = 'itzy'
-    await media_handler(ctx, group, person)
-
-
-@client.command(aliases=['blackpink', 'mink', 'bp'], help='Get a random pic of the specified BLACKPINK member')
-async def pink(ctx, *person):
-    group = 'blackpink'
-    await media_handler(ctx, group, person)
-
-
-@client.command(aliases=['twice'], help='Get a random pic of the specified TWICE member')
-async def more(ctx, *person):
-    group = 'twice'
-    await media_handler(ctx, group, person)
-
-
-@client.command(aliases=['red-velvet', 'velvet', 'rv'], help='Get a random pic of the specified RED VELVET member')
-async def red(ctx, *person):
-    group = 'redvelvet'
-    await media_handler(ctx, group, person)
-
-
 @client.command(help='Clear the specified amount of latest messages')
 async def clear(ctx, amount):
     if amount == None or int(amount) < 1:
@@ -103,23 +79,61 @@ async def clear(ctx, amount):
         await ctx.channel.purge(limit=int(amount + 1))
 
 
+@client.command(aliases=['itzy'], help='Get a random pic of the specified ITZY member')
+async def itz(ctx, *person):
+    group = 'itzy'
+    media = await media_handler(group, person)
+    message = await ctx.send(files=media)
+    await bombard_hearts(message)
+
+
+@client.command(aliases=['blackpink', 'mink', 'bp'], help='Get a random pic of the specified BLACKPINK member')
+async def pink(ctx, *person):
+    group = 'blackpink'
+    media = await media_handler(group, person)
+    message = await ctx.send(files=media)
+    await bombard_hearts(message)
+
+
+@client.command(aliases=['twice'], help='Get a random pic of the specified TWICE member')
+async def more(ctx, *person):
+    group = 'twice'
+    media = await media_handler(group, person)
+    message = await ctx.send(files=media)
+    await bombard_hearts(message)
+
+
+@client.command(aliases=['red-velvet', 'velvet', 'rv'], help='Get a random pic of the specified RED VELVET member')
+async def red(ctx, *person):
+    group = 'redvelvet'
+    media = await media_handler(group, person)
+    message = await ctx.send(files=media)
+    await bombard_hearts(message)
+
+
 @tasks.loop(hours=1)
 async def hourly_itzy():
-    channels = Channel.objects.filter(group__name='itzy')
+    group = 'itzy'
+    channels = Channel.objects.filter(group__name=group)
+    media = await media_handler(group, person=None, hourly=True)
     for channel in channels:
         ch = client.get_channel(channel)
         print(f'Connected to ITZY channel {ch}')
-        await media_handler(ch, group, member=None, hourly=True)
+        message = await channel.send(files=media)
+        await bombard_hearts(message)
     await client.change_presence(status=discord.Status.online, activity=discord.Game(name='ITZY fancams'))
 
 
 @tasks.loop(hours=1)
 async def hourly_blackpink():
-    channels = Channel.objects.filter(group__name='blackpink')
+    group = 'blackpink'
+    channels = Channel.objects.filter(group__name=group)
+    media = await media_handler(group, person=None, hourly=True)
     for channel in channels:
         ch = client.get_channel(channel)
         print(f'Connected to BLACKPINK channel {ch}')
-        await media_handler(ch, group, member=None, hourly=True)
+        message = await channel.send(files=media)
+        await bombard_hearts(message)
     await client.change_presence(status=discord.Status.online, activity=discord.Game(name='BLACKPINK fancams'))
 
 
