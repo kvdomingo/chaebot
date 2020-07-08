@@ -24,6 +24,8 @@ async def on_ready():
     hourly_blackpink.start()
 
 
+# Convenience functions
+
 @client.command(help='Check server response time')
 async def ping(ctx):
     await ctx.send(f'Pong ({round(client.latency*1000)}ms)')
@@ -79,6 +81,24 @@ async def clear(ctx, amount):
         await ctx.channel.purge(limit=int(amount + 1))
 
 
+# Administrative functions
+
+@client.command(aliases=['get-aliases'], hidden=True)
+async def get_aliases(ctx, group, member):
+    from backend.asyncers import sta_get_alias
+    message = await sta_get_alias(group, member)
+    await ctx.send(message)
+
+
+@client.command(aliases=['add-alias'], hidden=True)
+async def add_alias(ctx, group, member, *alias):
+    from backend.asyncers import sta_add_alias
+    message = await sta_add_alias(group, member, alias)
+    await ctx.send(message)
+
+
+# Query functions
+
 @client.command(aliases=['itzy'], help='Get a random pic of the specified ITZY member')
 async def itz(ctx, *person):
     group = 'itzy'
@@ -111,6 +131,8 @@ async def red(ctx, *person):
     await bombard_hearts(message)
 
 
+# Scheduled tasks
+
 @tasks.loop(hours=1)
 async def hourly_itzy():
     group = 'itzy'
@@ -136,6 +158,8 @@ async def hourly_blackpink():
         await bombard_hearts(message)
     await client.change_presence(status=discord.Status.online, activity=discord.Game(name='BLACKPINK fancams'))
 
+
+# Schedule deferrers
 
 @hourly_itzy.before_loop
 async def itzy_hour():
