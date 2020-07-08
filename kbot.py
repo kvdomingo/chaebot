@@ -187,8 +187,8 @@ async def red(ctx, *person):
 async def clear(ctx, amount):
     if amount == None or int(amount) < 1:
         await ctx.send('Please specify a positive number.')
-        return
-    await ctx.channel.purge(limit=int(amount))
+    else:
+        await ctx.channel.purge(limit=int(amount + 1))
 
 
 @tasks.loop(hours=1)
