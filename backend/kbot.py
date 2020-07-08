@@ -1,109 +1,21 @@
-import os
-import re
-import io
-import json
-import random
-import twitter
-import discord
-import asyncio
-import aiohttp
-from discord.ext import commands, tasks
-from datetime import datetime, timedelta
+import os, sys
+sys.path.append('.')
+
 from dotenv import load_dotenv
-
-
 load_dotenv()
 
-api = twitter.Api(
-    consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
-    consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
-    access_token_key=os.environ['TWITTER_ACCESS_KEY'],
-    access_token_secret=os.environ['TWITTER_ACCESS_SECRET'],
-)
+import django
+django.setup()
 
-
-def alias_matcher(member, group, hourly):
-    with open(f'{group}.json', 'r') as f:
-        ACCOUNTS = json.load(f)
-
-    if hourly:
-        member = random.choice(list(ACCOUNTS.keys()))
-        return ACCOUNTS[member]['accounts']
-
-    member = ' '.join(member)
-
-    if member is None or len(member) == 0:
-        member = random.choice(list(ACCOUNTS.keys()))
-        return ACCOUNTS[member]['accounts']
-
-    for key in ACCOUNTS.keys():
-        if re.search(member, key, re.I) or re.search(key, member, re.I):
-            return ACCOUNTS[key]['accounts']
-
-        for alias in ACCOUNTS[key]['aliases']:
-            if re.search(alias, member, re.I) or re.search(member, alias, re.I):
-                return ACCOUNTS[key]['accounts']
-
-    member = random.choice(list(ACCOUNTS.keys()))
-    return ACCOUNTS[member]['accounts']
-
-
-async def media_handler(ctx, group, member=None, hourly=False):
-    account_cat = alias_matcher(member, group, hourly)
-    tl = api.GetUserTimeline(screen_name=random.choice(account_cat))
-
-    media_post = (random.choice(tl)).media
-    while media_post == None or len(media_post) == 0:
-        media_post = random.choice(tl).media
-
-    video_info = media_post[0].video_info
-    if video_info is not None:
-        if len(video_info['variants']) == 1:
-            link = video_info['variants'][0]['url']
-            async with aiohttp.ClientSession() as session:
-                async with session.get(link) as res:
-                    if res.status != 200:
-                        return
-                    data = io.BytesIO(await res.read())
-                    file = discord.File(data, 'image_0.mp4')
-                    message = await ctx.send(file=file)
-        else:
-            for i, vid in enumerate(video_info['variants']):
-                if '.m3u8' not in vid['url']:
-                    link = vid['url']
-                    async with aiohttp.ClientSession() as session:
-                        async with session.get(link) as res:
-                            if res.status != 200:
-                                return
-                            data = io.BytesIO(await res.read())
-                            file = discord.File(data, 'video_0.mp4')
-                            message = await ctx.send(file=file)
-                    break
-    else:
-        links = [media.media_url_https for media in media_post]
-        files = []
-        async with aiohttp.ClientSession() as session:
-            for i, link in enumerate(links):
-                async with session.get(link) as res:
-                    if res.status != 200:
-                        return
-                    data = io.BytesIO(await res.read())
-                    files.append(discord.File(data, f'image_{i}.jpg'))
-            message = await ctx.send(files=files)
-
-    reactions = [
-        '♥', '💘', '💖', '💗', '💓',
-        '💙', '💚', '💛', '💜', '🧡',
-        '💝', '💞', '💟', '🖤', '❤',
-        '❣', '🤎', '🤍', '😍', '🥰',
-    ]
-    for react in reactions:
-        await message.add_reaction(react)
-        asyncio.sleep(1)
+import random
+import discord
+import asyncio
+from discord.ext import commands, tasks
+from datetime import datetime, timedelta
+from backend.utils import alias_matcher, media_handler
 
 
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
-
 
 @client.event
 async def on_ready():

@@ -1,1 +1,1 @@
-worker: python kbot.py
+worker: python backend/kbot.py

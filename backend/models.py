@@ -12,7 +12,7 @@ class Member(models.Model):
     stage_name = models.CharField(max_length=64)
     given_name = models.CharField(max_length=64)
     family_name = models.CharField(max_length=64)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='members')
 
     def __str__(self):
         return f'{self.stage_name} of {str(self.group)}'
@@ -20,7 +20,7 @@ class Member(models.Model):
 
 class Alias(models.Model):
     alias = models.CharField(max_length=64)
-    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='aliases')
 
     class Meta:
         verbose_name_plural = 'Aliases'
@@ -31,7 +31,7 @@ class Alias(models.Model):
 
 class TwitterAccount(models.Model):
     account_name = models.CharField(max_length=255)
-    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='twitter_accounts')
 
     def __str__(self):
         return f'{self.account_name} (for {str(self.member)})'
@@ -39,7 +39,7 @@ class TwitterAccount(models.Model):
 
 class Channel(models.Model):
     channel_id = models.BigIntegerField(unique=True)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='channels')
 
     def __str__(self):
         return f'{self.channel_id} ({str(self.group)})'
