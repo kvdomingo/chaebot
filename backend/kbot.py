@@ -105,19 +105,21 @@ async def clear(ctx, amount):
 
 @tasks.loop(hours=1)
 async def hourly_itzy():
-    group = 'itzy'
-    channel = client.get_channel(int(os.environ['ITZY_CHANNEL']))
-    print(f'Connected to ITZY channel {channel}')
-    await media_handler(channel, group, member=None, hourly=True)
+    channels = Channel.objects.filter(group__name='itzy')
+    for channel in channels:
+        ch = client.get_channel(channel)
+        print(f'Connected to ITZY channel {ch}')
+        await media_handler(ch, group, member=None, hourly=True)
     await client.change_presence(status=discord.Status.online, activity=discord.Game(name='ITZY fancams'))
 
 
 @tasks.loop(hours=1)
 async def hourly_blackpink():
-    group = 'blackpink'
-    channel = client.get_channel(int(os.environ['BLACKPINK_CHANNEL']))
-    print(f'Connected to BLACKPINK channel {channel}')
-    await media_handler(channel, group, member=None, hourly=True)
+    channels = Channel.objects.filter(group__name='blackpink')
+    for channel in channels:
+        ch = client.get_channel(channel)
+        print(f'Connected to BLACKPINK channel {ch}')
+        await media_handler(ch, group, member=None, hourly=True)
     await client.change_presence(status=discord.Status.online, activity=discord.Game(name='BLACKPINK fancams'))
 
 
