@@ -1,4 +1,4 @@
-# KBOT
+# KVISUALBOT
 A Discord bot to pull random ~~ITZY~~ k-pop idol pics from public fan accounts on Twitter and post them to a Discord server channel.
 
 ## Supported groups/idols

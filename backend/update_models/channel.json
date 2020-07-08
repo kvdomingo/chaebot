@@ -1,0 +1,18 @@
+[
+    {
+        "model": "backend.channel",
+        "pk": 1,
+        "fields": {
+            "channel_id": 726831180565184603,
+            "group": 1
+        }
+    },
+    {
+        "model": "backend.channel",
+        "pk": 3,
+        "fields": {
+            "channel_id": 727956565390524447,
+            "group": 2
+        }
+    }
+]

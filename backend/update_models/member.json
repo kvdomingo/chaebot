@@ -1,0 +1,232 @@
+[
+    {
+        "model": "backend.member",
+        "pk": 1,
+        "fields": {
+            "stage_name": "Ryujin",
+            "given_name": "Ryujin",
+            "family_name": "Shin",
+            "group": 1
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 2,
+        "fields": {
+            "stage_name": "Yuna",
+            "given_name": "Yuna",
+            "family_name": "Shin",
+            "group": 1
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 3,
+        "fields": {
+            "stage_name": "Yeji",
+            "given_name": "Yeji",
+            "family_name": "Hwang",
+            "group": 1
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 4,
+        "fields": {
+            "stage_name": "Lia",
+            "given_name": "Jisu",
+            "family_name": "Choi",
+            "group": 1
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 5,
+        "fields": {
+            "stage_name": "Chaeryeong",
+            "given_name": "Chaeryeong",
+            "family_name": "Lee",
+            "group": 1
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 6,
+        "fields": {
+            "stage_name": "Jennie",
+            "given_name": "Jennie Ruby Jane",
+            "family_name": "Kim",
+            "group": 2
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 7,
+        "fields": {
+            "stage_name": "Jisoo",
+            "given_name": "Jisoo",
+            "family_name": "Kim",
+            "group": 2
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 8,
+        "fields": {
+            "stage_name": "Rosé",
+            "given_name": "Chaeyoung",
+            "family_name": "Park",
+            "group": 2
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 9,
+        "fields": {
+            "stage_name": "Lisa",
+            "given_name": "Lalisa",
+            "family_name": "Manoban",
+            "group": 2
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 10,
+        "fields": {
+            "stage_name": "Nayeon",
+            "given_name": "Nayeon",
+            "family_name": "Im",
+            "group": 3
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 11,
+        "fields": {
+            "stage_name": "Jeongyeon",
+            "given_name": "Jeongyeon",
+            "family_name": "Yoo",
+            "group": 3
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 12,
+        "fields": {
+            "stage_name": "Momo",
+            "given_name": "Momo",
+            "family_name": "Hirai",
+            "group": 3
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 13,
+        "fields": {
+            "stage_name": "Sana",
+            "given_name": "Sana",
+            "family_name": "Minatozaki",
+            "group": 3
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 14,
+        "fields": {
+            "stage_name": "Jihyo",
+            "given_name": "Jisoo",
+            "family_name": "Park",
+            "group": 3
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 15,
+        "fields": {
+            "stage_name": "Mina",
+            "given_name": "Minari",
+            "family_name": "Myoui",
+            "group": 3
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 16,
+        "fields": {
+            "stage_name": "Dahyun",
+            "given_name": "Dahyun",
+            "family_name": "Kim",
+            "group": 3
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 17,
+        "fields": {
+            "stage_name": "Chaeyoung",
+            "given_name": "Chaeyoung",
+            "family_name": "Son",
+            "group": 3
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 18,
+        "fields": {
+            "stage_name": "Tzuyu",
+            "given_name": "Tzuyu",
+            "family_name": "Chou",
+            "group": 3
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 19,
+        "fields": {
+            "stage_name": "Irene",
+            "given_name": "Joohyun",
+            "family_name": "Bae",
+            "group": 4
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 20,
+        "fields": {
+            "stage_name": "Seulgi",
+            "given_name": "Seulgi",
+            "family_name": "Kang",
+            "group": 4
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 21,
+        "fields": {
+            "stage_name": "Wendy",
+            "given_name": "Seungwan",
+            "family_name": "Shon",
+            "group": 4
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 22,
+        "fields": {
+            "stage_name": "Joy",
+            "given_name": "Sooyoung",
+            "family_name": "Park",
+            "group": 4
+        }
+    },
+    {
+        "model": "backend.member",
+        "pk": 23,
+        "fields": {
+            "stage_name": "Yeri",
+            "given_name": "Yerim",
+            "family_name": "Kim",
+            "group": 4
+        }
+    }
+]
