@@ -25,20 +25,21 @@ api = twitter.Api(
 @sync_to_async
 def alias_matcher(member, group, hourly):
     group = Group.objects.get(name=group)
-    members = group.members.all()
+    members = group.members.all().order_by('-id')
     if hourly or member is None or len(member) == 0:
         member = random.choice(members)
         accounts = member.twitter_accounts.all()
         return accounts
     member = ' '.join(member)
     for key in members:
-        if re.search(member, key.stage_name, re.I) or re.search(key.stage_name, member, re.I):
-            print(f'Query matched: {str(key)}')
-            return key.twitter_accounts.all()
-        if re.search(member, key.given_name, re.I) or re.search(key.given_name, member, re.I):
-            print(f'Query matched: {str(key)}')
-            return key.twitter_accounts.all()
-        if re.search(member, key.family_name, re.I) or re.search(key.family_name, member, re.I):
+        if (
+            re.search(member, key.stage_name, re.I) or
+            re.search(key.stage_name, member, re.I) or
+            re.search(member, key.given_name, re.I) or
+            re.search(key.given_name, member, re.I) or
+            re.search(member, key.family_name, re.I) or
+            re.search(key.family_name, member, re.I)
+        ):
             print(f'Query matched: {str(key)}')
             return key.twitter_accounts.all()
         for alias in key.aliases.all():
