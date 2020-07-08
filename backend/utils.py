@@ -33,16 +33,21 @@ def alias_matcher(member, group, hourly):
     member = ' '.join(member)
     for key in members:
         if re.search(member, key.stage_name, re.I) or re.search(key.stage_name, member, re.I):
+            print(f'Query matched: {str(key)}')
             return key.twitter_accounts.all()
         if re.search(member, key.given_name, re.I) or re.search(key.given_name, member, re.I):
+            print(f'Query matched: {str(key)}')
             return key.twitter_accounts.all()
         if re.search(member, key.family_name, re.I) or re.search(key.family_name, member, re.I):
+            print(f'Query matched: {str(key)}')
             return key.twitter_accounts.all()
         for alias in key.aliases.all():
             if re.search(alias.alias, member, re.I) or re.search(member, alias.alias, re.I):
+                print(f'Query matched: {str(key)}')
                 return key.twitter_accounts.all()
     member = random.choice(members)
     accounts = member.twitter_accounts.all()
+    print('No match, choosing random')
     return accounts
 
 
