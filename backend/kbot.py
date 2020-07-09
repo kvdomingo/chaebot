@@ -11,6 +11,7 @@ import random
 import requests
 import discord
 import asyncio
+from tqdm import tqdm
 from django.conf import settings
 from discord.ext import commands, tasks
 from datetime import datetime, timedelta
@@ -100,19 +101,26 @@ async def add_alias(ctx, group, member, *alias):
     await ctx.send(message)
 
 
-@client.command(aliases=['download', 'download-all'], hidden=True)
-async def download_all(ctx, limit=1):
+@client.command(hidden=True)
+async def download(ctx, limit):
+    if limit.lower() == 'all':
+        limit = None
+    else:
+        limit = int(limit)
     await ctx.channel.purge(limit=1)
-    messages = await ctx.channel.history(limit=limit).flatten()
-    for message in messages:
+    messages = await ctx.channel.history(limit=limit, oldest_first=True).flatten()
+    for message in tqdm(messages):
         for attachment in message.attachments:
             m_id = attachment.id
             ext = attachment.url.split('.')[-1]
-            if ext == 'mp4':
-                continue
-            else:
-                await attachment.save(os.path.join(settings.BASE_DIR, f'backend/_media/{m_id}.{ext}'))
-                print(f'Saved {m_id}.{ext} to media directory')
+            if ext != 'mp4':
+                fp = os.path.join(settings.BASE_DIR, f'backend/_media')
+                # existing_files = os.listdir(fp)
+                # if len(existing_files) > 0:
+                #     existing_files = [f.split('.')[1] for f in existing_files]
+                # if str(m_id) not in existing_files:
+                await attachment.save(os.path.join(fp, f'{m_id}.{ext}'))
+    print('Download complete.')
 
 
 # Query functions
