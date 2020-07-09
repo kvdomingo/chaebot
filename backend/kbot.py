@@ -8,11 +8,14 @@ import django
 django.setup()
 
 import random
+import requests
 import discord
 import asyncio
+from django.conf import settings
 from discord.ext import commands, tasks
 from datetime import datetime, timedelta
 from backend.utils import alias_matcher, media_handler, bombard_hearts
+from backend.models import *
 
 
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
@@ -97,6 +100,21 @@ async def add_alias(ctx, group, member, *alias):
     await ctx.send(message)
 
 
+@client.command(aliases=['download', 'download-all'], hidden=True)
+async def download_all(ctx, limit=1):
+    await ctx.channel.purge(limit=1)
+    messages = await ctx.channel.history(limit=limit).flatten()
+    for message in messages:
+        for attachment in message.attachments:
+            m_id = attachment.id
+            ext = attachment.url.split('.')[-1]
+            if ext == 'mp4':
+                continue
+            else:
+                await attachment.save(os.path.join(settings.BASE_DIR, f'backend/_media/{m_id}.{ext}'))
+                print(f'Saved {m_id}.{ext} to media directory')
+
+
 # Query functions
 
 @client.command(aliases=['itzy'], help='Get a random pic of the specified ITZY member')
@@ -137,11 +155,11 @@ async def red(ctx, *person):
 async def hourly_itzy():
     group = 'itzy'
     channels = Channel.objects.filter(group__name=group)
-    media = await media_handler(group, person=None, hourly=True)
+    media = await media_handler(group, member=None, hourly=True)
     for channel in channels:
-        ch = client.get_channel(channel)
+        ch = client.get_channel(channel.channel_id)
         print(f'Connected to ITZY channel {ch}')
-        message = await channel.send(files=media)
+        message = await ch.send(files=media)
         await bombard_hearts(message)
     await client.change_presence(status=discord.Status.online, activity=discord.Game(name='ITZY fancams'))
 
@@ -150,11 +168,11 @@ async def hourly_itzy():
 async def hourly_blackpink():
     group = 'blackpink'
     channels = Channel.objects.filter(group__name=group)
-    media = await media_handler(group, person=None, hourly=True)
+    media = await media_handler(group, member=None, hourly=True)
     for channel in channels:
-        ch = client.get_channel(channel)
+        ch = client.get_channel(channel.channel_id)
         print(f'Connected to BLACKPINK channel {ch}')
-        message = await channel.send(files=media)
+        message = await ch.send(files=media)
         await bombard_hearts(message)
     await client.change_presence(status=discord.Status.online, activity=discord.Game(name='BLACKPINK fancams'))
 
