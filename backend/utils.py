@@ -21,7 +21,6 @@ api = twitter.Api(
     access_token_secret=os.environ['TWITTER_ACCESS_SECRET'],
 )
 
-
 @sync_to_async
 def alias_matcher(member, group, hourly):
     group = Group.objects.get(name=group)

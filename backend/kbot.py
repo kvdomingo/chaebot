@@ -12,6 +12,7 @@ import requests
 import discord
 import asyncio
 from tqdm import tqdm
+from django import db
 from django.conf import settings
 from discord.ext import commands, tasks
 from datetime import datetime, timedelta
@@ -127,6 +128,7 @@ async def download(ctx, limit):
 
 @client.command(aliases=['itzy'], help='Get a random pic of the specified ITZY member')
 async def itz(ctx, *person):
+    db.close_old_connections()
     group = 'itzy'
     media = await media_handler(group, person)
     message = await ctx.send(files=media)
@@ -135,6 +137,7 @@ async def itz(ctx, *person):
 
 @client.command(aliases=['blackpink', 'mink', 'bp'], help='Get a random pic of the specified BLACKPINK member')
 async def pink(ctx, *person):
+    db.close_old_connections()
     group = 'blackpink'
     media = await media_handler(group, person)
     message = await ctx.send(files=media)
@@ -143,6 +146,7 @@ async def pink(ctx, *person):
 
 @client.command(aliases=['twice'], help='Get a random pic of the specified TWICE member')
 async def more(ctx, *person):
+    db.close_old_connections()
     group = 'twice'
     media = await media_handler(group, person)
     message = await ctx.send(files=media)
@@ -151,6 +155,7 @@ async def more(ctx, *person):
 
 @client.command(aliases=['red-velvet', 'velvet', 'rv'], help='Get a random pic of the specified RED VELVET member')
 async def red(ctx, *person):
+    db.close_old_connections()
     group = 'redvelvet'
     media = await media_handler(group, person)
     message = await ctx.send(files=media)
@@ -161,6 +166,7 @@ async def red(ctx, *person):
 
 @tasks.loop(hours=1)
 async def hourly_itzy():
+    db.close_old_connections()
     group = 'itzy'
     channels = Channel.objects.filter(group__name=group)
     media = await media_handler(group, member=None, hourly=True)
@@ -174,6 +180,7 @@ async def hourly_itzy():
 
 @tasks.loop(hours=1)
 async def hourly_blackpink():
+    db.close_old_connections()
     group = 'blackpink'
     channels = Channel.objects.filter(group__name=group)
     media = await media_handler(group, member=None, hourly=True)
@@ -208,6 +215,18 @@ async def blackpink_hour():
         print(f'Waiting for {delta_min} minutes to start hourly BLACKPINK update...')
         await asyncio.sleep(delta_min * 60)
         print('Starting hourly BLACKPINK update...')
+
+
+# Schedule completion callbacks
+
+@hourly_itzy.after_loop
+async def itzy_cleanup():
+    db.close_old_connections()
+
+
+@hourly_blackpink.after_loop
+async def blackpink_cleanup():
+    db.close_old_connections()
 
 
 client.run(os.environ['DISCORD_TOKEN'])
