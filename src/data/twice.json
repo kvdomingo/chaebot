@@ -1,0 +1,111 @@
+{
+    "NAYEON": {
+        "accounts": [
+            "nayeonpics",
+            "imnayeonarchive",
+            "archivenayeon",
+            "nayeonarchives"
+        ],
+        "aliases": [
+            "im",
+            "nabong"
+        ]
+    },
+    "JEONGYEON": {
+        "accounts": [
+            "myjeongarchives",
+            "1101_yjy",
+            "TWICE_JYY",
+            "yjyworld"
+        ],
+        "aliases": [
+            "yoo"
+        ]
+    },
+    "MOMO": {
+        "accounts": [
+            "dailyhiraimomo",
+            "hiraimomopics",
+            "momosarchives",
+            "hiraidotjpg"
+        ],
+        "aliases": [
+            "hirai",
+            "dance machine"
+        ]
+    },
+    "SANA": {
+        "accounts": [
+            "sanapics",
+            "sanaarchive",
+            "sanaspics",
+            "sanarchives"
+        ],
+        "aliases": [
+            "minatozaki",
+            "gae"
+        ]
+    },
+    "JIHYO": {
+        "accounts": [
+            "jihyopictures",
+            "jihyosarchive",
+            "loopjihyo",
+            "jihyospic"
+        ],
+        "aliases": [
+            "jisoo",
+            "park"
+        ]
+    },
+    "MINA": {
+        "accounts": [
+            "minapics",
+            "archivemina",
+            "minajpgs",
+            "myouipics"
+        ],
+        "aliases": [
+            "gummy",
+            "myoui"
+        ]
+    },
+    "DAHYUN": {
+        "accounts": [
+            "dubupics",
+            "dahyunniepics",
+            "loopsdubu",
+            "bestofdahyun"
+        ],
+        "aliases": [
+            "dubu",
+            "kim"
+        ]
+    },
+    "CHAEYOUNG": {
+        "accounts": [
+            "chaeyoungpic",
+            "chaeypics",
+            "loopschaeng",
+            "chaengspic"
+        ],
+        "aliases": [
+            "chaeng",
+            "son"
+        ]
+    },
+    "TZUYU": {
+        "accounts": [
+            "tzuyudotjpg",
+            "ctzuyupics",
+            "tzuyu",
+            "tzuyuzones"
+        ],
+        "aliases": [
+            "chou",
+            "maknae",
+            "maknæ",
+            "chewy"
+        ]
+    }
+}
