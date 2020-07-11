@@ -34,7 +34,7 @@ class Member(BaseMixin, Base):
         return f"<Member {self.id}: {self.family_name.capitalize()} {self.stage_name.capitalize()}>"
 
     def __str__(self):
-        return f"{self.stage_name.capitalize()} of {str(self.group.name)}"
+        return f"{self.stage_name.capitalize()} of {self.group.name.upper()}"
 
 
 class Alias(BaseMixin, Base):
@@ -46,7 +46,7 @@ class Alias(BaseMixin, Base):
         return f"<Alias {self.id}: {self.alias}>"
 
     def __str__(self):
-        return f"{self.alias} ({str(self.member)})"
+        return f"{self.alias} ({self.member.capitalize()})"
 
 
 class TwitterAccount(BaseMixin, Base):
@@ -58,7 +58,7 @@ class TwitterAccount(BaseMixin, Base):
         return f"<Twitter account {self.id}: {self.account_name}>"
 
     def __str__(self):
-        return f"{self.account_name} ({str(self.member)})"
+        return f"{self.account_name} ({self.member.capitalize()})"
 
 
 class Channel(BaseMixin, Base):
@@ -71,4 +71,4 @@ class Channel(BaseMixin, Base):
         return f"<Channel {self.channel_id}>"
 
     def __str__(self):
-        return f"{self.channel_id} ({str(self.member)})"
+        return f"{self.channel_id} ({self.member.capitalize()})"
