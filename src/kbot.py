@@ -9,7 +9,7 @@ from .models import *
 from . import Session
 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
 
 @client.event
@@ -99,18 +99,18 @@ async def download(ctx, limit):
     else:
         limit = int(limit)
     await ctx.channel.purge(limit=1)
-    messages = await ctx.channel.history(limit=limit, oldest_first=True).flatten()
+    messages = await ctx.channel.history(limit=limit).flatten()
     for message in tqdm(messages):
         for attachment in message.attachments:
             m_id = attachment.id
             ext = attachment.url.split('.')[-1]
             if ext != 'mp4':
-                fp = os.path.join(BASE_DIR, f'src/_media')
-                # existing_files = os.listdir(fp)
-                # if len(existing_files) > 0:
-                #     existing_files = [f.split('.')[1] for f in existing_files]
-                # if str(m_id) not in existing_files:
-                await attachment.save(os.path.join(fp, f'{m_id}.{ext}'))
+                fp = os.path.join(BASE_DIR, 'src/_media')
+                existing_files = os.listdir(fp)
+                if len(existing_files) > 0:
+                    existing_files = [f.split('.')[0] for f in existing_files]
+                if str(m_id) not in existing_files:
+                    await attachment.save(os.path.join(fp, f'{m_id}.{ext}'))
     print('Download complete.')
 
 
