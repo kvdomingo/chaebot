@@ -1,9 +1,4 @@
-import os, sys, json
-sys.path.append('.')
-
-from dotenv import load_dotenv
-load_dotenv()
-
+import os, json
 import sqlalchemy as sa
 from sqlalchemy import orm, exc
 from src.models import *
