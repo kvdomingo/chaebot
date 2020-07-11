@@ -1,6 +1,4 @@
 import subprocess
-from dotenv import load_dotenv
-load_dotenv()
 
 
 def main(commit_message):

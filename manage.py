@@ -1,26 +1,41 @@
-import sys
-from argparse import ArgumentParser
+import click
 
 
-def main():
-    parser = ArgumentParser()
-    parser.add_argument('cmd', type=str)
-    parser.add_argument('-m', '--message', type=str)
-    args = parser.parse_args()
+@click.group()
+def manage():
+    pass
 
-    if len(sys.argv) < 2:
-        parser.print_help(sys.stderr)
-        sys.exit(0)
+@click.command()
+@click.argument('message')
+def makemigrations(message):
+    from manage import makemigrations
+    makemigrations.main(message)
 
-    if args.cmd == 'makemigrations':
-        from manage import makemigrations
-        makemigrations.main(args.message)
+@click.command()
+def migrate():
+    from manage import migrate
+    migrate.main()
 
-    if args.cmd == 'migrate':
-        from manage import migrate
-        migrate.main()
+@click.command()
+def dbupdate():
+    from src import update_or_create
+    update_or_create.main()
 
+@click.command()
+def restart():
+    from src import restart
+    restart.main()
+
+@click.command()
+def runbot():
+    from src import kbot
+
+manage.add_command(makemigrations)
+manage.add_command(migrate)
+manage.add_command(dbupdate)
+manage.add_command(restart)
+manage.add_command(runbot)
 
 
 if __name__ == '__main__':
-    main()
+    manage()
