@@ -8,7 +8,11 @@ from .mixins import BaseMixin
 Base = declarative_base()
 
 class Group(BaseMixin, Base):
+    __table_args__ = (sa.UniqueConstraint('name'), )
+
     name = sa.Column(sa.String(64))
+    members = orm.relationship('Member', back_populates='group')
+    channels = orm.relationship('Channel', back_populates='group')
 
     def __repr__(self):
         return f"<Group {self.id}: {self.name.upper()}>"
@@ -23,6 +27,8 @@ class Member(BaseMixin, Base):
     family_name = sa.Column(sa.String(64))
     group_id = sa.Column(sa.Integer, sa.ForeignKey('group.id'))
     group = orm.relationship('Group', back_populates='members')
+    aliases = orm.relationship('Alias', back_populates='member')
+    twitter_accounts = orm.relationship('TwitterAccount', back_populates='member')
 
     def __repr__(self):
         return f"<Member {self.id}: {self.family_name.capitalize()} {self.stage_name.capitalize()}>"
