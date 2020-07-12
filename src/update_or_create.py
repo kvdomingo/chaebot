@@ -8,6 +8,7 @@ db = sa.create_engine(os.environ['DATABASE_URL'])
 Session = orm.sessionmaker(bind=db)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
 def add_from_json(Model, namespace=None):
     filename = Model.__name__.lower()
     filename = 'account' if filename == 'twitteraccount' else filename
@@ -34,6 +35,7 @@ def add_from_json(Model, namespace=None):
         print(f'{status} entry for {repr(dat)}')
     sess.commit()
     sess.close()
+
 
 def main():
     add_from_json(Group)

@@ -1,16 +1,16 @@
-import os
-import discord
 import asyncio
-from tqdm import tqdm
-from discord.ext import commands, tasks
 from datetime import datetime, timedelta
-from .utils import alias_matcher, media_handler, bombard_hearts
-from .models import *
-from . import Session
 
+import discord
+from discord.ext import commands, tasks
+from tqdm import tqdm
+
+from .crud import *
+from .utils import media_handler, bombard_hearts
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
+
 
 @client.event
 async def on_ready():
@@ -78,9 +78,54 @@ async def clear(ctx, amount):
 
 # Administrative functions
 
-@client.command(aliases=['add-group'], hidden=True)
-async def add_group(ctx, name):
+@client.group(hidden=True)
+async def group(ctx):
     pass
+
+
+@group.command(aliases=['get', 'read'], hidden=True)
+async def group_get(ctx, name):
+    api = GroupApi()
+    response = api.get(name)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
+@group.command(aliases=['add', 'create'], hidden=True)
+async def group_add(ctx, name):
+    api = GroupApi()
+    response = api.create(name)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
+@group.command(aliases=['edit', 'update'], hidden=True)
+async def group_edit(ctx, old_name, new_name):
+    api = GroupApi()
+    response = api.update(old_name, new_name)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
+@client.group(hidden=True)
+async def member(ctx):
+    pass
+
+
+@member.command(aliases=['get', 'read'], hidden=True)
+async def member_get(ctx, group, name):
+    api = MemberApi()
+    response = api.get(group, name)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
+@member.command(aliases=['add', 'create'], hidden=True)
+async def member_add(ctx, *args):
+    api = MemberApi()
+    response = api.create(*args)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
 
 
 @client.command(hidden=True)
@@ -171,7 +216,7 @@ async def hourly_blackpink():
     sess.close_all()
 
 
-# Schedule deferrers
+# Scheduled task deferrers
 
 @hourly_itzy.before_loop
 async def itzy_hour():
