@@ -78,18 +78,9 @@ async def clear(ctx, amount):
 
 # Administrative functions
 
-@client.command(aliases=['get-aliases'], hidden=True)
-async def get_aliases(ctx, group, member):
-    from .asyncers import sta_get_alias
-    message = await sta_get_alias(group, member)
-    await ctx.send(message)
-
-
-@client.command(aliases=['add-alias'], hidden=True)
-async def add_alias(ctx, group, member, *alias):
-    from .asyncers import sta_add_alias
-    message = await sta_add_alias(group, member, alias)
-    await ctx.send(message)
+@client.command(aliases=['add-group'], hidden=True)
+async def add_group(ctx, name):
+    pass
 
 
 @client.command(hidden=True)

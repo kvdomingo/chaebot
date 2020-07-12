@@ -228,5 +228,15 @@
             "family_name": "Kim",
             "group": 4
         }
+    },
+    {
+        "model": "backend.member",
+        "pk": 24,
+        "fields": {
+            "stage_name": "IU",
+            "given_name": "Jieun",
+            "family_name": "Lee",
+            "group": 5
+        }
     }
 ]

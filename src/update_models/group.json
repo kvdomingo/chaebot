@@ -26,5 +26,12 @@
         "fields": {
             "name": "redvelvet"
         }
+    },
+    {
+        "model": "backend.group",
+        "pk": 5,
+        "fields": {
+            "name": "iu"
+        }
     }
 ]
