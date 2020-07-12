@@ -209,4 +209,9 @@ async def blackpink_hour():
         await client.change_presence(status=discord.Status.online, activity=discord.Game(name='BLACKPINK fancams'))
 
 
-client.run(os.environ['DISCORD_TOKEN'])
+def run():
+    client.run(os.environ['DISCORD_TOKEN'])
+
+
+if __name__ == '__main__':
+    run()

@@ -8,13 +8,20 @@ def manage():
 @click.command()
 @click.argument('message')
 def makemigrations(message):
-    from manage import makemigrations
+    from src import makemigrations
     makemigrations.main(message)
 
 @click.command()
 def migrate():
-    from manage import migrate
+    from src import migrate
     migrate.main()
+
+@click.command()
+@click.option('--limit', default=5)
+@click.option('--channel', default=726831180565184603)
+def download(limit, channel):
+    from src import download
+    download.main(limit, channel)
 
 @click.command()
 def dbupdate():
@@ -29,10 +36,12 @@ def restart():
 @click.command()
 def runbot():
     from src import kbot
+    kbot.run()
 
 manage.add_command(makemigrations)
 manage.add_command(migrate)
 manage.add_command(dbupdate)
+manage.add_command(download)
 manage.add_command(restart)
 manage.add_command(runbot)
 
