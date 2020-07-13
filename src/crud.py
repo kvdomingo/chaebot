@@ -1,20 +1,21 @@
 import json
-from sqlalchemy import func
+
 from sqlalchemy import exc
-from .mixins import ApiSerializerMixin
-from .models import *
+from sqlalchemy import func
+
 from . import Session
+from .models import *
 
 
-class GroupApi(ApiSerializerMixin):
+class GroupApi:
     def get(self, name):
         sess = Session()
         if name == 'all':
             queryset = sess.query(Group).order_by(Group.id).all()
-            response = [self.serialize(group) for group in queryset]
+            response = [group.to_dict() for group in queryset]
         else:
             query = sess.query(Group).filter(Group.name == name).first()
-            response = self.serialize(query)
+            response = query.to_dict()
         sess.close()
         return json.dumps(response, indent=4)
 
@@ -25,7 +26,7 @@ class GroupApi(ApiSerializerMixin):
         sess.add(obj)
         try:
             sess.commit()
-            response = self.serialize(obj)
+            response = obj.to_dict()
         except exc.SQLAlchemyError as e:
             response = dict(error=f"Object creation failed with the following error: {e}")
         sess.close()
@@ -38,7 +39,7 @@ class GroupApi(ApiSerializerMixin):
         try:
             sess.commit()
             qid = query.id
-            response = self.serialize(query)
+            response = query.to_dict()
             print(f"Updated Group {qid}")
         except exc.SQLAlchemyError as e:
             response = dict(error=f"Object update failed with the following error: {e}")
@@ -46,16 +47,16 @@ class GroupApi(ApiSerializerMixin):
         return json.dumps(response, indent=4)
 
 
-class MemberApi(ApiSerializerMixin):
+class MemberApi:
     def get(self, group, name):
         sess = Session()
         if name == 'all':
             queryset = sess.query(Member).filter(Member.group.has(name=group)).all()
-            response = [self.serialize(query) for query in queryset]
+            response = [query.to_dict() for query in queryset]
         else:
             query = sess.query(Group).filter(Group.name == group).filter(Group.members.has(stage_name=name)).first()
             if query:
-                response = self.serialize(query)
+                response = query.to_dict()
             else:
                 response = dict(error=f"No match for member with corresponding stage_name={name}")
         sess.close()
@@ -75,8 +76,39 @@ class MemberApi(ApiSerializerMixin):
             sess.add(obj)
             sess.commit()
             m_id = obj.id
-            response = self.serialize(obj)
+            response = obj.to_dict()
             print(f"Created member {m_id}")
         except exc.SQLAlchemyError as e:
             response = dict(error=f"Object creation failed with the following error: {e}")
+        sess.close()
+        return json.dumps(response, indent=4)
+
+
+class AccountApi:
+    def get(self, group, member):
+        sess = Session()
+        accounts = sess.query(Member).filter(Member.group.has(name=group)).filter(Member.stage_name == member).first().twitter_accounts
+        response = [acc.to_dict() for acc in accounts]
+        sess.close()
+        return json.dumps(response, indent=4)
+
+    def create(self, *args):
+        params = ['group', 'member', 'account_name']
+        fields = dict(zip(params, args))
+        sess = Session()
+        a_id = sess.query(func.max(TwitterAccount.id)).first()[0] + 1
+        member_id = sess.query(Member).filter(Member.group.has(name=fields['group'])).filter(Member.stage_name == fields['member']).first().id
+        fields['id'] = a_id
+        fields['member_id'] = member_id
+        del fields['member'], fields['group']
+        obj = TwitterAccount(**fields)
+        try:
+            sess.add(obj)
+            sess.commit()
+            a_id = obj.id
+            response = obj.to_dict()
+            print(f"Created twitter account {a_id}")
+        except exc.SQLAlchemyError as e:
+            response = dict(error=f"Object creation failed with the following error: {e}")
+        sess.close()
         return json.dumps(response, indent=4)

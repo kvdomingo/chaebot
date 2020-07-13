@@ -11,9 +11,3 @@ class BaseMixin:
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
-
-class ApiSerializerMixin:
-    def serialize(self, obj):
-        d = {k: v for k, v in list(obj.__dict__.items())[1:]}
-        return d

@@ -133,3 +133,4 @@ dmypy.json
 # IDE files
 .idea
 .vscode
+download.sh

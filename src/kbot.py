@@ -79,6 +79,14 @@ async def clear(ctx, amount):
 # Administrative functions
 
 @client.group(hidden=True)
+async def admin(ctx):
+    if str(ctx.message.author) != os.environ['DISCORD_ADMIN']:
+        ctx.send('Sorry, you are not authorized to access that command.')
+        return
+    else:
+        pass
+
+@admin.group(hidden=True)
 async def group(ctx):
     pass
 
@@ -107,7 +115,7 @@ async def group_edit(ctx, old_name, new_name):
     await ctx.send(message)
 
 
-@client.group(hidden=True)
+@admin.group(hidden=True)
 async def member(ctx):
     pass
 
@@ -123,6 +131,27 @@ async def member_get(ctx, group, name):
 @member.command(aliases=['add', 'create'], hidden=True)
 async def member_add(ctx, *args):
     api = MemberApi()
+    response = api.create(*args)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
+@admin.group(hidden=True)
+async def account(ctx):
+    pass
+
+
+@account.command(aliases=['get'], hidden=True)
+async def account_get(ctx, group, member):
+    api = AccountApi()
+    response = api.get(group, member)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
+@account.command(aliases=['create', 'add'], hidden=True)
+async def account_add(ctx, *args):
+    api = AccountApi()
     response = api.create(*args)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
@@ -179,6 +208,14 @@ async def more(ctx, *person):
 @client.command(aliases=['red-velvet', 'velvet', 'rv'], help='Get a random pic of the specified RED VELVET member')
 async def red(ctx, *person):
     group = 'redvelvet'
+    media = await media_handler(group, person)
+    message = await ctx.send(files=media)
+    await bombard_hearts(message)
+
+
+@client.command(help='Get a random pic of IU')
+async def iu(ctx, *person):
+    group = 'iu'
     media = await media_handler(group, person)
     message = await ctx.send(files=media)
     await bombard_hearts(message)

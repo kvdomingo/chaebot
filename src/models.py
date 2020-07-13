@@ -1,9 +1,8 @@
-import os
 import sqlalchemy as sa
 from sqlalchemy import orm
 from sqlalchemy.ext.declarative import declarative_base
-from .mixins import BaseMixin
 
+from .mixins import BaseMixin
 
 Base = declarative_base()
 
