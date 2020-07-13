@@ -112,3 +112,19 @@ class AccountApi:
             response = dict(error=f"Object creation failed with the following error: {e}")
         sess.close()
         return json.dumps(response, indent=4)
+
+    def update(self, *args):
+        params = ['group', 'member', 'old_account', 'new_account']
+        fields = dict(zip(params, args))
+        sess = Session()
+        obj = sess.query(TwitterAccount).join(TwitterAccount.member).filter(Member.group.has(name=fields['group'])).filter(Member.stage_name == fields['member']).filter(TwitterAccount.account_name == fields['old_account']).first()
+        obj.account_name = fields['new_account']
+        try:
+            sess.commit()
+            m_id = obj.id
+            response = obj.to_dict()
+            print(f"Updated twitter account {m_id}")
+        except exc.SQLAlchemyError as e:
+            response = dict(error=f"Object creation failed with the following error: {e}")
+        sess.close()
+        return json.dumps(response, indent=4)

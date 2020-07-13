@@ -1,3 +1,4 @@
+import os
 import asyncio
 from datetime import datetime, timedelta
 
@@ -153,6 +154,14 @@ async def account_get(ctx, group, member):
 async def account_add(ctx, *args):
     api = AccountApi()
     response = api.create(*args)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
+@account.command(aliases=['update', 'edit'], hidden=True)
+async def account_edit(ctx, *args):
+    api = AccountApi()
+    response = api.update(*args)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
