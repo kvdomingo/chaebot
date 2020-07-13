@@ -54,7 +54,7 @@ class MemberApi:
             queryset = sess.query(Member).filter(Member.group.has(name=group)).all()
             response = [query.to_dict() for query in queryset]
         else:
-            query = sess.query(Group).filter(Group.name == group).filter(Group.members.has(stage_name=name)).first()
+            query = sess.query(Member).filter(Member.group.has(name=group)).filter(Member.stage_name == name).first()
             if query:
                 response = query.to_dict()
             else:
@@ -124,6 +124,36 @@ class AccountApi:
             m_id = obj.id
             response = obj.to_dict()
             print(f"Updated twitter account {m_id}")
+        except exc.SQLAlchemyError as e:
+            response = dict(error=f"Object creation failed with the following error: {e}")
+        sess.close()
+        return json.dumps(response, indent=4)
+
+
+class AliasApi:
+    def get(self, group, member):
+        sess = Session()
+        query = sess.query(Alias).join(Alias.member).filter(Member.group.has(name=group)).filter(Member.stage_name == member).all()
+        response = [obj.to_dict() for obj in query]
+        sess.close()
+        return json.dumps(response, indent=4)
+
+    def create(self, *args):
+        params = ['group', 'member', 'alias']
+        fields = dict(zip(params, args))
+        sess = Session()
+        a_id = sess.query(func.max(Alias.id)).first()[0] + 1
+        m_id = sess.query(Member).filter(Member.group.has(name=fields['group'])).filter(Member.stage_name == fields['member']).first().id
+        fields['member_id'] = m_id
+        fields['id'] = a_id
+        del fields['member'], fields['group']
+        obj = Alias(**fields)
+        try:
+            sess.add(obj)
+            sess.commit()
+            a_id = obj.id
+            response = obj.to_dict()
+            print(f"Created alias {a_id}")
         except exc.SQLAlchemyError as e:
             response = dict(error=f"Object creation failed with the following error: {e}")
         sess.close()

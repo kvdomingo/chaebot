@@ -166,6 +166,27 @@ async def account_edit(ctx, *args):
     await ctx.send(message)
 
 
+@admin.group(hidden=True)
+async def alias(ctx):
+    pass
+
+
+@alias.command(aliases=['get'], hidden=True)
+async def alias_get(ctx, group, member):
+    api = AliasApi()
+    response = api.get(group, member)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
+@alias.command(aliases=['add', 'create'], hidden=True)
+async def alias_add(ctx, *args):
+    api = AliasApi()
+    response = api.create(*args)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
 @client.command(hidden=True)
 async def download(ctx, limit):
     if limit.lower() == 'all':
@@ -184,7 +205,7 @@ async def download(ctx, limit):
                 if len(existing_files) > 0:
                     existing_files = [f.split('.')[0] for f in existing_files]
                 if str(m_id) not in existing_files:
-                    await attachment.save(os.path.join(fp, f'{m_id}.{ext}'))
+                    await attachment.save(os.path.join(fp, f"{m_id}.{ext}"))
     print('Download complete.')
 
 
