@@ -11,7 +11,7 @@ def dbupdate():
     update_or_create.main()
 
 @click.command()
-@click.option('--limit', default=5)
+@click.option('--limit', default=10)
 @click.option('--channel', default=726831180565184603)
 def download(limit, channel):
     from src import download

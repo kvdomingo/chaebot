@@ -158,3 +158,38 @@ class AliasApi:
             response = dict(error=f"Object creation failed with the following error: {e}")
         sess.close()
         return json.dumps(response, indent=4)
+
+
+class ChannelApi:
+    def create(self, channel_id, group):
+        sess = Session()
+        query = sess.query(Channel).filter(Channel.channel_id == channel_id).first()
+        if query:
+            response = dict(error=f"This channel is already subscribed to hourly {query.group.name.upper()} updates")
+        else:
+            g_id = sess.query(Group).filter(Group.name == group.lower()).first().id
+            c_id = sess.query(func.max(Channel.id)).first()[0] + 1
+            obj = Channel(id=c_id, channel_id=channel_id, group_id=g_id)
+            try:
+                sess.add(obj)
+                sess.commit()
+                c_id = obj.id
+                response = obj.to_dict()
+                print(f"Created channel {c_id}")
+            except exc.SQLAlchemyError as e:
+                response = dict(error=f"Object creation failed with the following error: {e}")
+            sess.close()
+        return json.dumps(response, indent=4)
+
+    def delete(self, channel_id):
+        sess = Session()
+        obj = sess.query(Channel).filter(Channel.channel_id == channel_id).first()
+        if not obj:
+            response = dict(error="This channel is not subscribed to any hourly updates")
+        else:
+            sess.delete(obj)
+            c_id = obj.id
+            response = dict(message=f"This channel has been unsubscribed from {obj.group.name.upper()} updates")
+            print(f"Deleted channel {c_id}")
+        sess.close()
+        return json.dumps(response)

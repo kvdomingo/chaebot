@@ -27,22 +27,6 @@ async def ping(ctx):
     await ctx.send(f'Pong ({round(client.latency*1000)}ms)')
 
 
-@client.command(help='Get dyno metadata')
-async def meta(ctx):
-    created = os.environ['HEROKU_RELEASE_CREATED_AT']
-    created = datetime.strptime(created, '%Y-%m-%dT%H:%M:%SZ')
-    created += timedelta(hours=8)
-    message = f"""
-```
-Latest release:
-    {os.environ['HEROKU_RELEASE_VERSION']}
-    {os.environ['HEROKU_SLUG_DESCRIPTION']}
-    {created}
-```
-    """
-    await ctx.send(message)
-
-
 @client.command(help='(Re)start all hourly tasks')
 async def wake(ctx):
     print('Starting all hourly tasks...')
@@ -74,10 +58,26 @@ async def clear(ctx, amount):
     if amount == None or int(amount) < 1:
         await ctx.send('Please specify a positive number.')
     else:
-        await ctx.channel.purge(limit=int(amount + 1))
+        await ctx.channel.purge(limit=int(amount) + 1)
 
 
 # Administrative functions
+
+@client.command(help='Subscribe the channel to hourly updates of the selected group')
+async def subscribe(ctx, group):
+    api = ChannelApi()
+    response = api.create(int(ctx.channel.id), group)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
+@client.command(help='Unsubscribe the channel to any hourly update')
+async def unsubscribe(ctx):
+    api = ChannelApi()
+    response = api.delete(int(ctx.channel.id))
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
 
 @client.group(hidden=True)
 async def admin(ctx):
@@ -86,6 +86,23 @@ async def admin(ctx):
         return
     else:
         pass
+
+
+@admin.command(help='Get technical bot status', hidden=True)
+async def status(ctx):
+    created = os.environ['HEROKU_RELEASE_CREATED_AT']
+    created = datetime.strptime(created, '%Y-%m-%dT%H:%M:%SZ')
+    created += timedelta(hours=8)
+    message = f"""
+```
+Latest release:
+    {os.environ['HEROKU_RELEASE_VERSION']}
+    {os.environ['HEROKU_SLUG_DESCRIPTION']}
+    {created}
+```
+    """
+    await ctx.send(message)
+
 
 @admin.group(hidden=True)
 async def group(ctx):
