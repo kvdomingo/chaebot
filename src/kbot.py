@@ -7,7 +7,7 @@ from discord.ext import commands, tasks
 from tqdm import tqdm
 
 from .crud import *
-from .utils import media_handler, bombard_hearts
+from .utils import escape_quote, media_handler, bombard_hearts
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
@@ -53,7 +53,7 @@ async def sleep(ctx):
         await client.change_presence(status=discord.Status.idle)
 
 
-@client.command(aliases=['clean', 'sanitize'], help='Clear the specified amount of latest messages')
+@client.command(help='Clear the specified amount of latest messages')
 async def clear(ctx, amount):
     if amount == None or int(amount) < 1:
         await ctx.send('Please specify a positive number.')
@@ -82,7 +82,7 @@ async def unsubscribe(ctx):
 @client.group(hidden=True)
 async def admin(ctx):
     if str(ctx.message.author) != os.environ['DISCORD_ADMIN']:
-        await ctx.send('Sorry, you are not authorized to access that command.')
+        ctx.send('Sorry, you are not authorized to access that command.')
         return
     else:
         pass
@@ -230,6 +230,7 @@ async def download(ctx, limit):
 
 @client.command(aliases=['itzy'], help='Get a random pic of the specified ITZY member')
 async def itz(ctx, *person):
+    person = escape_quote(person)
     group = 'itzy'
     media = await media_handler(group, person)
     message = await ctx.send(files=media)
@@ -238,6 +239,7 @@ async def itz(ctx, *person):
 
 @client.command(aliases=['blackpink', 'mink', 'bp'], help='Get a random pic of the specified BLACKPINK member')
 async def pink(ctx, *person):
+    person = escape_quote(person)
     group = 'blackpink'
     media = await media_handler(group, person)
     message = await ctx.send(files=media)
@@ -246,6 +248,7 @@ async def pink(ctx, *person):
 
 @client.command(aliases=['twice'], help='Get a random pic of the specified TWICE member')
 async def more(ctx, *person):
+    person = escape_quote(person)
     group = 'twice'
     media = await media_handler(group, person)
     message = await ctx.send(files=media)
@@ -254,6 +257,7 @@ async def more(ctx, *person):
 
 @client.command(aliases=['red-velvet', 'velvet', 'rv'], help='Get a random pic of the specified RED VELVET member')
 async def red(ctx, *person):
+    person = escape_quote(person)
     group = 'redvelvet'
     media = await media_handler(group, person)
     message = await ctx.send(files=media)
@@ -262,6 +266,7 @@ async def red(ctx, *person):
 
 @client.command(help='Get a random pic of IU')
 async def iu(ctx, *person):
+    person = escape_quote(person)
     group = 'iu'
     media = await media_handler(group, person)
     message = await ctx.send(files=media)

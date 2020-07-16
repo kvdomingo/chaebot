@@ -21,7 +21,7 @@ class GroupApi:
 
     def create(self, name):
         sess = Session()
-        g_id = sess.query(func.max(Group.id)) + 1
+        g_id = sess.query(func.max(Group.id)).first()[0] + 1
         obj = Group(id=g_id, name=name.lower())
         sess.add(obj)
         try:

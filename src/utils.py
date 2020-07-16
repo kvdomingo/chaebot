@@ -20,6 +20,11 @@ api = twitter.Api(
     access_token_secret=os.environ['TWITTER_ACCESS_SECRET'],
 )
 
+
+def escape_quote(queries):
+    return [f"""{query.replace('"', "").replace("'", "").replace("’", "")}""" for query in queries]
+
+
 async def alias_matcher(member, group, hourly):
     sess = Session()
     members = sess.query(Member).filter(Member.group.has(name=group)).order_by(Member.id.desc()).all()
