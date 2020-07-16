@@ -273,6 +273,15 @@ async def iu(ctx, *person):
     await bombard_hearts(message)
 
 
+@client.command(help='Get a random pic of the specified BTS member')
+async def bts(ctx, *person):
+    person = escape_quote(person)
+    group = 'bts'
+    media = await media_handler(group, person)
+    message = await ctx.send(files=media)
+    await bombard_hearts(message)
+
+
 # Scheduled tasks
 
 @tasks.loop(hours=1)
