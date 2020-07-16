@@ -53,7 +53,7 @@ async def sleep(ctx):
         await client.change_presence(status=discord.Status.idle)
 
 
-@client.command(help='Clear the specified amount of latest messages')
+@client.command(aliases=['clean', 'sanitize'], help='Clear the specified amount of latest messages')
 async def clear(ctx, amount):
     if amount == None or int(amount) < 1:
         await ctx.send('Please specify a positive number.')
@@ -82,7 +82,7 @@ async def unsubscribe(ctx):
 @client.group(hidden=True)
 async def admin(ctx):
     if str(ctx.message.author) != os.environ['DISCORD_ADMIN']:
-        ctx.send('Sorry, you are not authorized to access that command.')
+        await ctx.send('Sorry, you are not authorized to access that command.')
         return
     else:
         pass
