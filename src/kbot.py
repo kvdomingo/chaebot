@@ -65,16 +65,14 @@ async def clear(ctx, amount):
 
 @client.command(help='Subscribe the channel to hourly updates of the selected group')
 async def subscribe(ctx, group):
-    api = ChannelApi()
-    response = api.create(int(ctx.channel.id), group)
+    response = ChannelApi().create(ctx.channel.id, group)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
 
 @client.command(help='Unsubscribe the channel to any hourly update')
 async def unsubscribe(ctx):
-    api = ChannelApi()
-    response = api.delete(int(ctx.channel.id))
+    response = ChannelApi().delete(ctx.channel.id)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
@@ -111,24 +109,21 @@ async def group(ctx):
 
 @group.command(aliases=['get', 'read'], hidden=True)
 async def group_get(ctx, name):
-    api = GroupApi()
-    response = api.get(name)
+    response = GroupApi().get(name)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
 
 @group.command(aliases=['add', 'create'], hidden=True)
 async def group_add(ctx, name):
-    api = GroupApi()
-    response = api.create(name)
+    response = GroupApi().create(name)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
 
 @group.command(aliases=['edit', 'update'], hidden=True)
 async def group_edit(ctx, old_name, new_name):
-    api = GroupApi()
-    response = api.update(old_name, new_name)
+    response = GroupApi().update(old_name, new_name)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
@@ -140,16 +135,15 @@ async def member(ctx):
 
 @member.command(aliases=['get', 'read'], hidden=True)
 async def member_get(ctx, group, name):
-    api = MemberApi()
-    response = api.get(group, name)
+    response = MemberApi().get(group, name)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
 
 @member.command(aliases=['add', 'create'], hidden=True)
-async def member_add(ctx, *args):
-    api = MemberApi()
-    response = api.create(*args)
+async def member_add(ctx, group, stage_name, family_name, given_name):
+    kwargs = {k: v for k, v in list(locals().items())[1:]}
+    response = MemberApi().create(**kwargs)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
@@ -161,24 +155,23 @@ async def account(ctx):
 
 @account.command(aliases=['get'], hidden=True)
 async def account_get(ctx, group, member):
-    api = AccountApi()
-    response = api.get(group, member)
+    response = AccountApi().get(group, member)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
 
 @account.command(aliases=['create', 'add'], hidden=True)
-async def account_add(ctx, *args):
-    api = AccountApi()
-    response = api.create(*args)
+async def account_add(ctx, group, member, account_name):
+    kwargs = {k: v for k, v in list(locals().items())[1:]}
+    response = AccountApi().create(**kwargs)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
 
 @account.command(aliases=['update', 'edit'], hidden=True)
-async def account_edit(ctx, *args):
-    api = AccountApi()
-    response = api.update(*args)
+async def account_edit(ctx, group, member, old_account, new_account):
+    kwargs = {k: v for k, v in list(locals().items())[1:]}
+    response = AccountApi().update(**kwargs)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
@@ -190,22 +183,20 @@ async def alias(ctx):
 
 @alias.command(aliases=['get'], hidden=True)
 async def alias_get(ctx, group, member):
-    api = AliasApi()
-    response = api.get(group, member)
+    response = AliasApi().get(group, member)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
 
 @alias.command(aliases=['add', 'create'], hidden=True)
-async def alias_add(ctx, *args):
-    api = AliasApi()
-    response = api.create(*args)
+async def alias_add(ctx, group, member, alias):
+    response = AliasApi().create(group, member, alias)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
 
 @client.command(hidden=True)
-async def download(ctx, limit):
+async def download(ctx, limit: str):
     if limit.lower() == 'all':
         limit = None
     else:
