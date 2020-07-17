@@ -1,14 +1,19 @@
 import os
 import asyncio
 from datetime import datetime, timedelta
+from random import SystemRandom
 
 import discord
 from discord.ext import commands, tasks
 from tqdm import tqdm
 
 from .crud import *
-from .utils import escape_quote, media_handler, bombard_hearts
+from .utils import bombard_hearts, escape_quote
+from src.handlers.twitter import twitter_handler
+from src.handlers.vlive import vlive_handler
 
+
+random = SystemRandom()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
 
@@ -18,6 +23,7 @@ async def on_ready():
     print(f'Logged in as {client.user}')
     hourly_itzy.start()
     hourly_blackpink.start()
+    itzy_vlive.start()
 
 
 # Convenience functions
@@ -27,52 +33,31 @@ async def ping(ctx):
     await ctx.send(f'Pong ({round(client.latency*1000)}ms)')
 
 
-@client.command(help='(Re)start all hourly tasks')
-async def wake(ctx):
-    print('Starting all hourly tasks...')
-    try:
-        hourly_itzy.start()
-        hourly_blackpink.start()
-    except commands.errors.CommandInvokeError:
-        await ctx.send('Already awake!')
-    print('All scheduled tasks successfully started.')
-    await ctx.send('I am awake! :sunrise:')
-    await client.change_presence(status=discord.Status.online)
-
-
-@client.command(help='Stop all hourly tasks')
-async def sleep(ctx):
-    if not (hourly_itzy.get_task() and hourly_blackpink.get_task()):
-        await ctx.send('Already sleeping :sleeping:')
-    else:
-        print('Stopping all hourly tasks...')
-        hourly_itzy.cancel()
-        hourly_blackpink.cancel()
-        print('All scheduled tasks successfully stopped.')
-        await ctx.send('Going to sleep :sleeping:')
-        await client.change_presence(status=discord.Status.idle)
-
-
 @client.command(help='Clear the specified amount of latest messages')
-async def clear(ctx, amount):
-    if amount == None or int(amount) < 1:
+async def clear(ctx, amount: int = 0):
+    if amount < 1:
         await ctx.send('Please specify a positive number.')
     else:
-        await ctx.channel.purge(limit=int(amount) + 1)
+        await ctx.channel.purge(limit=amount+1)
 
 
 # Administrative functions
 
-@client.command(help='Subscribe the channel to hourly updates of the selected group')
-async def subscribe(ctx, group):
-    response = ChannelApi().create(ctx.channel.id, group)
+@client.group(hidden=True)
+async def twitter():
+    pass
+
+
+@twitter.command(aliases=['subscribe'], help='Subscribe the channel to hourly updates of the selected group')
+async def twitter_subscribe(ctx, group: str):
+    response = TwitterChannelApi().create(ctx.channel.id, group)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
 
-@client.command(help='Unsubscribe the channel to any hourly update')
-async def unsubscribe(ctx):
-    response = ChannelApi().delete(ctx.channel.id)
+@twitter.command(aliases=['unsubscribe'], help='Unsubscribe the channel to any hourly update')
+async def twitter_unsubscribe(ctx):
+    response = TwitterChannelApi().delete(ctx.channel.id)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
@@ -219,38 +204,47 @@ async def download(ctx, limit: str):
 
 # Query functions
 
-@client.command(aliases=['itzy'], help='Get a random pic of the specified ITZY member')
-async def itz(ctx, *person):
+@client.command(help='Get a random pic from a random JYP group')
+async def jyp(ctx):
+    group = random.choice([itzy, twice])
+    await group(ctx, [])
+
+
+@client.command(aliases=['itz'], help='Get a random pic of the specified ITZY member')
+async def itzy(ctx, *person):
     person = escape_quote(person)
     group = 'itzy'
-    media = await media_handler(group, person)
+    media = await twitter_handler(group, person)
     message = await ctx.send(files=media)
     await bombard_hearts(message)
 
 
-@client.command(aliases=['blackpink', 'mink', 'bp'], help='Get a random pic of the specified BLACKPINK member')
-async def pink(ctx, *person):
+@client.command(aliases=['pink', 'mink', 'bp'], help='Get a random pic of the specified BLACKPINK member')
+async def blackpink(ctx, *person):
     person = escape_quote(person)
     group = 'blackpink'
-    media = await media_handler(group, person)
+    media = await twitter_handler(group, person)
     message = await ctx.send(files=media)
     await bombard_hearts(message)
 
 
-@client.command(aliases=['twice'], help='Get a random pic of the specified TWICE member')
-async def more(ctx, *person):
+@client.command(aliases=['more'], help='Get a random pic of the specified TWICE member')
+async def twice(ctx, *person):
     person = escape_quote(person)
     group = 'twice'
-    media = await media_handler(group, person)
+    media = await twitter_handler(group, person)
     message = await ctx.send(files=media)
     await bombard_hearts(message)
 
 
-@client.command(aliases=['red-velvet', 'velvet', 'rv'], help='Get a random pic of the specified RED VELVET member')
-async def red(ctx, *person):
+@client.command(
+    aliases=['red-velvet', 'red', 'velvet', 'rv'],
+    help='Get a random pic of the specified RED VELVET member'
+)
+async def red_velvet(ctx, *person):
     person = escape_quote(person)
     group = 'redvelvet'
-    media = await media_handler(group, person)
+    media = await twitter_handler(group, person)
     message = await ctx.send(files=media)
     await bombard_hearts(message)
 
@@ -259,16 +253,16 @@ async def red(ctx, *person):
 async def iu(ctx, *person):
     person = escape_quote(person)
     group = 'iu'
-    media = await media_handler(group, person)
+    media = await twitter_handler(group, person)
     message = await ctx.send(files=media)
     await bombard_hearts(message)
 
 
-@client.command(help='Get a random pic of the specified BTS member')
+@client.command(aliases=['bangtan'], help='Get a random pic of the specified BTS member')
 async def bts(ctx, *person):
     person = escape_quote(person)
     group = 'bts'
-    media = await media_handler(group, person)
+    media = await twitter_handler(group, person)
     message = await ctx.send(files=media)
     await bombard_hearts(message)
 
@@ -277,7 +271,7 @@ async def bts(ctx, *person):
 async def mamamoo(ctx, *person):
     person = escape_quote(person)
     group = 'mamamoo'
-    media = await media_handler(group, person)
+    media = await twitter_handler(group, person)
     message = await ctx.send(files=media)
     await bombard_hearts(message)
 
@@ -288,8 +282,8 @@ async def mamamoo(ctx, *person):
 async def hourly_itzy():
     sess = Session()
     group = 'itzy'
-    channels = sess.query(Channel).filter(Channel.group.has(name=group)).all()
-    media = await media_handler(group, '', True)
+    channels = sess.query(TwitterChannel).filter(TwitterChannel.group.has(name=group)).all()
+    media = await twitter_handler(group, '', True)
     for channel in channels:
         ch = client.get_channel(channel.channel_id)
         print(f'Connected to ITZY channel {ch}')
@@ -303,14 +297,29 @@ async def hourly_itzy():
 async def hourly_blackpink():
     sess = Session()
     group = 'blackpink'
-    channels = sess.query(Channel).filter(Channel.group.has(name=group)).all()
-    media = await media_handler(group, '', True)
+    channels = sess.query(TwitterChannel).filter(TwitterChannel.group.has(name=group)).all()
+    media = await twitter_handler(group, '', True)
     for channel in channels:
         ch = client.get_channel(channel.channel_id)
         print(f'Connected to BLACKPINK channel {ch}')
         message = await ch.send(files=media)
         await bombard_hearts(message)
     await client.change_presence(status=discord.Status.online, activity=discord.Game(name='BLACKPINK fancams'))
+    sess.close_all()
+
+
+@tasks.loop(seconds=30)
+async def itzy_vlive():
+    print("Checking latest ITZY VLIVE...")
+    sess = Session()
+    group = 'itzy'
+    embed = vlive_handler(sess, group)
+    if embed:
+        channels = sess.query(VliveChannel).filter(VliveChannel.group.has(name=group)).all()
+        for channel in channels:
+            ch = client.get_channel(channel.channel_id)
+            await ch.send(f"@everyone {channel.group.name.upper()} is live!")
+            await ch.send(embed=embed)
     sess.close_all()
 
 

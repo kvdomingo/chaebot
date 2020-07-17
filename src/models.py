@@ -11,8 +11,12 @@ class Group(BaseMixin, Base):
     __table_args__ = (sa.UniqueConstraint('name'), )
 
     name = sa.Column(sa.String(64))
+    vlive_channel_code = sa.Column(sa.String(255))
+    vlive_channel_seq = sa.Column(sa.BigInteger)
+    vlive_last_seq = sa.Column(sa.BigInteger)
     members = orm.relationship('Member', back_populates='group')
-    channels = orm.relationship('Channel', back_populates='group')
+    twitter_channels = orm.relationship('TwitterChannel', back_populates='group')
+    vlive_channels = orm.relationship('VliveChannel', back_populates='group')
 
     def __repr__(self):
         return f"<Group {self.id}: {self.name.upper()}>"
@@ -46,7 +50,7 @@ class Alias(BaseMixin, Base):
         return f"<Alias {self.id}: {self.alias}>"
 
     def __str__(self):
-        return f"{self.alias} ({self.member.capitalize()})"
+        return f"{self.alias} ({str(self.member).capitalize()})"
 
 
 class TwitterAccount(BaseMixin, Base):
@@ -58,17 +62,29 @@ class TwitterAccount(BaseMixin, Base):
         return f"<Twitter account {self.id}: {self.account_name}>"
 
     def __str__(self):
-        return f"{self.account_name} ({self.member.capitalize()})"
+        return f"{self.account_name} ({str(self.member).capitalize()})"
 
 
-class Channel(BaseMixin, Base):
+class TwitterChannel(BaseMixin, Base):
     __table_args__ = (sa.UniqueConstraint('channel_id'), )
     channel_id = sa.Column(sa.BigInteger)
     group_id = sa.Column(sa.Integer, sa.ForeignKey('group.id'))
-    group = orm.relationship('Group', back_populates='channels')
+    group = orm.relationship('Group', back_populates='twitter_channels')
 
     def __repr__(self):
-        return f"<Channel {self.channel_id}>"
+        return f"<Twitter channel {self.channel_id}>"
 
     def __str__(self):
-        return f"{self.channel_id} ({self.member.capitalize()})"
+        return f"{self.channel_id} ({str(self.group)})"
+
+
+class VliveChannel(BaseMixin, Base):
+    channel_id = sa.Column(sa.BigInteger)
+    group_id = sa.Column(sa.Integer, sa.ForeignKey('group.id'))
+    group = orm.relationship('Group', back_populates='vlive_channels')
+
+    def __repr__(self):
+        return f"<VLIVE channel {self.channel_id}>"
+
+    def __str__(self):
+        return f"{self.channel_id} ({str(self.group)})"

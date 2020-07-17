@@ -177,16 +177,16 @@ class AliasApi:
         return json.dumps(response, indent=4)
 
 
-class ChannelApi:
+class TwitterChannelApi:
     def create(self, channel_id: int, group: str) -> str:
         sess = Session()
-        query = sess.query(Channel).filter(Channel.channel_id == channel_id).first()
+        query = sess.query(TwitterChannel).filter(TwitterChannel.channel_id == channel_id).first()
         if query:
             response = dict(error=f"This channel is already subscribed to hourly {query.group.name.upper()} updates")
         else:
             g_id = sess.query(Group).filter(Group.name == group.lower()).first().id
-            c_id = sess.query(func.max(Channel.id)).first()[0] + 1
-            obj = Channel(id=c_id, channel_id=channel_id, group_id=g_id)
+            c_id = sess.query(func.max(TwitterChannel.id)).first()[0] + 1
+            obj = TwitterChannel(id=c_id, channel_id=channel_id, group_id=g_id)
             try:
                 sess.add(obj)
                 sess.commit()
@@ -200,7 +200,7 @@ class ChannelApi:
 
     def delete(self, channel_id: int) -> str:
         sess = Session()
-        obj = sess.query(Channel).filter(Channel.channel_id == channel_id).first()
+        obj = sess.query(TwitterChannel).filter(TwitterChannel.channel_id == channel_id).first()
         if not obj:
             response = dict(error="This channel is not subscribed to any hourly updates")
         else:
