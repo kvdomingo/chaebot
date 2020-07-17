@@ -13,6 +13,7 @@ A Discord bot to pull random ~~ITZY~~ k-pop idol pics from public fan accounts o
 - RED VELVET
 - IU
 - BTS
+- MAMAMOO
 
 ## Usage
 The bot is currently in `beta` phase. Shoot me an email to request access!

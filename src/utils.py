@@ -1,15 +1,16 @@
-import os
-import re
-import io
-import json
-import random
-import aiohttp
 import asyncio
-import twitter
-import discord
-from .models import *
-from . import Session
+import io
+import os
+import random
+import re
 
+import aiohttp
+import discord
+import twitter
+
+from typing import List
+from . import Session
+from .models import *
 
 random = random.SystemRandom()
 
@@ -21,14 +22,14 @@ api = twitter.Api(
 )
 
 
-def escape_quote(queries):
+def escape_quote(queries: List[str]) -> List[str]:
     return [f"""{query.replace('"', "").replace("'", "").replace("’", "")}""" for query in queries]
 
 
-async def alias_matcher(member, group, hourly):
+async def alias_matcher(member: str, group: str, hourly: bool):
     sess = Session()
     members = sess.query(Member).filter(Member.group.has(name=group)).order_by(Member.id.desc()).all()
-    if hourly or member is None or len(member) == 0:
+    if hourly or not member:
         member = random.choice(members)
         accounts = member.twitter_accounts
         return accounts
@@ -55,7 +56,7 @@ async def alias_matcher(member, group, hourly):
     return accounts
 
 
-async def media_handler(group, member=None, hourly=False):
+async def media_handler(group: str, member: str = '', hourly: bool = False):
     account_cat = await alias_matcher(member, group, hourly)
     screen_name = random.choice(account_cat).account_name
     tl = api.GetUserTimeline(screen_name=screen_name)
@@ -87,7 +88,7 @@ async def media_handler(group, member=None, hourly=False):
             return files
 
 
-async def bombard_hearts(message):
+async def bombard_hearts(message: discord.Message):
     reactions = [
         '♥', '💘', '💖', '💗', '💓',
         '💙', '💚', '💛', '💜', '🧡',

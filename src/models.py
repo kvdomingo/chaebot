@@ -6,6 +6,7 @@ from .mixins import BaseMixin
 
 Base = declarative_base()
 
+
 class Group(BaseMixin, Base):
     __table_args__ = (sa.UniqueConstraint('name'), )
 

@@ -273,6 +273,15 @@ async def bts(ctx, *person):
     await bombard_hearts(message)
 
 
+@client.command(aliases=['mama'], help='Get a random pic of the specified MAMAMOO member')
+async def mamamoo(ctx, *person):
+    person = escape_quote(person)
+    group = 'mamamoo'
+    media = await media_handler(group, person)
+    message = await ctx.send(files=media)
+    await bombard_hearts(message)
+
+
 # Scheduled tasks
 
 @tasks.loop(hours=1)
@@ -280,7 +289,7 @@ async def hourly_itzy():
     sess = Session()
     group = 'itzy'
     channels = sess.query(Channel).filter(Channel.group.has(name=group)).all()
-    media = await media_handler(group, member=None, hourly=True)
+    media = await media_handler(group, '', True)
     for channel in channels:
         ch = client.get_channel(channel.channel_id)
         print(f'Connected to ITZY channel {ch}')
@@ -295,7 +304,7 @@ async def hourly_blackpink():
     sess = Session()
     group = 'blackpink'
     channels = sess.query(Channel).filter(Channel.group.has(name=group)).all()
-    media = await media_handler(group, member=None, hourly=True)
+    media = await media_handler(group, '', True)
     for channel in channels:
         ch = client.get_channel(channel.channel_id)
         print(f'Connected to BLACKPINK channel {ch}')
