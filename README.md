@@ -4,7 +4,13 @@
 ![GitHub last commit](https://img.shields.io/github/last-commit/kvdomingo/discord-kbot?style=for-the-badge)
 ![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/kvdomingo/discord-kbot?logo=python&style=for-the-badge)
 
-A Discord bot to pull random ~~ITZY~~ k-pop idol pics from public fan accounts on Twitter and post them to a Discord server channel.
+A bot written in Python for K-pop Discord servers.
+
+## Features
+- Hourly posts of a random member from the selected group
+- On-demand post of a specific idol
+- Notifications when a group/idol starts streaming on VLIVE
+- ++ more in progress... 
 
 ## Supported groups/idols
 - ITZY

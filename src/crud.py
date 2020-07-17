@@ -19,10 +19,19 @@ class GroupApi:
         sess.close()
         return json.dumps(response, indent=4)
 
-    def create(self, name: str) -> str:
+    def create(
+            self,
+            name: str,
+            vlive_channel_code: str = None,
+            vlive_channel_seq: int = None,
+            vlive_last_seq: int = None
+    ) -> str:
+        fields = {k: v for k, v in list(locals().items())[1:]}
         sess = Session()
         g_id = sess.query(func.max(Group.id)).first()[0] + 1
-        obj = Group(id=g_id, name=name.lower())
+        fields['name'] = fields['name'].lower()
+        fields['id'] = g_id
+        obj = Group(**fields)
         sess.add(obj)
         try:
             sess.commit()
@@ -207,6 +216,41 @@ class TwitterChannelApi:
             sess.delete(obj)
             c_id = obj.id
             response = dict(message=f"This channel has been unsubscribed from {obj.group.name.upper()} updates")
+            print(f"Deleted channel {c_id}")
+        sess.close()
+        return json.dumps(response)
+
+
+class VliveChannelApi:
+    def create(self, channel_id: int, group: str) -> str:
+        sess = Session()
+        query = sess.query(VliveChannel).filter(VliveChannel.channel_id == channel_id).first()
+        if query:
+            response = dict(error=f"This channel is already subscribed to {query.group.name.upper()} notifications")
+        else:
+            g_id = sess.query(Group).filter(Group.name == group.lower()).first().id
+            c_id = sess.query(func.max(VliveChannel.id)).first()[0] + 1
+            obj = VliveChannel(id=c_id, channel_id=channel_id, group_id=g_id)
+            try:
+                sess.add(obj)
+                sess.commit()
+                c_id = obj.id
+                response = obj.to_dict()
+                print(f"Created channel {c_id}")
+            except exc.SQLAlchemyError as e:
+                response = dict(error=f"Object creation failed with the following error: {e}")
+            sess.close()
+        return json.dumps(response, indent=4)
+
+    def delete(self, channel_id: int) -> str:
+        sess = Session()
+        obj = sess.query(VliveChannel).filter(VliveChannel.channel_id == channel_id).first()
+        if not obj:
+            response = dict(error="This channel is not subscribed to any notifications")
+        else:
+            sess.delete(obj)
+            c_id = obj.id
+            response = dict(message=f"This channel has been unsubscribed from {obj.group.name.upper()} notifications")
             print(f"Deleted channel {c_id}")
         sess.close()
         return json.dumps(response)

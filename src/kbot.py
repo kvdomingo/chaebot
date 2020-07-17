@@ -100,8 +100,9 @@ async def group_get(ctx, name):
 
 
 @group.command(aliases=['add', 'create'], hidden=True)
-async def group_add(ctx, name):
-    response = GroupApi().create(name)
+async def group_add(ctx, name, vlive_channel_code=None, vlive_channel_seq=None, vlive_last_seq=None):
+    kwargs = {k: v for k, v in list(locals().items())[1:]}
+    response = GroupApi().create(**kwargs)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
@@ -109,6 +110,20 @@ async def group_add(ctx, name):
 @group.command(aliases=['edit', 'update'], hidden=True)
 async def group_edit(ctx, old_name, new_name):
     response = GroupApi().update(old_name, new_name)
+    message = f"```json\n{response}\n```"
+    await ctx.send(message)
+
+
+@group.command(aliases=['subscribe'], help='Subscribe the channel to VLIVE notifications of the selected group')
+async def group_subscribe(ctx, name: str):
+    response = VliveChannelApi().create(ctx.channel.id, name)
+    message = f"```\n{response}\n```"
+    await ctx.send(message)
+
+
+@group.command(aliases=['unsubscribe'], help='Unsubscribe the channel to all VLIVE notifications')
+async def group_unsubscribe(ctx):
+    response = VliveChannelApi().delete(ctx.channel.id)
     message = f"```json\n{response}\n```"
     await ctx.send(message)
 
@@ -318,7 +333,7 @@ async def itzy_vlive():
         channels = sess.query(VliveChannel).filter(VliveChannel.group.has(name=group)).all()
         for channel in channels:
             ch = client.get_channel(channel.channel_id)
-            await ch.send(f"@everyone {channel.group.name.upper()} is live!")
+            await ch.send(f"@everyone ITZY is live!")
             await ch.send(embed=embed)
     sess.close_all()
 
