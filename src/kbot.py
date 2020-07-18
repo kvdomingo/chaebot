@@ -9,8 +9,8 @@ from tqdm import tqdm
 
 from .crud import *
 from .utils import bombard_hearts, escape_quote
-from src.handlers.twitter import twitter_handler
-from src.handlers.vlive import vlive_handler
+from src.handlers.twitter import media_handler as twitter_handler
+from src.handlers.vlive import loop_handler as vlive_handler
 
 
 random = SystemRandom()

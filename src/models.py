@@ -55,6 +55,7 @@ class Alias(BaseMixin, Base):
 
 class TwitterAccount(BaseMixin, Base):
     account_name = sa.Column(sa.String(255))
+    last_tweet_id = sa.Column(sa.BigInteger)
     member_id = sa.Column(sa.Integer, sa.ForeignKey('member.id'))
     member = orm.relationship('Member', back_populates='twitter_accounts')
 

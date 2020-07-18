@@ -2,15 +2,15 @@ import os
 import discord
 import requests
 from datetime import datetime, timedelta
-from src import Session
 from src.models import *
+from sqlalchemy.orm.session import Session
 
 
 BASE_URL = 'http://api.vfan.vlive.tv/vproxy/channelplus'
 APP_ID = os.environ['VLIVE_APP_ID']
 
 
-def vlive_handler(sess, group: str):
+def loop_handler(sess: Session, group: str) -> discord.Embed:
     obj = sess.query(Group).filter(Group.name == group).first()
     payload = {
         'app_id': APP_ID,

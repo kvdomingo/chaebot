@@ -7,6 +7,7 @@ import twitter
 from random import SystemRandom
 from src import Session
 from src.models import *
+from typing import List, Optional
 
 
 random = SystemRandom()
@@ -18,7 +19,7 @@ api = twitter.Api(
 )
 
 
-async def twitter_alias_matcher(member: str, group: str, hourly: bool):
+async def alias_matcher(member: str, group: str, hourly: bool) -> List[TwitterAccount]:
     sess = Session()
     members = sess.query(Member).filter(Member.group.has(name=group)).order_by(Member.id.desc()).all()
     if hourly or not member:
@@ -48,10 +49,19 @@ async def twitter_alias_matcher(member: str, group: str, hourly: bool):
     return accounts
 
 
-async def twitter_handler(group: str, member: str = '', hourly: bool = False):
-    account_cat = await twitter_alias_matcher(member, group, hourly)
+async def media_handler(
+        group: str,
+        member: str = None,
+        hourly: bool = False
+) -> Optional[List[discord.File]]:
+    account_cat = await alias_matcher(member, group, hourly)
     screen_name = random.choice(account_cat).account_name
-    tl = api.GetUserTimeline(screen_name=screen_name)
+    tl = api.GetUserTimeline(
+        screen_name=screen_name,
+        exclude_replies=True,
+        include_rts=False,
+        count=100,
+    )
     media_post = (random.choice(tl)).media
     while media_post is None or len(media_post) == 0:
         media_post = random.choice(tl).media

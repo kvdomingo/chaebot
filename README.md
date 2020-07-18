@@ -22,6 +22,4 @@ A bot written in Python for K-pop Discord servers.
 - MAMAMOO
 
 ## Usage
-The bot is currently in `beta` phase. Shoot me an email to request access!
-
-If I have already sent you an access link (which should automatically add the bot to your selected server), you don't need to do anything else. Send a `!help` command to the bot (either by DM or server) to list all the commands.
+Shoot me an email or DM (`Tito Boyet#8827`) to add the bot to your server!
