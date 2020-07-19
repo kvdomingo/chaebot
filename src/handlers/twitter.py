@@ -56,12 +56,15 @@ async def media_handler(
 ) -> Optional[List[discord.File]]:
     account_cat = await alias_matcher(member, group, hourly)
     screen_name = random.choice(account_cat).account_name
-    tl = api.GetUserTimeline(
-        screen_name=screen_name,
-        exclude_replies=True,
-        include_rts=False,
-        count=100,
-    )
+    try:
+        tl = api.GetUserTimeline(
+            screen_name=screen_name,
+            exclude_replies=True,
+            include_rts=False,
+            count=100,
+        )
+    except twitter.error.TwitterError:
+        return
     media_post = (random.choice(tl)).media
     while media_post is None or len(media_post) == 0:
         media_post = random.choice(tl).media
