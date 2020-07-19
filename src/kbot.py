@@ -325,7 +325,6 @@ async def hourly_blackpink():
 
 @tasks.loop(seconds=30)
 async def itzy_vlive():
-    print("Checking latest ITZY VLIVE...")
     sess = Session()
     group = 'itzy'
     embed = vlive_handler(sess, group)

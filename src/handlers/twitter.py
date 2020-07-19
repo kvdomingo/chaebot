@@ -53,7 +53,7 @@ async def media_handler(
         group: str,
         member: str = None,
         hourly: bool = False
-) -> Optional[List[discord.File]]:
+) -> list:
     account_cat = await alias_matcher(member, group, hourly)
     screen_name = random.choice(account_cat).account_name
     try:
@@ -64,7 +64,7 @@ async def media_handler(
             count=100,
         )
     except twitter.error.TwitterError:
-        return
+        return []
     media_post = (random.choice(tl)).media
     while media_post is None or len(media_post) == 0:
         media_post = random.choice(tl).media
@@ -76,7 +76,7 @@ async def media_handler(
                 async with aiohttp.ClientSession() as session:
                     async with session.get(link) as res:
                         if res.status != 200:
-                            return
+                            return []
                         data = io.BytesIO(await res.read())
                         file = discord.File(data, 'video_0.mp4')
                         return [file]
@@ -87,7 +87,7 @@ async def media_handler(
             for i, link in enumerate(links):
                 async with session.get(link) as res:
                     if res.status != 200:
-                        return
+                        return []
                     data = io.BytesIO(await res.read())
                     files.append(discord.File(data, f'image_{i}.jpg'))
             return files
