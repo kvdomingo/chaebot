@@ -1,11 +1,11 @@
 import os
 import sys
-import discord
-from tqdm import tqdm
-from discord.ext import commands, tasks
 
+from discord.ext import commands, tasks
+from tqdm import tqdm
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 class DownloaderBot(commands.Cog):
     def __init__(self, bot, limit, channel):
@@ -52,4 +52,4 @@ def main(*args):
 
 
 if __name__ == '__main__':
-    main(*args)
+    main()

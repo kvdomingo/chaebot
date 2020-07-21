@@ -35,8 +35,8 @@ def restart():
 
 @click.command()
 def runbot():
-    from src import kbot
-    kbot.run()
+    from src import bot
+    bot.run()
 
 @click.command()
 def shell():
