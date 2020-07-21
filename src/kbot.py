@@ -1,20 +1,19 @@
 import os
 import asyncio
-from datetime import datetime, timedelta
-from random import SystemRandom
-
+import logging
 import discord
 from discord.ext import commands, tasks
-from tqdm import tqdm
-
+from datetime import datetime, timedelta
+from random import SystemRandom
 from .crud import *
 from .utils import bombard_hearts, escape_quote
 from src.handlers.twitter import media_handler as twitter_handler
 from src.handlers.vlive import loop_handler as vlive_handler
 
-
+logging.basicConfig(level=logging.INFO)
 random = SystemRandom()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
 
 
@@ -30,7 +29,7 @@ async def on_ready():
 
 @client.command(help='Check server response time')
 async def ping(ctx):
-    await ctx.send(f'Pong ({round(client.latency*1000)}ms)')
+    await ctx.send(f'Pong ({round(client.latency * 1000)}ms)')
 
 
 @client.command(help='Clear the specified amount of latest messages')
@@ -38,29 +37,46 @@ async def clear(ctx, amount: int = 0):
     if amount < 1:
         await ctx.send('Please specify a positive number.')
     else:
-        await ctx.channel.purge(limit=amount+1)
+        await ctx.channel.purge(limit=amount + 1)
 
 
-# Administrative functions
+# (Un)Subscription functions
 
 @client.group(hidden=True)
-async def twitter():
+async def twitter(ctx):
     pass
 
 
 @twitter.command(aliases=['subscribe'], help='Subscribe the channel to hourly updates of the selected group')
 async def twitter_subscribe(ctx, group: str):
-    response = TwitterChannelApi().create(ctx.channel.id, group)
-    message = f"```json\n{response}\n```"
+    message = TwitterChannelApi().create(ctx.channel.id, group)
     await ctx.send(message)
 
 
 @twitter.command(aliases=['unsubscribe'], help='Unsubscribe the channel to any hourly update')
-async def twitter_unsubscribe(ctx):
-    response = TwitterChannelApi().delete(ctx.channel.id)
-    message = f"```json\n{response}\n```"
+async def twitter_unsubscribe(ctx, group: str):
+    message = TwitterChannelApi().delete(ctx.channel.id, group)
     await ctx.send(message)
 
+
+@client.group(hidden=True)
+async def vlive(ctx):
+    pass
+
+
+@vlive.command(aliases=['subscribe'], help='Subscribe the channel to VLIVE notifications of the selected group')
+async def vlive_subscribe(ctx, name: str):
+    message = VliveChannelApi().create(ctx.channel.id, name)
+    await ctx.send(message)
+
+
+@vlive.command(aliases=['unsubscribe'], help='Unsubscribe the channel to all VLIVE notifications')
+async def vlive_unsubscribe(ctx):
+    message = VliveChannelApi().delete(ctx.channel.id)
+    await ctx.send(message)
+
+
+# Administrative functions
 
 @client.group(hidden=True)
 async def admin(ctx):
@@ -71,8 +87,8 @@ async def admin(ctx):
         pass
 
 
-@admin.command(help='Get technical bot status', hidden=True)
-async def status(ctx):
+@admin.command(aliases=['status'], help='Get technical bot status', hidden=True)
+async def admin_status(ctx):
     created = os.environ['HEROKU_RELEASE_CREATED_AT']
     created = datetime.strptime(created, '%Y-%m-%dT%H:%M:%SZ')
     created += timedelta(hours=8)
@@ -87,134 +103,88 @@ Latest release:
     await ctx.send(message)
 
 
-@admin.group(hidden=True)
-async def group(ctx):
+@admin.group(aliases=['group'], hidden=True)
+async def admin_group(ctx):
     pass
 
 
-@group.command(aliases=['get', 'read'], hidden=True)
-async def group_get(ctx, name):
+@admin_group.command(aliases=['get', 'read'], hidden=True)
+async def group_get(ctx, name=None):
     response = GroupApi().get(name)
-    message = f"```json\n{response}\n```"
-    await ctx.send(message)
+    await ctx.send(response)
 
 
-@group.command(aliases=['add', 'create'], hidden=True)
+@admin_group.command(aliases=['add', 'create'], hidden=True)
 async def group_add(ctx, name, vlive_channel_code=None, vlive_channel_seq=None, vlive_last_seq=None):
     kwargs = {k: v for k, v in list(locals().items())[1:]}
-    response = GroupApi().create(**kwargs)
-    message = f"```json\n{response}\n```"
+    message = GroupApi().create(**kwargs)
     await ctx.send(message)
 
 
-@group.command(aliases=['edit', 'update'], hidden=True)
+@admin_group.command(aliases=['edit', 'update'], hidden=True)
 async def group_edit(ctx, old_name, new_name):
-    response = GroupApi().update(old_name, new_name)
-    message = f"```json\n{response}\n```"
+    message = GroupApi().update(old_name, new_name)
     await ctx.send(message)
 
 
-@group.command(aliases=['subscribe'], help='Subscribe the channel to VLIVE notifications of the selected group')
-async def group_subscribe(ctx, name: str):
-    response = VliveChannelApi().create(ctx.channel.id, name)
-    message = f"```\n{response}\n```"
-    await ctx.send(message)
-
-
-@group.command(aliases=['unsubscribe'], help='Unsubscribe the channel to all VLIVE notifications')
-async def group_unsubscribe(ctx):
-    response = VliveChannelApi().delete(ctx.channel.id)
-    message = f"```json\n{response}\n```"
-    await ctx.send(message)
-
-
-@admin.group(hidden=True)
-async def member(ctx):
+@admin.group(aliases=['member'], hidden=True)
+async def admin_member(ctx):
     pass
 
 
-@member.command(aliases=['get', 'read'], hidden=True)
+@admin_member.command(aliases=['get', 'read'], hidden=True)
 async def member_get(ctx, group, name):
-    response = MemberApi().get(group, name)
-    message = f"```json\n{response}\n```"
+    message = MemberApi().get(group, name)
     await ctx.send(message)
 
 
-@member.command(aliases=['add', 'create'], hidden=True)
+@admin_member.command(aliases=['add', 'create'], hidden=True)
 async def member_add(ctx, group, stage_name, family_name, given_name):
     kwargs = {k: v for k, v in list(locals().items())[1:]}
-    response = MemberApi().create(**kwargs)
-    message = f"```json\n{response}\n```"
+    message = MemberApi().create(**kwargs)
     await ctx.send(message)
 
 
-@admin.group(hidden=True)
-async def account(ctx):
+@admin.group(aliases=['account'], hidden=True)
+async def admin_account(ctx):
     pass
 
 
-@account.command(aliases=['get'], hidden=True)
+@admin_account.command(aliases=['get'], hidden=True)
 async def account_get(ctx, group, member):
-    response = AccountApi().get(group, member)
-    message = f"```json\n{response}\n```"
+    message = AccountApi().get(group, member)
     await ctx.send(message)
 
 
-@account.command(aliases=['create', 'add'], hidden=True)
+@admin_account.command(aliases=['create', 'add'], hidden=True)
 async def account_add(ctx, group, member, account_name):
     kwargs = {k: v for k, v in list(locals().items())[1:]}
-    response = AccountApi().create(**kwargs)
-    message = f"```json\n{response}\n```"
+    message = AccountApi().create(**kwargs)
     await ctx.send(message)
 
 
-@account.command(aliases=['update', 'edit'], hidden=True)
+@admin_account.command(aliases=['update', 'edit'], hidden=True)
 async def account_edit(ctx, group, member, old_account, new_account):
     kwargs = {k: v for k, v in list(locals().items())[1:]}
-    response = AccountApi().update(**kwargs)
-    message = f"```json\n{response}\n```"
+    message = AccountApi().update(**kwargs)
     await ctx.send(message)
 
 
-@admin.group(hidden=True)
-async def alias(ctx):
+@admin.group(aliases=['alias'], hidden=True)
+async def admin_alias(ctx):
     pass
 
 
-@alias.command(aliases=['get'], hidden=True)
+@admin_alias.command(aliases=['get'], hidden=True)
 async def alias_get(ctx, group, member):
-    response = AliasApi().get(group, member)
-    message = f"```json\n{response}\n```"
+    message = AliasApi().get(group, member)
     await ctx.send(message)
 
 
-@alias.command(aliases=['add', 'create'], hidden=True)
+@admin_alias.command(aliases=['add', 'create'], hidden=True)
 async def alias_add(ctx, group, member, alias):
-    response = AliasApi().create(group, member, alias)
-    message = f"```json\n{response}\n```"
+    message = AliasApi().create(group, member, alias)
     await ctx.send(message)
-
-
-@client.command(hidden=True)
-async def download(ctx, limit: str):
-    if limit.lower() == 'all':
-        limit = None
-    else:
-        limit = int(limit)
-    await ctx.channel.purge(limit=1)
-    messages = await ctx.channel.history(limit=limit).flatten()
-    for message in tqdm(messages):
-        for attachment in message.attachments:
-            m_id = attachment.id
-            ext = attachment.url.split('.')[-1]
-            if ext != 'mp4':
-                fp = os.path.join(BASE_DIR, 'src/_media')
-                existing_files = os.listdir(fp)
-                if len(existing_files) > 0:
-                    existing_files = [f.split('.')[0] for f in existing_files]
-                if str(m_id) not in existing_files:
-                    await attachment.save(os.path.join(fp, f"{m_id}.{ext}"))
-    print('Download complete.')
 
 
 # Query functions
@@ -222,11 +192,11 @@ async def download(ctx, limit: str):
 @client.command(help='Get a random pic from a random JYP group')
 async def jyp(ctx):
     group = random.choice([itzy, twice])
-    await group(ctx, [])
+    await group(ctx, '')
 
 
 @client.command(aliases=['itz'], help='Get a random pic of the specified ITZY member')
-async def itzy(ctx, *person):
+async def itzy(ctx, *person: str):
     person = escape_quote(person)
     group = 'itzy'
     media = await twitter_handler(group, person)
@@ -235,7 +205,7 @@ async def itzy(ctx, *person):
 
 
 @client.command(aliases=['pink', 'mink', 'bp'], help='Get a random pic of the specified BLACKPINK member')
-async def blackpink(ctx, *person):
+async def blackpink(ctx, *person: str):
     person = escape_quote(person)
     group = 'blackpink'
     media = await twitter_handler(group, person)
@@ -244,7 +214,7 @@ async def blackpink(ctx, *person):
 
 
 @client.command(aliases=['more'], help='Get a random pic of the specified TWICE member')
-async def twice(ctx, *person):
+async def twice(ctx, *person: str):
     person = escape_quote(person)
     group = 'twice'
     media = await twitter_handler(group, person)
@@ -256,7 +226,7 @@ async def twice(ctx, *person):
     aliases=['red-velvet', 'red', 'velvet', 'rv'],
     help='Get a random pic of the specified RED VELVET member'
 )
-async def red_velvet(ctx, *person):
+async def red_velvet(ctx, *person: str):
     person = escape_quote(person)
     group = 'redvelvet'
     media = await twitter_handler(group, person)
@@ -265,7 +235,7 @@ async def red_velvet(ctx, *person):
 
 
 @client.command(help='Get a random pic of IU')
-async def iu(ctx, *person):
+async def iu(ctx, *person: str):
     person = escape_quote(person)
     group = 'iu'
     media = await twitter_handler(group, person)
@@ -274,7 +244,7 @@ async def iu(ctx, *person):
 
 
 @client.command(aliases=['bangtan'], help='Get a random pic of the specified BTS member')
-async def bts(ctx, *person):
+async def bts(ctx, *person: str):
     person = escape_quote(person)
     group = 'bts'
     media = await twitter_handler(group, person)
@@ -283,7 +253,7 @@ async def bts(ctx, *person):
 
 
 @client.command(aliases=['mama'], help='Get a random pic of the specified MAMAMOO member')
-async def mamamoo(ctx, *person):
+async def mamamoo(ctx, *person: str):
     person = escape_quote(person)
     group = 'mamamoo'
     media = await twitter_handler(group, person)
@@ -298,7 +268,7 @@ async def hourly_itzy():
     sess = Session()
     group = 'itzy'
     channels = sess.query(TwitterChannel).filter(TwitterChannel.group.has(name=group)).all()
-    media = await twitter_handler(group, '', True)
+    media = await twitter_handler(group, [], True)
     for channel in channels:
         ch = client.get_channel(channel.channel_id)
         print(f'Connected to ITZY channel {ch}')
@@ -313,7 +283,7 @@ async def hourly_blackpink():
     sess = Session()
     group = 'blackpink'
     channels = sess.query(TwitterChannel).filter(TwitterChannel.group.has(name=group)).all()
-    media = await twitter_handler(group, '', True)
+    media = await twitter_handler(group, [], True)
     for channel in channels:
         ch = client.get_channel(channel.channel_id)
         print(f'Connected to BLACKPINK channel {ch}')
@@ -332,7 +302,6 @@ async def itzy_vlive():
         channels = sess.query(VliveChannel).filter(VliveChannel.group.has(name=group)).all()
         for channel in channels:
             ch = client.get_channel(channel.channel_id)
-            await ch.send(f"@everyone ITZY is live!")
             await ch.send(embed=embed)
     sess.close_all()
 

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2959fc602c7fd891252ae5ac9b29cf3b81329fe8f6dac6d5ee6ada601ae9fc17"
+            "sha256": "ec294462a623c27c5b68359b198cc4539f5e79b42292a14aa733a0a25a80fd46"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -82,11 +82,11 @@
         },
         "discord.py": {
             "hashes": [
-                "sha256:406871b06d86c3dc49fba63238519f28628dac946fef8a0e22988ff58ec05580",
-                "sha256:ad00e34c72d2faa8db2157b651d05f3c415d7d05078e7e41dc9e8dc240051beb"
+                "sha256:1b546a32c0cd83d949392a71e5b06e30e19d1067246e3826d32ae9b8b3d06c1e",
+                "sha256:8ef58d6fc1e66903bc00ae79c4c09a38aa71043e88a83da4d2e8b9b1c9f9b9e2"
             ],
             "index": "pypi",
-            "version": "==1.3.3"
+            "version": "==1.3.4"
         },
         "future": {
             "hashes": [
@@ -401,11 +401,11 @@
         },
         "jedi": {
             "hashes": [
-                "sha256:1ddb0ec78059e8e27ec9eb5098360b4ea0a3dd840bedf21415ea820c21b40a22",
-                "sha256:807d5d4f96711a2bcfdd5dfa3b1ae6d09aa53832b182090b222b5efb81f52f63"
+                "sha256:86ed7d9b750603e4ba582ea8edc678657fb4007894a12bcf6f4bb97892f31d20",
+                "sha256:98cc583fa0f2f8304968199b01b6b4b94f469a1f4a74c1560506ca2a211378b5"
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
-            "version": "==0.17.1"
+            "version": "==0.17.2"
         },
         "parso": {
             "hashes": [

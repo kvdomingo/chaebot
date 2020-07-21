@@ -67,7 +67,6 @@ class TwitterAccount(BaseMixin, Base):
 
 
 class TwitterChannel(BaseMixin, Base):
-    __table_args__ = (sa.UniqueConstraint('channel_id'), )
     channel_id = sa.Column(sa.BigInteger)
     group_id = sa.Column(sa.Integer, sa.ForeignKey('group.id'))
     group = orm.relationship('Group', back_populates='twitter_channels')

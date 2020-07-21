@@ -19,7 +19,7 @@ api = twitter.Api(
 )
 
 
-async def alias_matcher(member: str, group: str, hourly: bool) -> List[TwitterAccount]:
+async def alias_matcher(member: List[str], group: str, hourly: bool) -> List[TwitterAccount]:
     sess = Session()
     members = sess.query(Member).filter(Member.group.has(name=group)).order_by(Member.id.desc()).all()
     if hourly or not member:
@@ -51,7 +51,7 @@ async def alias_matcher(member: str, group: str, hourly: bool) -> List[TwitterAc
 
 async def media_handler(
         group: str,
-        member: str = None,
+        member: List[str] = None,
         hourly: bool = False
 ) -> list:
     account_cat = await alias_matcher(member, group, hourly)

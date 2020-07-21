@@ -7,17 +7,33 @@ from . import Session
 from .models import *
 
 
+def textualize(obj) -> str:
+    message = ""
+    for k, v in obj.to_dict().items():
+        message += f"\n`{k}`: {v}"
+    return message
+
+
 class GroupApi:
-    def get(self, name: str) -> str:
+    name = 'group'
+
+    def get(self, name: str = None) -> str:
         sess = Session()
-        if name == 'all':
-            queryset = sess.query(Group).order_by(Group.id).all()
-            response = [group.to_dict() for group in queryset]
+        if name is None or name == 'all':
+            query = sess.query(Group).order_by(Group.name).all()
+            message = f"Here are all the {self.name}s I currently support:"
+            for obj in query:
+                message += "\n"
+                message += textualize(obj)
         else:
-            query = sess.query(Group).filter(Group.name == name).first()
-            response = query.to_dict()
+            obj = sess.query(Group).filter(Group.name == name).first()
+            if obj:
+                message = f"""I have records of a {self.name} matching your query "`{name}`":\n"""
+                message += textualize(obj)
+            else:
+                message = f"""Sorry, I couldn't find a record of a {self.name} matching your query "`{name}`" :cry:"""
         sess.close()
-        return json.dumps(response, indent=4)
+        return message
 
     def create(
             self,
@@ -35,41 +51,52 @@ class GroupApi:
         sess.add(obj)
         try:
             sess.commit()
-            response = obj.to_dict()
+            g_id = obj.id
+            message = f"I've created {self.name} **{obj.name}** with the following details:\n"
+            message += textualize(obj)
+            print(f"Created {self.name} {g_id}")
         except exc.SQLAlchemyError as e:
-            response = dict(error=f"Object creation failed with the following error: {e}")
+            message = f"Sorry, I couldn't create the {self.name}. Please try again later!"
+            print(e)
         sess.close()
-        return json.dumps(response, indent=4)
+        return message
 
     def update(self, old_name: str, new_name: str) -> str:
         sess = Session()
-        query = sess.query(Group).filter(Group.name == old_name.lower()).first()
-        query.name = new_name.lower()
+        obj = sess.query(Group).filter(Group.name == old_name.lower()).first()
+        obj.name = new_name.lower()
         try:
             sess.commit()
-            qid = query.id
-            response = query.to_dict()
-            print(f"Updated Group {qid}")
+            qid = obj.id
+            message = f"I've updated {self.name} **{obj.name}** with the following details:\n"
+            message += textualize(obj)
+            print(f"Updated {self.name} {qid}")
         except exc.SQLAlchemyError as e:
-            response = dict(error=f"Object update failed with the following error: {e}")
+            message = f"Sorry, I couldn't update the {self.name}. Please try again later!"
+            print(e)
         sess.close()
-        return json.dumps(response, indent=4)
+        return message
 
 
 class MemberApi:
-    def get(self, group: str, name: str) -> str:
+    name = 'member'
+
+    def get(self, group: str, name: str = None) -> str:
         sess = Session()
-        if name == 'all':
+        if name == 'all' or name is None:
             queryset = sess.query(Member).filter(Member.group.has(name=group)).all()
-            response = [query.to_dict() for query in queryset]
+            message = f"Here are all the {self.name}s of the group {group.upper()}:"
+            for obj in queryset:
+                message += f"\n{textualize(obj)}"
         else:
-            query = sess.query(Member).filter(Member.group.has(name=group)).filter(Member.stage_name == name).first()
-            if query:
-                response = query.to_dict()
+            obj = sess.query(Member).filter(Member.group.has(name=group)).filter(Member.stage_name == name).first()
+            if obj:
+                message = f"""Here are the details of "`{name}`" of {group.upper()}:\n"""
+                message += textualize(obj)
             else:
-                response = dict(error=f"No match for member with corresponding stage_name={name}")
+                message = f"""Sorry, I couldn't find a member with the name or alias of "`{name}`" """
         sess.close()
-        return json.dumps(response, indent=4)
+        return message
 
     def create(self, group: str, stage_name: str, family_name: str, given_name: str) -> str:
         fields = {k: v for k, v in list(locals().items())[1:]}
@@ -84,22 +111,33 @@ class MemberApi:
             sess.add(obj)
             sess.commit()
             m_id = obj.id
-            response = obj.to_dict()
-            print(f"Created member {m_id}")
+            message = f"I've created {self.name} **{obj.stage_name}** with the following details:\n"
+            message += textualize(obj)
+            print(f"Created {self.name} {m_id}")
         except exc.SQLAlchemyError as e:
-            response = dict(error=f"Object creation failed with the following error: {e}")
+            message = f"Sorry, I couldn't create the {self.name}. Please try again later!"
+            print(e)
         sess.close()
-        return json.dumps(response, indent=4)
+        return message
 
 
 class AccountApi:
+    name = 'twitter account'
+
     def get(self, group: str, member: str) -> str:
         sess = Session()
-        accounts = sess.query(Member).filter(Member.group.has(name=group)).filter(
-            Member.stage_name == member).first().twitter_accounts
-        response = [acc.to_dict() for acc in accounts]
+        accounts = (
+            sess.query(Member)
+                .filter(Member.group.has(name=group))
+                .filter(Member.stage_name == member)
+                .first()
+                .twitter_accounts
+        )
+        message = f"Here are all the {self.name}s for {member}:"
+        for obj in accounts:
+            message += f"\n{textualize(obj)}"
         sess.close()
-        return json.dumps(response, indent=4)
+        return message
 
     def create(self, group: str, member: str, account_name: str) -> str:
         fields = {k: v for k, v in list(locals().items())[1:]}
@@ -115,12 +153,14 @@ class AccountApi:
             sess.add(obj)
             sess.commit()
             a_id = obj.id
-            response = obj.to_dict()
+            message = f"I've created {self.name} @{obj.account_name} for {member} with the following details:\n"
+            message += textualize(obj)
             print(f"Created twitter account {a_id}")
         except exc.SQLAlchemyError as e:
-            response = dict(error=f"Object creation failed with the following error: {e}")
+            message = f"Sorry, I couldn't create the {self.name}. Please try again later!"
+            print(e)
         sess.close()
-        return json.dumps(response, indent=4)
+        return message
 
     def update(self, group: str, member: str, old_account: str, new_account: str) -> str:
         fields = {k: v for k, v in list(locals().items())[1:]}
@@ -137,15 +177,19 @@ class AccountApi:
         try:
             sess.commit()
             m_id = obj.id
-            response = obj.to_dict()
+            message = f"Updated {self.name} @{old_account} with the following details:\n"
+            message += textualize(obj)
             print(f"Updated twitter account {m_id}")
         except exc.SQLAlchemyError as e:
-            response = dict(error=f"Object creation failed with the following error: {e}")
+            message = f"Sorry, I couldn't update the {self.name}. Please try again later!"
+            print(e)
         sess.close()
-        return json.dumps(response, indent=4)
+        return message
 
 
 class AliasApi:
+    name = 'alias'
+
     def get(self, group: str, member: str) -> str:
         sess = Session()
         query = (
@@ -155,9 +199,11 @@ class AliasApi:
                 .filter(Member.stage_name == member)
                 .all()
         )
-        response = [obj.to_dict() for obj in query]
+        message = f"Here are all the {self.name}es for {member}:"
+        for obj in query:
+            message += f"\n{textualize(obj)}"
         sess.close()
-        return json.dumps(response, indent=4)
+        return message
 
     def create(self, group: str, member: str, alias: str) -> str:
         fields = {k: v for k, v in list(locals().items())[1:]}
@@ -178,20 +224,29 @@ class AliasApi:
             sess.add(obj)
             sess.commit()
             a_id = obj.id
-            response = obj.to_dict()
+            message = f"""I've created the {self.name} "{alias}" for {member} with the following details:\n"""
+            message += textualize(obj)
             print(f"Created alias {a_id}")
         except exc.SQLAlchemyError as e:
-            response = dict(error=f"Object creation failed with the following error: {e}")
+            message = f"Sorry, I couldn't create the {self.name}. Please try again later!"
+            print(e)
         sess.close()
-        return json.dumps(response, indent=4)
+        return message
 
 
 class TwitterChannelApi:
+    name = "twitter-subscribed channel"
+
     def create(self, channel_id: int, group: str) -> str:
         sess = Session()
-        query = sess.query(TwitterChannel).filter(TwitterChannel.channel_id == channel_id).first()
-        if query:
-            response = dict(error=f"This channel is already subscribed to hourly {query.group.name.upper()} updates")
+        obj = (
+            sess.query(TwitterChannel)
+                .filter(TwitterChannel.channel_id == channel_id)
+                .filter(TwitterChannel.group.has(name=group.lower()))
+                .first()
+        )
+        if obj:
+            message = f"This channel is already subscribed to hourly {obj.group.name.upper()} updates!"
         else:
             g_id = sess.query(Group).filter(Group.name == group.lower()).first().id
             c_id = sess.query(func.max(TwitterChannel.id)).first()[0] + 1
@@ -200,33 +255,42 @@ class TwitterChannelApi:
                 sess.add(obj)
                 sess.commit()
                 c_id = obj.id
-                response = obj.to_dict()
-                print(f"Created channel {c_id}")
+                message = f"This channel has been subscribed to hourly {obj.group.name.upper()} updates with the following details:\n"
+                message += textualize(obj)
+                print(f"Created twitter channel {c_id}")
             except exc.SQLAlchemyError as e:
-                response = dict(error=f"Object creation failed with the following error: {e}")
-            sess.close()
-        return json.dumps(response, indent=4)
+                message = f"Sorry, I couldn't subscribe this channel. Please try again later!"
+                print(e)
+        sess.close()
+        return message
 
-    def delete(self, channel_id: int) -> str:
+    def delete(self, channel_id: int, group: str) -> str:
         sess = Session()
-        obj = sess.query(TwitterChannel).filter(TwitterChannel.channel_id == channel_id).first()
+        obj = (
+            sess.query(TwitterChannel)
+                .filter(TwitterChannel.channel_id == channel_id)
+                .filter(TwitterChannel.group.has(name=group.lower()))
+                .first()
+        )
         if not obj:
-            response = dict(error="This channel is not subscribed to any hourly updates")
+            message = f"This channel is not subscribed to hourly {group.upper()} updates!"
         else:
             sess.delete(obj)
             c_id = obj.id
-            response = dict(message=f"This channel has been unsubscribed from {obj.group.name.upper()} updates")
+            message = f"This channel has been unsubscribed from {group.upper()} updates"
             print(f"Deleted channel {c_id}")
         sess.close()
-        return json.dumps(response)
+        return message
 
 
 class VliveChannelApi:
+    name = "vlive-subscribed channel"
+
     def create(self, channel_id: int, group: str) -> str:
         sess = Session()
-        query = sess.query(VliveChannel).filter(VliveChannel.channel_id == channel_id).first()
-        if query:
-            response = dict(error=f"This channel is already subscribed to {query.group.name.upper()} notifications")
+        obj = sess.query(VliveChannel).filter(VliveChannel.channel_id == channel_id).first()
+        if obj:
+            message = f"This channel is already subscribed to {obj.group.name.upper()} notifications!"
         else:
             g_id = sess.query(Group).filter(Group.name == group.lower()).first().id
             c_id = sess.query(func.max(VliveChannel.id)).first()[0] + 1
@@ -235,22 +299,24 @@ class VliveChannelApi:
                 sess.add(obj)
                 sess.commit()
                 c_id = obj.id
-                response = obj.to_dict()
+                message = f"This channel has been subscribed to {obj.group.name.upper()} VLIVE alerts with the following details:\n"
+                message += textualize(obj)
                 print(f"Created channel {c_id}")
             except exc.SQLAlchemyError as e:
-                response = dict(error=f"Object creation failed with the following error: {e}")
-            sess.close()
-        return json.dumps(response, indent=4)
+                message = f"Sorry, I couldn't subscribe this channel. Please try again later!"
+                print(e)
+        sess.close()
+        return message
 
     def delete(self, channel_id: int) -> str:
         sess = Session()
         obj = sess.query(VliveChannel).filter(VliveChannel.channel_id == channel_id).first()
         if not obj:
-            response = dict(error="This channel is not subscribed to any notifications")
+            message = "This channel is not subscribed to any VLIVE notifications!"
         else:
             sess.delete(obj)
             c_id = obj.id
-            response = dict(message=f"This channel has been unsubscribed from {obj.group.name.upper()} notifications")
+            message = f"This channel has been unsubscribed from {obj.group.name.upper()} VLIVE notifications!"
             print(f"Deleted channel {c_id}")
         sess.close()
-        return json.dumps(response)
+        return message

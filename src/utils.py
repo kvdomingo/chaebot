@@ -1,9 +1,9 @@
 import asyncio
 import discord
-from typing import List
+from typing import List, Tuple, Union
 
 
-def escape_quote(queries: List[str]) -> List[str]:
+def escape_quote(queries: Union[List[str], Tuple[str]]) -> List[str]:
     return [f"""{query.replace('"', "").replace("'", "").replace("’", "")}""" for query in queries]
 
 

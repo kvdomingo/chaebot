@@ -32,15 +32,15 @@ def loop_handler(sess: Session, group: str) -> discord.Embed:
         if delay_timestamp.seconds < 60:
             delay_text = f"{delay_timestamp.seconds}s"
         else:
-            delay_text =  f"{delay_timestamp.seconds//60}min"
+            delay_text = f"{delay_timestamp.seconds//60}min"
         embed = discord.Embed(
             title=latest_vid['title'],
             url=f"https://www.vlive.tv/video/{latest_vid['videoSeq']}",
-            description = f"{obj.name.upper()} started streaming ({delay_text} ago)",
+            description=f"@everyone {obj.name.upper()} started streaming ({delay_text} ago)",
             timestamp=release_timestamp,
         )
         embed.set_author(
-            name=f"{latest_vid['representChannelName']} - LIVE",
+            name=f"{latest_vid['representChannelName']}",
             icon_url=channel_info['channelProfileImage'],
             url=f"https://channels.vlive.tv/{channel_info['channelCode']}/home",
         )
