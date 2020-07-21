@@ -20,6 +20,7 @@ A bot written in Python for K-pop Discord servers.
 - IU
 - BTS
 - MAMAMOO
+- Somi
 
 ## Usage
 Shoot me an email or DM (`Tito Boyet#8827`) to add the bot to your server!
