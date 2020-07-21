@@ -7,7 +7,7 @@ import twitter
 from random import SystemRandom
 from src import Session
 from src.models import *
-from typing import List, Optional
+from typing import List, Union
 
 
 random = SystemRandom()
@@ -53,7 +53,7 @@ async def media_handler(
         group: str,
         member: List[str] = None,
         hourly: bool = False
-) -> list:
+) -> Union[list, str]:
     account_cat = await alias_matcher(member, group, hourly)
     screen_name = random.choice(account_cat).account_name
     try:
@@ -75,8 +75,9 @@ async def media_handler(
                 link = vid['url']
                 async with aiohttp.ClientSession() as session:
                     async with session.get(link) as res:
-                        if res.status != 200:
-                            return []
+                        if res.status//100 != 2:
+                            message = "Sorry, I'm having some trouble talking to Twitter :upside_down: Try that again in a few seconds"
+                            return message
                         data = io.BytesIO(await res.read())
                         file = discord.File(data, 'video_0.mp4')
                         return [file]
@@ -86,8 +87,9 @@ async def media_handler(
         async with aiohttp.ClientSession() as session:
             for i, link in enumerate(links):
                 async with session.get(link) as res:
-                    if res.status != 200:
-                        return []
+                    if res.status//100 != 2:
+                        message = "Sorry, I'm having some trouble talking to Twitter :upside_down: Try that again in a few seconds"
+                        return message
                     data = io.BytesIO(await res.read())
                     files.append(discord.File(data, f'image_{i}.jpg'))
             return files

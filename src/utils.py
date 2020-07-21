@@ -10,9 +10,12 @@ def escape_quote(queries: Union[List[str], Tuple[str]]) -> List[str]:
 
 async def query_handler(ctx, group: str, person: Union[List[str], Tuple[str]]):
     person = escape_quote(person)
-    media = await twitter_handler(group, person)
-    message = await ctx.send(files=media)
-    await bombard_hearts(message)
+    response = await twitter_handler(group, person)
+    if isinstance(response, list):
+        message = await ctx.send(files=response)
+        await bombard_hearts(message)
+    elif isinstance(response, str):
+        await ctx.send(response)
 
 
 async def bombard_hearts(message: discord.Message):
