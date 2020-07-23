@@ -15,14 +15,14 @@ class Tasks(commands.Cog):
     def cog_unload(self):
         self.hourly_itzy.cancel()
         self.hourly_blackpink.cancel()
-        self.itzy_vlive.cancel()
+        self.vlive_listener.cancel()
 
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'Logged in as {self.client.user}')
         self.hourly_itzy.start()
         self.hourly_blackpink.start()
-        self.itzy_vlive.start()
+        self.vlive_listener.start()
 
     @tasks.loop(hours=1)
     async def hourly_itzy(self):
@@ -53,15 +53,16 @@ class Tasks(commands.Cog):
         sess.close_all()
 
     @tasks.loop(seconds=30)
-    async def itzy_vlive(self):
+    async def vlive_listener(self):
         sess = Session()
-        group = 'itzy'
-        embed = vlive_handler(sess, group)
-        if embed:
-            channels = sess.query(VliveChannel).filter(VliveChannel.group.has(name=group)).all()
-            for channel in channels:
-                ch = self.client.get_channel(channel.channel_id)
-                await ch.send(embed=embed)
+        groups = sess.query(Group).all()
+        for group in groups:
+            embed = vlive_handler(sess, group.name)
+            if embed:
+                channels = sess.query(VliveChannel).filter(VliveChannel.group.has(name=group)).all()
+                for channel in channels:
+                    ch = self.client.get_channel(channel.channel_id)
+                    await ch.send(embed=embed)
         sess.close_all()
 
     @hourly_itzy.before_loop
