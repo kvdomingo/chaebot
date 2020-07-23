@@ -59,7 +59,7 @@ class Tasks(commands.Cog):
         for group in groups:
             embed = vlive_handler(sess, group.name)
             if embed:
-                channels = sess.query(VliveChannel).filter(VliveChannel.group.has(name=group)).all()
+                channels = sess.query(VliveChannel).filter(VliveChannel.group.has(name=group.name)).all()
                 for channel in channels:
                     ch = self.client.get_channel(channel.channel_id)
                     await ch.send(embed=embed)

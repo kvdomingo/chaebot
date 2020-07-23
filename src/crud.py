@@ -276,6 +276,7 @@ class TwitterChannelApi:
             message = f"This channel is not subscribed to hourly {group.upper()} updates!"
         else:
             sess.delete(obj)
+            sess.commit()
             c_id = obj.id
             message = f"This channel has been unsubscribed from {group.upper()} updates"
             print(f"Deleted channel {c_id}")
@@ -315,6 +316,7 @@ class VliveChannelApi:
             message = "This channel is not subscribed to any VLIVE notifications!"
         else:
             sess.delete(obj)
+            sess.commit()
             c_id = obj.id
             message = f"This channel has been unsubscribed from {obj.group.name.upper()} VLIVE notifications!"
             print(f"Deleted channel {c_id}")

@@ -7,11 +7,12 @@ from src.crud import *
 class Admin(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.time_up = datetime.now()
 
     @commands.group(hidden=True)
     async def admin(self, ctx):
         if str(ctx.message.author) != os.environ['DISCORD_ADMIN']:
-            ctx.send('Sorry, you are not authorized to access that command.')
+            ctx.send('Sorry, you are not authorized to use that command.')
             return
         else:
             pass
@@ -21,13 +22,14 @@ class Admin(commands.Cog):
         created = os.environ['HEROKU_RELEASE_CREATED_AT']
         created = datetime.strptime(created, '%Y-%m-%dT%H:%M:%SZ')
         created += timedelta(hours=8)
+        time_now = datetime.now()
+        uptime = str(time_now - self.time_up)
         message = f"""
-        ```
-        Latest release:
-            {os.environ['HEROKU_RELEASE_VERSION']}
-            {os.environ['HEROKU_SLUG_DESCRIPTION']}
-            {created}
-        ```
+Latest release:
+Version: `{os.environ['HEROKU_RELEASE_VERSION']}`
+Hash: `{os.environ['HEROKU_SLUG_DESCRIPTION']}`
+Build time: `{created}`
+Uptime: `{uptime}`
         """
         await ctx.send(message)
 
