@@ -9,7 +9,7 @@ class Convenience(commands.Cog):
     async def ping(self, ctx):
         await ctx.send(f'Pong ({round(self.client.latency * 1000)}ms)')
 
-    @commands.command()
+    @commands.command(aliases=['purge', 'sanitize'])
     async def clear(self, ctx, amount: int = 0):
         if amount < 1:
             await ctx.send('Please specify a positive number.')

@@ -41,7 +41,7 @@ class Query(commands.Cog):
         await query_handler(ctx, group, person)
 
     @commands.command(
-        aliases=['red-velvet', 'red', 'velvet', 'rv'],
+        aliases=['red-velvet', 'red', 'velvet', 'rv', 'reve'],
         help='Get a random pic of the specified RED VELVET member'
     )
     async def red_velvet(self, ctx, *person: str):
