@@ -23,5 +23,6 @@ A bot written in Python for K-pop Discord servers.
 - Somi
 
 ## Usage
+- Documentation: [kvisualbot.vercel.app](https://kvisualbot.vercel.app)
 - Shoot me an email or DM (`Tito Boyet#8827`) to add the bot to your server!
 - Join the [Discord server](https://discord.gg/jQ5dpeN).
