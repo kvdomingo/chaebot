@@ -57,7 +57,7 @@ class Tasks(commands.Cog):
         sess = Session()
         groups = sess.query(Group).all()
         for group in groups:
-            embed = vlive_handler(sess, group.name)
+            embed = await vlive_handler(sess, group.name)
             if embed:
                 channels = sess.query(VliveChannel).filter(VliveChannel.group.has(name=group.name)).all()
                 for channel in channels:
