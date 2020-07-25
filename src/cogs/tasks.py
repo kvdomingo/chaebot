@@ -62,7 +62,8 @@ class Tasks(commands.Cog):
                 channels = sess.query(VliveChannel).filter(VliveChannel.group.has(name=group.name)).all()
                 for channel in channels:
                     ch = self.client.get_channel(channel.channel_id)
-                    await ch.send(embed=embed)
+                    if ch:
+                        await ch.send(embed=embed)
         sess.close_all()
 
     @hourly_itzy.before_loop

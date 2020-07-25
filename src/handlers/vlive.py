@@ -21,13 +21,15 @@ async def loop_handler(sess: Session, group: str) -> Optional[discord.Embed]:
     }
     async with aiohttp.ClientSession() as session:
         async with session.get(f"{BASE_URL}/getChannelVideoList", params=payload) as res:
-            if res.status//10 != 2:
+            if res.status//100 != 2:
+                print("Retrieve failed.")
                 return
             res = await res.json()
             channel_info = res['result']['channelInfo']
             video_list = res['result']['videoList']
             latest_vid = video_list[0]
             if latest_vid['videoSeq'] != obj.vlive_last_seq:
+                print("New vlive detected")
                 obj.vlive_last_seq = latest_vid['videoSeq']
                 sess.commit()
                 release_timestamp = datetime.strptime(latest_vid['onAirStartAt'], '%Y-%m-%d %H:%M:%S')
