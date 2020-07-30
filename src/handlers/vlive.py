@@ -22,32 +22,38 @@ async def loop_handler(sess: Session, group: str) -> Optional[discord.Embed]:
     async with aiohttp.ClientSession() as session:
         async with session.get(f"{BASE_URL}/getChannelVideoList", params=payload) as res:
             if res.status//100 != 2:
-                print("Retrieve failed.")
+                print("VLIVE retrieve failed.")
                 return
             res = await res.json()
             channel_info = res['result']['channelInfo']
             video_list = res['result']['videoList']
             latest_vid = video_list[0]
             if latest_vid['videoSeq'] != obj.vlive_last_seq:
-                print("New vlive detected")
+                print("New VLIVE detected")
                 obj.vlive_last_seq = latest_vid['videoSeq']
                 sess.commit()
                 release_timestamp = datetime.strptime(latest_vid['onAirStartAt'], '%Y-%m-%d %H:%M:%S')
                 release_timestamp -= timedelta(hours=1)
                 now_timestamp = datetime.now()
+                release_timestamp -= timedelta(hours=8)
                 delay_timestamp = now_timestamp - release_timestamp
-                if delay_timestamp.seconds < 60:
-                    delay_text = f"{delay_timestamp.seconds}s"
+                live = latest_vid['videoType'] == 'LIVE'
+                title = "**[LIVE]** " if live else "**[VOD]** "
+                title += latest_vid['title']
+                name = latest_vid['representChannelName']
+                name += " Now Live!" if live else " New Upload"
+                if live:
+                    description = f"@everyone {obj.name.upper()} started streaming"
                 else:
-                    delay_text = f"{delay_timestamp.seconds//60}min"
+                    description = f"@everyone {obj.name.upper()} uploaded a new video"
                 embed = discord.Embed(
-                    title=latest_vid['title'],
+                    title=title,
                     url=f"https://www.vlive.tv/video/{latest_vid['videoSeq']}",
-                    description=f"@everyone {obj.name.upper()} started streaming ({delay_text} ago)",
+                    description=description,
                     timestamp=release_timestamp,
                 )
                 embed.set_author(
-                    name=f"{latest_vid['representChannelName']}",
+                    name=name,
                     icon_url=channel_info['channelProfileImage'],
                     url=f"https://channels.vlive.tv/{channel_info['channelCode']}/home",
                 )
