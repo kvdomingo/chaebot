@@ -28,33 +28,27 @@ class Tasks(commands.Cog):
         self.vlive_listener.start()
         self.twohour_covid.start()
 
-    @tasks.loop(hours=1)
-    async def hourly_itzy(self):
+    async def send_hourly_to_channels(self, group: str):
         sess = Session()
-        group = 'itzy'
         channels = sess.query(TwitterChannel).filter(TwitterChannel.group.has(name=group)).all()
         media = await twitter_handler(group, [], True)
         for channel in channels:
             ch = self.client.get_channel(channel.channel_id)
-            print(f'Connected to ITZY channel {ch}')
+            print(f'Connected to {group.upper()} channel {ch}')
             message = await ch.send(files=media)
             await bombard_hearts(message)
-        await self.client.change_presence(status=discord.Status.online, activity=discord.Game(name='ITZY fancams'))
+        await self.client.change_presence(status=discord.Status.online, activity=discord.Game(name=f'{group.upper()} fancams'))
         sess.close_all()
 
     @tasks.loop(hours=1)
+    async def hourly_itzy(self):
+        group = 'itzy'
+        await self.send_hourly_to_channels(group)
+
+    @tasks.loop(hours=1)
     async def hourly_blackpink(self):
-        sess = Session()
         group = 'blackpink'
-        channels = sess.query(TwitterChannel).filter(TwitterChannel.group.has(name=group)).all()
-        media = await twitter_handler(group, [], True)
-        for channel in channels:
-            ch = self.client.get_channel(channel.channel_id)
-            print(f'Connected to BLACKPINK channel {ch}')
-            message = await ch.send(files=media)
-            await bombard_hearts(message)
-        await self.client.change_presence(status=discord.Status.online, activity=discord.Game(name='BLACKPINK fancams'))
-        sess.close_all()
+        await self.send_hourly_to_channels(group)
 
     @tasks.loop(seconds=30)
     async def vlive_listener(self):

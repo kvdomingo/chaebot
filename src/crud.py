@@ -1,8 +1,5 @@
-import json
-
 from sqlalchemy import exc
 from sqlalchemy import func
-
 from . import Session
 from .models import *
 
