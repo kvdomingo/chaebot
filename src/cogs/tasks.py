@@ -92,7 +92,7 @@ class Tasks(commands.Cog):
                 activity=discord.Game(name='BLACKPINK fancams')
             )
 
-    @tasks.loop(hours=3)
+    @tasks.loop(hours=6)
     async def twohour_covid(self):
         img_url = 'https://res.cloudinary.com/kdphotography-assets/image/upload/v1/kvisualbot/covidph.jpg'
         ch = self.client.get_channel(695937463742496800)
