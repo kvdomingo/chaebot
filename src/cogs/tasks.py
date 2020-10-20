@@ -1,5 +1,3 @@
-import io
-import aiohttp
 import asyncio
 import discord
 from datetime import datetime
@@ -18,7 +16,6 @@ class Tasks(commands.Cog):
         self.hourly_itzy.cancel()
         self.hourly_blackpink.cancel()
         self.vlive_listener.cancel()
-        self.twohour_covid.cancel()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -26,7 +23,6 @@ class Tasks(commands.Cog):
         self.hourly_itzy.start()
         self.hourly_blackpink.start()
         self.vlive_listener.start()
-        self.twohour_covid.start()
 
     async def send_hourly_to_channels(self, group: str):
         sess = Session()
@@ -91,17 +87,6 @@ class Tasks(commands.Cog):
                 status=discord.Status.online,
                 activity=discord.Game(name='BLACKPINK fancams')
             )
-
-    @tasks.loop(hours=6)
-    async def twohour_covid(self):
-        img_url = 'https://res.cloudinary.com/kdphotography-assets/image/upload/v1/kvisualbot/covidph.jpg'
-        ch = self.client.get_channel(695937463742496800)
-        async with aiohttp.ClientSession() as session:
-            async with session.get(img_url) as res:
-                data = io.BytesIO(await res.read())
-                file = discord.File(data, 'covidph.jpg')
-        await ch.send('<@696695544826953769>')
-        await ch.send(file=file)
 
 
 def setup(client):
