@@ -1,11 +1,15 @@
 import asyncio
 import discord
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Dict
 from src.handlers.twitter import media_handler as twitter_handler
 
 
 def escape_quote(queries: Union[List[str], Tuple[str]]) -> List[str]:
     return [f"""{query.replace('"', "").replace("'", "").replace("’", "")}""" for query in queries]
+
+
+def query_string_from_dict(query_dict: Dict):
+    return '&'.join([f'{k}={v}' for k, v in query_dict.items()])
 
 
 async def query_handler(ctx, group: str, person: Union[List[str], Tuple[str]]):

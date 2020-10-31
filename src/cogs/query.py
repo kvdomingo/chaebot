@@ -35,7 +35,7 @@ class Query(commands.Cog):
         group = 'iu'
         await query_handler(ctx, group, person)
 
-    @commands.command(aliases=['mama'], help='Get a random pic of the specified MAMAMOO member')
+    @commands.command(aliases=['moo'], help='Get a random pic of the specified MAMAMOO member')
     async def mamamoo(self, ctx, *person: str):
         group = 'mamamoo'
         await query_handler(ctx, group, person)
