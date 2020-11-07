@@ -53,6 +53,19 @@ class Query(commands.Cog):
         group = 'somi'
         await query_handler(ctx, group, person)
 
+    @commands.command(
+        aliases=['æ', 'æspa', 'ae'],
+        help='Get a random pic of the specified aespa member'
+    )
+    async def aespa(self, ctx, *person: str):
+        group = 'aespa'
+        await query_handler(ctx, group, person)
+
+    @commands.command(help='Get a random pic of the specified EXO member')
+    async def exo(self, ctx, *person: str):
+        group = 'exo'
+        await query_handler(ctx, group, person)
+
     @commands.command(aliases=['more'], help='Get a random pic of the specified TWICE member')
     async def twice(self, ctx, *person: str):
         group = 'twice'

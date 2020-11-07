@@ -21,6 +21,8 @@ A bot written in Python for K-pop Discord servers.
 - BTS
 - MAMAMOO
 - Somi
+- aespa
+- EXO
 
 ## Usage
 - Documentation: [kvisualbot.vercel.app](https://kvisualbot.vercel.app)
