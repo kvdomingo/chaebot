@@ -23,12 +23,14 @@ async def query_handler(ctx, group: str, person: Union[List[str], Tuple[str]]):
 
 
 async def bombard_hearts(message: discord.Message):
-    reactions = [
-        '♥', '💘', '💖', '💗', '💓',
-        '💙', '💚', '💛', '💜', '🧡',
-        '💝', '💞', '💟', '🖤', '❤',
-        '❣', '🤎', '🤍', '😍', '🥰',
-    ]
-    for react in reactions:
-        await message.add_reaction(react)
-        await asyncio.sleep(0.5)
+    pass
+    # TODO: Implement opt-in/opt-out system for individual servers
+    # reactions = [
+    #     '♥', '💘', '💖', '💗', '💓',
+    #     '💙', '💚', '💛', '💜', '🧡',
+    #     '💝', '💞', '💟', '🖤', '❤',
+    #     '❣', '🤎', '🤍', '😍', '🥰',
+    # ]
+    # for react in reactions:
+    #     await message.add_reaction(react)
+    #     await asyncio.sleep(0.5)
