@@ -13,6 +13,8 @@ APP_ID = os.environ['VLIVE_APP_ID']
 
 async def loop_handler(sess: Session, group: str) -> Optional[discord.Embed]:
     obj = sess.query(Group).filter(Group.name == group).first()
+    if obj.vlive_channel_seq is None:
+        return
     payload = {
         'app_id': APP_ID,
         'channelSeq': obj.vlive_channel_seq,
@@ -34,9 +36,9 @@ async def loop_handler(sess: Session, group: str) -> Optional[discord.Embed]:
                 sess.commit()
                 release_timestamp = datetime.strptime(latest_vid['onAirStartAt'], '%Y-%m-%d %H:%M:%S')
                 release_timestamp -= timedelta(hours=1)
-                now_timestamp = datetime.now()
+                # now_timestamp = datetime.now()
                 release_timestamp -= timedelta(hours=8)
-                delay_timestamp = now_timestamp - release_timestamp
+                # delay_timestamp = now_timestamp - release_timestamp
                 live = latest_vid['videoType'] == 'LIVE'
                 title = "**[LIVE]** " if live else "**[VOD]** "
                 title += latest_vid['title']
