@@ -1,4 +1,4 @@
-import asyncio
+# import asyncio
 import discord
 from typing import List, Tuple, Union, Dict
 from src.handlers.twitter import media_handler as twitter_handler
@@ -15,6 +15,9 @@ def query_string_from_dict(query_dict: Dict):
 async def query_handler(ctx, group: str, person: Union[List[str], Tuple[str]]):
     person = escape_quote(person)
     response = await twitter_handler(group, person)
+    while not len(response):
+        response = await twitter_handler(group, person)
+
     if isinstance(response, list):
         message = await ctx.send(files=response)
         await bombard_hearts(message)
