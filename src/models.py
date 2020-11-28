@@ -29,6 +29,7 @@ class Member(BaseMixin, Base):
     stage_name = sa.Column(sa.String(64))
     given_name = sa.Column(sa.String(64))
     family_name = sa.Column(sa.String(64))
+    birthday = sa.Column(sa.Date, nullable=True)
     group_id = sa.Column(sa.Integer, sa.ForeignKey('group.id'))
     group = orm.relationship('Group', back_populates='members')
     aliases = orm.relationship('Alias', back_populates='member')

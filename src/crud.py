@@ -1,3 +1,4 @@
+from discord import Color, Embed
 from sqlalchemy import exc
 from sqlalchemy import func
 from . import Session
@@ -14,21 +15,36 @@ def textualize(obj) -> str:
 class GroupApi:
     name = 'group'
 
-    def get(self, name: str = None) -> str:
+    def get(self, name: str = None) -> Embed:
         sess = Session()
         if name is None or name == 'all':
             query = sess.query(Group).order_by(Group.name).all()
-            message = f"Here are all the {self.name}s I currently support:"
+            description = ''
             for obj in query:
-                message += "\n"
-                message += textualize(obj)
+                description += f'\n- {obj.name.upper()}'
+            message = Embed(
+                title='Supported groups/idols:',
+                color=Color.green(),
+                description=description,
+            )
         else:
             obj = sess.query(Group).filter(Group.name == name).first()
             if obj:
-                message = f"""I have records of a {self.name} matching your query "`{name}`":\n"""
-                message += textualize(obj)
+                message = Embed(
+                    title='Query matched:',
+                    color=Color.green(),
+                )
+                for key, val in obj.to_dict().items():
+                    message.add_field(
+                        name=f'`{key}`',
+                        value=val,
+                        inline=False,
+                    )
             else:
-                message = f"""Sorry, I couldn't find a record of a {self.name} matching your query "`{name}`" :cry:"""
+                message = Embed(
+                    title='No match :cry:',
+                    color=Color.red(),
+                )
         sess.close()
         return message
 
@@ -37,39 +53,92 @@ class GroupApi:
             name: str,
             vlive_channel_code: str = None,
             vlive_channel_seq: int = None,
-            vlive_last_seq: int = None
-    ) -> str:
+            vlive_last_seq: int = None,
+    ) -> Embed:
         fields = {k: v for k, v in list(locals().items())[1:]}
         sess = Session()
-        g_id = sess.query(func.max(Group.id)).first()[0] + 1
-        fields['name'] = fields['name'].lower()
-        fields['id'] = g_id
-        obj = Group(**fields)
-        sess.add(obj)
-        try:
-            sess.commit()
-            g_id = obj.id
-            message = f"I've created {self.name} **{obj.name}** with the following details:\n"
-            message += textualize(obj)
-            print(f"Created {self.name} {g_id}")
-        except exc.SQLAlchemyError as e:
-            message = f"Sorry, I couldn't create the {self.name}. Please try again later!"
-            print(e)
+
+        groups = sess.query(Group).all()
+        names = [group.name for group in groups]
+        if name.lower() in names:
+            message = Embed(
+                title='Error',
+                description=f'Group "{name}" already exists with the following details:',
+                color=Color.red(),
+            )
+            group = list(filter(lambda obj: obj.name == name.lower(), groups))[0]
+            for key, val in group.to_dict().items():
+                message.add_field(
+                    name=f'`{key}`',
+                    value=val,
+                    inline=False,
+                )
+        else:
+            g_id = sess.query(func.max(Group.id)).first()[0] + 1
+            fields['name'] = fields['name'].lower()
+            fields['id'] = g_id
+            obj = Group(**fields)
+            sess.add(obj)
+            try:
+                sess.commit()
+                g_id = obj.id
+                message = Embed(
+                    title='Group created',
+                    description=f'Created {self.name} "{obj.name}" with the following details:',
+                    color=Color.green(),
+                )
+                for key, val in obj.to_dict().items():
+                    message.add_field(
+                        name=f'`{key}`',
+                        value=val,
+                        inline=False,
+                    )
+                print(f"Created {self.name} {g_id}")
+            except exc.SQLAlchemyError as e:
+                message = Embed(
+                    title='Error',
+                    description=f"Sorry, I couldn't create the {self.name}. Please try again later!",
+                    color=Color.red(),
+                )
+                print(e)
         sess.close()
         return message
 
-    def update(self, old_name: str, new_name: str) -> str:
+    def update(
+            self,
+            group: str,
+            name: str = None,
+            vlive_channel_code: str = None,
+            vlive_channel_seq: int = None,
+            vlive_last_seq: int = None,
+    ) -> Embed:
+        params = {k: v for k, v in list(locals().items())[2:]}
         sess = Session()
-        obj = sess.query(Group).filter(Group.name == old_name.lower()).first()
-        obj.name = new_name.lower()
+        obj = sess.query(Group).filter(Group.name == group.lower()).first()
+        for key, val in params.items():
+            if val is not None:
+                setattr(obj, key, val)
         try:
             sess.commit()
             qid = obj.id
-            message = f"I've updated {self.name} **{obj.name}** with the following details:\n"
-            message += textualize(obj)
+            message = Embed(
+                title='Group updated',
+                description=f"I've updated {self.name} **{obj.name.upper()}** with the following details:\n",
+                color=Color.green(),
+            )
+            for key, val in obj.to_dict().items():
+                message.add_field(
+                    name=f'`{key}`',
+                    value=val,
+                    inline=False,
+                )
             print(f"Updated {self.name} {qid}")
         except exc.SQLAlchemyError as e:
-            message = f"Sorry, I couldn't update the {self.name}. Please try again later!"
+            message = Embed(
+                title='Error',
+                description=f"Sorry, I couldn't update the {self.name}. Please try again later!",
+                color=Color.red(),
+            )
             print(e)
         sess.close()
         return message

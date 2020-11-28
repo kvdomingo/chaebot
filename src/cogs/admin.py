@@ -1,5 +1,6 @@
 import os
 from datetime import datetime, timedelta
+from discord import Embed
 from discord.ext import commands
 from src.crud import *
 
@@ -40,18 +41,21 @@ Uptime: `{uptime}`
     @admin_group.command(aliases=['get', 'read'], hidden=True)
     async def group_get(self, ctx, name=None):
         response = GroupApi().get(name)
-        await ctx.send(response)
+        await ctx.send(embed=response)
 
     @admin_group.command(aliases=['add', 'create'], hidden=True)
-    async def group_add(self, ctx, name, vlive_channel_code=None, vlive_channel_seq=None, vlive_last_seq=None):
-        kwargs = {k: v for k, v in list(locals().items())[2:]}
+    async def group_add(self, ctx, *args):
+        args = list(map(lambda arg: arg.split('='), args))
+        kwargs = {k.strip(): v.strip() for k, v in args}
         message = GroupApi().create(**kwargs)
-        await ctx.send(message)
+        await ctx.send(embed=message)
 
     @admin_group.command(aliases=['edit', 'update'], hidden=True)
-    async def group_edit(self, ctx, old_name, new_name):
-        message = GroupApi().update(old_name, new_name)
-        await ctx.send(message)
+    async def group_edit(self, ctx, group, *args):
+        args = list(map(lambda arg: arg.split('='), args))
+        kwargs = {k.strip(): v.strip() for k, v in args}
+        message = GroupApi().update(group, **kwargs)
+        await ctx.send(embed=message)
 
     @admin.group(aliases=['member'], hidden=True)
     async def admin_member(self, ctx):

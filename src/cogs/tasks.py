@@ -2,6 +2,7 @@ import asyncio
 import discord
 from datetime import datetime
 from discord.ext import commands, tasks
+from src import DEBUG
 from src.crud import *
 from src.handlers.twitter import media_handler as twitter_handler
 from src.handlers.vlive import loop_handler as vlive_handler
@@ -20,6 +21,18 @@ class Tasks(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print(f'Logged in as {self.client.user}')
+
+        if DEBUG:
+            await self.client.change_presence(
+                status=discord.Status.idle,
+                activity=discord.Game(name='under maintenance'),
+            )
+        else:
+            await self.client.change_presence(
+                status=discord.Status.online,
+                activity=discord.Game(name=f'in {len(self.client.guilds)} servers!'),
+            )
+
         self.hourly_itzy.start()
         self.hourly_blackpink.start()
         self.vlive_listener.start()
@@ -33,7 +46,6 @@ class Tasks(commands.Cog):
             print(f'Connected to {group.upper()} channel {ch}')
             message = await ch.send(files=media)
             await bombard_hearts(message)
-        await self.client.change_presence(status=discord.Status.online, activity=discord.Game(name=f'{group.upper()} fancams'))
         sess.close_all()
 
     @tasks.loop(hours=1)
@@ -68,8 +80,6 @@ class Tasks(commands.Cog):
             print(f'Waiting for {delta_min} minutes to start hourly ITZY update...')
             await asyncio.sleep(delta_min * 60)
             print('Starting hourly ITZY update...')
-        if now.minute < 30:
-            await self.client.change_presence(status=discord.Status.online, activity=discord.Game(name='ITZY fancams'))
 
     @hourly_blackpink.before_loop
     async def blackpink_hour(self):
@@ -82,11 +92,6 @@ class Tasks(commands.Cog):
             print(f'Waiting for {delta_min} minutes to start hourly BLACKPINK update...')
             await asyncio.sleep(delta_min * 60)
             print('Starting hourly BLACKPINK update...')
-        if now.minute > 30:
-            await self.client.change_presence(
-                status=discord.Status.online,
-                activity=discord.Game(name='BLACKPINK fancams')
-            )
 
 
 def setup(client):
