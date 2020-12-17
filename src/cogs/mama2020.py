@@ -145,4 +145,5 @@ class Mama2020(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(Mama2020(client))
+    # client.add_cog(Mama2020(client))
+    pass
