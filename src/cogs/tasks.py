@@ -43,8 +43,11 @@ class Tasks(commands.Cog):
         sess = Session()
         channels = sess.query(TwitterChannel).filter(TwitterChannel.group.has(name=group)).all()
         media = await twitter_handler(group, [], True)
+        while not media:
+            media = await twitter_handler(group, [], True)
         for channel in channels:
             ch = self.client.get_channel(channel.channel_id)
+            print(group, ch)
             print(f'Connected to {group.upper()} channel {ch}')
             message = await ch.send(files=media)
             await bombard_hearts(message)

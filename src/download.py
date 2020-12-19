@@ -42,7 +42,7 @@ class DownloaderBot(commands.Cog):
         await self.general_downloader(group, channel, folders)
 
         group = 'twice'
-        channel = 789204127485657093
+        channel = 789385817884721164
         folders = [
             'nayeon', 'jeongyeon', 'momo', 'sana',
             'jihyo', 'mina', 'dahyun', 'chaeyoung',
@@ -56,7 +56,7 @@ class DownloaderBot(commands.Cog):
 
     @download.after_loop
     async def after_download(self):
-        sys.exit(0)
+        sys.exit()
 
 
 def main(*args):
