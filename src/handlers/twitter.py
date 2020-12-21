@@ -12,10 +12,10 @@ from typing import List, Union
 
 random = SystemRandom()
 api = twitter.Api(
-    consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
-    consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
-    access_token_key=os.environ['TWITTER_ACCESS_KEY'],
-    access_token_secret=os.environ['TWITTER_ACCESS_SECRET'],
+    consumer_key=os.environ.get('TWITTER_CONSUMER_KEY'),
+    consumer_secret=os.environ.get('TWITTER_CONSUMER_SECRET'),
+    access_token_key=os.environ.get('TWITTER_ACCESS_KEY'),
+    access_token_secret=os.environ.get('TWITTER_ACCESS_SECRET'),
 )
 
 
@@ -70,24 +70,31 @@ async def media_handler(
         media_post = random.choice(tl).media
     video_info = media_post[0].video_info
     if video_info is not None:
-        for i, vid in enumerate(video_info['variants']):
-            if '.m3u8' not in vid['url']:
-                link = vid['url']
-                async with aiohttp.ClientSession() as session:
-                    async with session.get(link) as res:
-                        if res.status//100 != 2:
-                            message = "Sorry, I'm having some trouble talking to Twitter :upside_down: Try that again in a few seconds"
-                            return message
-                        data = io.BytesIO(await res.read())
-                        file = discord.File(data, 'video_0.mp4')
-                        return [file]
+        variants = video_info['variants']
+        bitrates = []
+        for variant in variants:
+            if 'bitrate' in variant.keys():
+                bitrates.append(variant['bitrate'])
+            else:
+                bitrates.append(0)
+        max_bitrate_loc = bitrates.index(max(bitrates))
+        vid = variants[max_bitrate_loc]
+        link = vid['url']
+        async with aiohttp.ClientSession() as session:
+            async with session.get(link) as res:
+                if res.status != 200:
+                    message = "Sorry, I'm having some trouble talking to Twitter :upside_down: Try that again in a few seconds"
+                    return message
+                data = io.BytesIO(await res.read())
+                file = discord.File(data, 'video_0.mp4')
+                return [file]
     else:
         links = [media.media_url_https for media in media_post]
         files = []
         async with aiohttp.ClientSession() as session:
             for i, link in enumerate(links):
                 async with session.get(link) as res:
-                    if res.status//100 != 2:
+                    if res.status != 200:
                         message = "Sorry, I'm having some trouble talking to Twitter :upside_down: Try that again in a few seconds"
                         return message
                     data = io.BytesIO(await res.read())
