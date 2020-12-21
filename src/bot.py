@@ -1,9 +1,14 @@
 import os
+import sentry_sdk
+import logging
 from src import BASE_DIR
 from discord.ext import commands
 
-import logging
 logging.basicConfig(level=logging.INFO)
+sentry_sdk.init(
+    "https://f5016ad6477147ceabb8459b73b01414@o493799.ingest.sentry.io/5563761",
+    traces_sample_rate=1.0,
+)
 
 client = commands.Bot(command_prefix='!', description="Hi, I'm Botbot de Leon!")
 

@@ -16,7 +16,7 @@ class DownloaderBot(commands.Cog):
     def cog_unload(self):
         self.download.cancel()
 
-    async def general_downloader(self, group, channel, folders):
+    async def downloader(self, group, channel, folders):
         limit = self.limit
         channel = self.bot.get_channel(channel)
         messages = await channel.history(limit=limit).flatten()
@@ -36,19 +36,24 @@ class DownloaderBot(commands.Cog):
 
     @tasks.loop(count=1)
     async def download(self):
-        group = 'itzy'
-        channel = 726831180565184603
-        folders = ['yeji', 'lia', 'ryujin', 'chaeryeong', 'yuna', 'mixed']
-        await self.general_downloader(group, channel, folders)
-
-        group = 'twice'
-        channel = 789385817884721164
-        folders = [
-            'nayeon', 'jeongyeon', 'momo', 'sana',
-            'jihyo', 'mina', 'dahyun', 'chaeyoung',
-            'tzuyu', 'mixed',
+        downloads = [
+            {
+                'group': 'itzy',
+                'channel': 726831180565184603,
+                'folders': ['yeji', 'lia', 'ryujin', 'chaeryeong', 'yuna', 'mixed'],
+            },
+            {
+                'group': 'twice',
+                'channel': 789385817884721164,
+                'folders': [
+                    'nayeon', 'jeongyeon', 'momo', 'sana',
+                    'jihyo', 'mina', 'dahyun', 'chaeyoung',
+                    'tzuyu', 'mixed',
+                ],
+            }
         ]
-        await self.general_downloader(group, channel, folders)
+        for download in downloads:
+            await self.downloader(**download)
 
     @download.before_loop
     async def before_download(self):
@@ -56,7 +61,8 @@ class DownloaderBot(commands.Cog):
 
     @download.after_loop
     async def after_download(self):
-        sys.exit()
+        print('Done')
+        sys.exit(0)
 
 
 def main(*args):
