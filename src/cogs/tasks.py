@@ -4,8 +4,8 @@ from datetime import datetime
 from discord.ext import commands, tasks
 from src import DEBUG
 from src.crud import *
-from src.handlers.twitter import media_handler as twitter_handler
-from src.handlers.vlive import loop_handler as vlive_handler
+from src.handlers.twitter import twitter_handler
+from src.handlers.vlive import vlive_handler
 from src.utils import bombard_hearts
 
 
@@ -23,16 +23,11 @@ class Tasks(commands.Cog):
     async def on_ready(self):
         print(f'Logged in as {self.client.user}')
 
-        if DEBUG:
-            await self.client.change_presence(
-                status=discord.Status.idle,
-                activity=discord.Game(name='under maintenance'),
-            )
-        else:
-            await self.client.change_presence(
-                status=discord.Status.online,
-                activity=discord.Game(name=f'in {len(self.client.guilds)} servers!'),
-            )
+        activity_name = 'under development' if DEBUG else f'in {len(self.client.guilds)} servers!'
+        await self.client.change_presence(
+            status=discord.Status.online,
+            activity=discord.Game(name=activity_name),
+        )
 
         self.hourly_itzy.start()
         self.hourly_twice.start()

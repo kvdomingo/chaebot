@@ -1,7 +1,7 @@
 # import asyncio
 import discord
 from typing import List, Tuple, Union, Dict
-from src.handlers.twitter import media_handler as twitter_handler
+from src.handlers.twitter import twitter_handler as twitter_handler
 
 
 def escape_quote(queries: Union[List[str], Tuple[str]]) -> List[str]:

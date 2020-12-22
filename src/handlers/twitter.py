@@ -49,7 +49,7 @@ async def alias_matcher(member: List[str], group: str, hourly: bool) -> List[Twi
     return accounts
 
 
-async def media_handler(
+async def twitter_handler(
         group: str,
         member: List[str] = None,
         hourly: bool = False
@@ -83,7 +83,7 @@ async def media_handler(
         async with aiohttp.ClientSession() as session:
             async with session.get(link) as res:
                 if res.status != 200:
-                    message = "Sorry, I'm having some trouble talking to Twitter :upside_down: Try that again in a few seconds"
+                    message = "Sorry, I'm having some trouble talking to Twitter :cry: Try that again in a few seconds"
                     return message
                 data = io.BytesIO(await res.read())
                 file = discord.File(data, 'video_0.mp4')
@@ -95,7 +95,7 @@ async def media_handler(
             for i, link in enumerate(links):
                 async with session.get(link) as res:
                     if res.status != 200:
-                        message = "Sorry, I'm having some trouble talking to Twitter :upside_down: Try that again in a few seconds"
+                        message = "Sorry, I'm having some trouble talking to Twitter :cry: Try that again in a few seconds"
                         return message
                     data = io.BytesIO(await res.read())
                     files.append(discord.File(data, f'image_{i}.jpg'))

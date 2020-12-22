@@ -11,7 +11,7 @@ BASE_URL = 'http://api.vfan.vlive.tv/vproxy/channelplus'
 APP_ID = os.environ['VLIVE_APP_ID']
 
 
-async def loop_handler(sess: Session, group: str) -> Optional[discord.Embed]:
+async def vlive_handler(sess: Session, group: str) -> Optional[discord.Embed]:
     obj = sess.query(Group).filter(Group.name == group).first()
     if obj.vlive_channel_seq is None:
         return
