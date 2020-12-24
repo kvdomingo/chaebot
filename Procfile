@@ -1,2 +1,2 @@
-release: python manage.py migrate
-worker: python manage.py runbot
+release: python main.py migrate
+worker: python main.py runbot
