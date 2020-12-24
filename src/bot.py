@@ -12,7 +12,9 @@ if not DEBUG:
         traces_sample_rate=1.0,
     )
 
-client = commands.Bot(command_prefix='$', description="Hi, I'm Botbot de Leon!")
+COMMAND_PREFIX = '$' if DEBUG else '!'
+
+client = commands.Bot(command_prefix=COMMAND_PREFIX, description="Hi, I'm Botbot de Leon!")
 
 
 def run():
