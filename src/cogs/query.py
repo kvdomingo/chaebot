@@ -1,6 +1,6 @@
 from random import SystemRandom
 from discord.ext import commands
-from src.utils import bombard_hearts, query_handler
+from src.utils import query_handler
 
 
 random = SystemRandom()

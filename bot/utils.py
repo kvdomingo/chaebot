@@ -1,7 +1,6 @@
-# import asyncio
 import discord
 from typing import List, Tuple, Union, Dict
-from .handlers.twitter import twitter_handler
+from src.handlers.twitter import twitter_handler as twitter_handler
 
 
 def escape_quote(queries: Union[List[str], Tuple[str]]) -> List[str]:
@@ -28,6 +27,7 @@ async def query_handler(ctx, group: str, person: Union[List[str], Tuple[str]]):
 async def bombard_hearts(message: discord.Message):
     pass
     # TODO: Implement opt-in/opt-out system for individual servers
+    # import asyncio
     # reactions = [
     #     '♥', '💘', '💖', '💗', '💓',
     #     '💙', '💚', '💛', '💜', '🧡',
