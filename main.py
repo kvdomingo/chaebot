@@ -7,6 +7,18 @@ def manage():
 
 
 @click.command()
+def dbdump():
+    from scripts import dump_to_json
+    dump_to_json.main()
+
+
+@click.command()
+def dbimport():
+    from scripts import import_json
+    import_json.main()
+
+
+@click.command()
 def dbupdate():
     from src import update_or_create
     update_or_create.main()
@@ -50,6 +62,8 @@ def shell():
     subprocess.run('ipython', shell=True)
 
 
+manage.add_command(dbdump)
+manage.add_command(dbimport)
 manage.add_command(dbupdate)
 manage.add_command(download)
 manage.add_command(makemigrations)

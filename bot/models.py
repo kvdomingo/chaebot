@@ -2,10 +2,10 @@ from django.db import models
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=16, unique=True)
-    vlive_channel_code = models.CharField(max_length=32)
-    vlive_channel_seq = models.BigIntegerField()
-    vlive_last_seq = models.BigIntegerField()
+    name = models.CharField(max_length=32, unique=True)
+    vlive_channel_code = models.CharField(max_length=32, null=True)
+    vlive_channel_seq = models.BigIntegerField(null=True)
+    vlive_last_seq = models.BigIntegerField(null=True)
     twitter_user_name = models.CharField(max_length=16, blank=True)
     instagram_user_name = models.CharField(max_length=32, blank=True)
 
@@ -34,7 +34,7 @@ class Member(models.Model):
     family_name = models.CharField(max_length=16)
     english_name = models.CharField(max_length=16, null=True)
     birthday = models.DateField(blank=True, null=True)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name='members', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.stage_name} ({self.group.name})'
@@ -57,7 +57,8 @@ class MemberAlias(models.Model):
 
 class TwitterMediaSource(models.Model):
     account_name = models.CharField(max_length=16, unique=True)
-    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+    member = models.ForeignKey(Member, related_name='twitter_media_sources', on_delete=models.CASCADE)
+    last_tweet_id = models.BigIntegerField(null=True)
 
     def __str__(self):
         return f'{self.account_name} (for {self.member.stage_name} of {self.member.group.name})'
@@ -65,7 +66,7 @@ class TwitterMediaSource(models.Model):
 
 class TwitterMediaSubscribedChannel(models.Model):
     channel_id = models.BigIntegerField(unique=True)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name='twitter_media_subscribed_channels', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.channel_id} ({self.group.name})'
@@ -73,7 +74,11 @@ class TwitterMediaSubscribedChannel(models.Model):
 
 class VliveSubscribedChannel(models.Model):
     channel_id = models.BigIntegerField(unique=True)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name='vlive_subscribed_channels', on_delete=models.CASCADE)
+    dev_channel = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.channel_id} ({self.group.name})'
+
+    class Meta:
+        ordering = ['group__name', 'channel_id']
