@@ -52,8 +52,8 @@ def restart():
 
 @click.command()
 def runbot():
-    from src import bot
-    bot.run()
+    from bot import bot
+    bot.main()
 
 
 @click.command()

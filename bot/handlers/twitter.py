@@ -6,7 +6,7 @@ import re
 import twitter
 from random import SystemRandom
 from asgiref.sync import sync_to_async
-from ..models import *
+from ..serializers import *
 from typing import List, Union
 
 
@@ -20,12 +20,12 @@ api = twitter.Api(
 
 
 @sync_to_async
-def alias_matcher(member: List[str], group: str, hourly: bool) -> List[TwitterMediaSource]:
+def alias_matcher(member: List[str], group: str, hourly: bool):
     members = Member.objects.filter(group__name=group).order_by('-id').all()
     if hourly or not member:
         member = random.choice(members)
-        accounts = member.twitter_media_sources
-        return accounts
+        accounts = member.twitter_media_sources.all()
+        return TwitterMediaSourceSerializer(accounts, many=True).data
     member = ' '.join(member)
     for key in members:
         search_parameters = [
@@ -42,32 +42,32 @@ def alias_matcher(member: List[str], group: str, hourly: bool) -> List[TwitterMe
                 re.search(member, key.english_name),
             ])
         if any(search_parameters):
-            print(f'Query matched: {str(key)}')
-            return key.twitter_accounts
-        for alias in key.aliases:
+            print(f'Member query matched: {str(key)}')
+            return TwitterMediaSourceSerializer(key.twitter_media_sources.all(), many=True).data
+        for alias in key.aliases.all():
             if re.search(alias.alias, member, re.I) or re.search(member, alias.alias, re.I):
-                print(f'Query matched: {str(key)}')
-                return key.twitter_accounts
+                print(f'Member query matched: {str(key)}')
+                return TwitterMediaSourceSerializer(key.twitter_media_sources.all(), many=True).data
 
     member = random.choice(members)
-    accounts = member.twitter_media_sources
-    print('No match, choosing random')
-    return accounts
+    accounts = member.twitter_media_sources.all()
+    print('No member query matched, choosing random')
+    return TwitterMediaSourceSerializer(accounts, many=True).data
 
 
-def twitter_handler(
+async def twitter_handler(
         group: str,
         member: List[str] = None,
         hourly: bool = False
 ) -> Union[list, str]:
-    account_cat = alias_matcher(member, group, hourly)
-    screen_name = random.choice(account_cat).account_name
+    account_cat = await alias_matcher(member, group, hourly)
+    screen_name = random.choice(account_cat)['account_name']
     try:
         tl = api.GetUserTimeline(
             screen_name=screen_name,
             exclude_replies=True,
             include_rts=False,
-            count=100,
+            count=50,
         )
     except twitter.error.TwitterError:
         return []

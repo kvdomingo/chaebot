@@ -1,17 +1,10 @@
 import discord
-from typing import List, Tuple, Union, Dict
-from src.handlers.twitter import twitter_handler as twitter_handler
+from typing import Iterable
+from . import escape_quote
+from ..handlers.twitter import twitter_handler
 
 
-def escape_quote(queries: Union[List[str], Tuple[str]]) -> List[str]:
-    return [f"""{query.replace('"', "").replace("'", "").replace("’", "")}""" for query in queries]
-
-
-def query_string_from_dict(query_dict: Dict):
-    return '&'.join([f'{k}={v}' for k, v in query_dict.items()])
-
-
-async def query_handler(ctx, group: str, person: Union[List[str], Tuple[str]]):
+async def query_handler(ctx, group: str, person: Iterable[str]):
     person = escape_quote(person)
     response = await twitter_handler(group, person)
     while not len(response):
