@@ -1,4 +1,9 @@
 from django.db import models
+from django.db.models import CharField
+from django.db.models.functions import Lower
+
+
+CharField.register_lookup(Lower)
 
 
 class Group(models.Model):
