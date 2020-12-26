@@ -6,7 +6,8 @@ import re
 import twitter
 from random import SystemRandom
 from asgiref.sync import sync_to_async
-from ..serializers import *
+from ..models import Group, Member
+from ..serializers import TwitterMediaSourceSerializer
 from typing import List, Union
 
 
@@ -20,7 +21,28 @@ api = twitter.Api(
 
 
 @sync_to_async
-def alias_matcher(member: List[str], group: str, hourly: bool):
+def group_name_matcher(name):
+    group_names = {
+        group.name: [alias.alias for alias in group.aliases.all()]
+        for group in Group.objects.all()
+    }
+    for key, value in group_names.items():
+        search_params = [
+            re.search(name, key, re.I),
+            re.search(key, name, re.I),
+        ]
+        search_params.extend([re.search(name, val, re.I) for val in value])
+        search_params.extend([re.search(val, name, re.I) for val in value])
+        if any(search_params):
+            print(f'Group query matched: {key}.')
+            return key
+    group = random.choice(list(group_names.keys()))
+    print(f'No group query matched, choosing random.')
+    return group
+
+
+@sync_to_async
+def member_name_matcher(member: List[str], group: str, hourly: bool):
     members = Member.objects.filter(group__name=group).order_by('-id').all()
     if hourly or not member:
         member = random.choice(members)
@@ -60,7 +82,8 @@ async def twitter_handler(
         member: List[str] = None,
         hourly: bool = False
 ) -> Union[list, str]:
-    account_cat = await alias_matcher(member, group, hourly)
+    group = await group_name_matcher(group)
+    account_cat = await member_name_matcher(member, group, hourly)
     screen_name = random.choice(account_cat)['account_name']
     try:
         tl = api.GetUserTimeline(
