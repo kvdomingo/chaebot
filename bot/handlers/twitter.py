@@ -4,10 +4,8 @@ import io
 import os
 import re
 import twitter
+from ..utils.endpoints import Api
 from random import SystemRandom
-from asgiref.sync import sync_to_async
-from ..models import Group, Member
-from ..serializers import TwitterMediaSourceSerializer
 from typing import List, Union
 
 
@@ -20,61 +18,58 @@ api = twitter.Api(
 )
 
 
-@sync_to_async
-def group_name_matcher(name):
-    group_names = {
-        group.name: [alias.alias for alias in group.aliases.all()]
-        for group in Group.objects.all()
-    }
-    for key, value in group_names.items():
-        search_params = [
-            re.search(name, key, re.I),
-            re.search(key, name, re.I),
-        ]
-        search_params.extend([re.search(name, val, re.I) for val in value])
-        search_params.extend([re.search(val, name, re.I) for val in value])
-        if any(search_params):
-            print(f'Group query matched: {key}.')
-            return key
-    group = random.choice(list(group_names.keys()))
+async def group_name_matcher(name: str) -> int:
+    groups = await Api.groups()
+    group_names = {}
+    for group in groups:
+        group_names[group['id']] = [group['name']]
+        for alias in group['aliases']:
+            group_names[group['id']].append(alias['alias'])
+    for id_, aliases in group_names.items():
+        search_params = []
+        for alias in aliases:
+            search_params.extend([
+                re.search(name, alias, re.I),
+                re.search(alias, name, re.I),
+            ])
+            if any(search_params):
+                print(f'Group query matched: {group_names[id_][0]}.')
+                return id_
     print(f'No group query matched, choosing random.')
-    return group
+    return random.choice(list(group_names.keys()))
 
 
-@sync_to_async
-def member_name_matcher(member: List[str], group: str, hourly: bool):
-    members = Member.objects.filter(group__name=group).order_by('-id').all()
+async def member_name_matcher(member: List[str], group: str, hourly: bool) -> list:
+    group_id = await group_name_matcher(group)
+    members = await Api.group_members(group_id)
     if hourly or not member:
         member = random.choice(members)
-        accounts = member.twitter_media_sources.all()
-        return TwitterMediaSourceSerializer(accounts, many=True).data
+        accounts = member['twitterMediaSources']
+        return accounts
     member = ' '.join(member)
     for key in members:
         search_parameters = [
-            re.search(member, key.stage_name, re.I),
-            re.search(key.stage_name, member, re.I),
-            re.search(member, key.given_name, re.I),
-            re.search(key.given_name, member, re.I),
-            re.search(member, key.family_name, re.I),
-            re.search(key.family_name, member, re.I)
+            re.search(member, key['stage_name'], re.I),
+            re.search(key['stage_name'], member, re.I),
+            re.search(member, key['given_name'], re.I),
+            re.search(key['given_name'], member, re.I),
+            re.search(member, key['family_name'], re.I),
+            re.search(key['family_name'], member, re.I)
         ]
-        if key.english_name:
+        if key['english_name']:
             search_parameters.extend([
-                re.search(key.english_name, member),
-                re.search(member, key.english_name),
+                re.search(key['english_name'], member),
+                re.search(member, key['english_name']),
             ])
         if any(search_parameters):
-            print(f'Member query matched: {str(key)}')
-            return TwitterMediaSourceSerializer(key.twitter_media_sources.all(), many=True).data
-        for alias in key.aliases.all():
-            if re.search(alias.alias, member, re.I) or re.search(member, alias.alias, re.I):
+            print(f'Member query matched: {key["stage_name"]}')
+            return key['twitterMediaSources']
+        for alias in key['aliases']:
+            if re.search(alias['alias'], member, re.I) or re.search(member, alias['alias'], re.I):
                 print(f'Member query matched: {str(key)}')
-                return TwitterMediaSourceSerializer(key.twitter_media_sources.all(), many=True).data
-
-    member = random.choice(members)
-    accounts = member.twitter_media_sources.all()
+                return key['twitterMediaSources']
     print('No member query matched, choosing random')
-    return TwitterMediaSourceSerializer(accounts, many=True).data
+    return random.choice(members)['twitter_media_sources']
 
 
 async def twitter_handler(
@@ -82,7 +77,6 @@ async def twitter_handler(
         member: List[str] = None,
         hourly: bool = False
 ) -> Union[list, str]:
-    group = await group_name_matcher(group)
     account_cat = await member_name_matcher(member, group, hourly)
     screen_name = random.choice(account_cat)['account_name']
     try:

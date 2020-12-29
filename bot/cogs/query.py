@@ -1,10 +1,9 @@
-from django import db
+import requests
 from random import SystemRandom
 from discord.ext import commands
 from ..handlers.twitter import twitter_handler
 from ..utils import escape_quote
-from ..models import Group
-from ..serializers import GroupSerializer
+from ..utils.endpoints import Api
 
 random = SystemRandom()
 
@@ -12,7 +11,6 @@ random = SystemRandom()
 class Query(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.groups = GroupSerializer(Group.objects.all(), many=True).data
 
     @commands.command(aliases=['q'], help='Get a random member pic from the specified group')
     async def query(self, ctx, group: str, *person: str):
@@ -25,11 +23,11 @@ class Query(commands.Cog):
             await ctx.send(files=response)
         elif isinstance(response, str):
             await ctx.send(response)
-        db.close_old_connections()
 
     @commands.command(aliases=['list'], help='List all supported groups')
     async def list_(self, ctx):
-        ctx.send('\n'.join([group['name'] for group in self.groups]))
+        groups = await Api.groups()
+        await ctx.send('\n'.join([group['name'] for group in groups]))
 
 
 def setup(client):

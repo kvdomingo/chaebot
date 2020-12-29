@@ -1,9 +1,6 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-import django
-django.setup()
-
 import os
 import sentry_sdk
 import logging
@@ -11,6 +8,7 @@ from django.conf import settings
 from discord.ext import commands
 
 logging.basicConfig(level=logging.INFO)
+
 if not settings.DEBUG:
     sentry_sdk.init(
         'https://f5016ad6477147ceabb8459b73b01414@o493799.ingest.sentry.io/5563761',
