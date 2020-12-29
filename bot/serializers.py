@@ -3,6 +3,19 @@ from .models import *
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    aliases = serializers.SerializerMethodField()
+    members = serializers.SerializerMethodField()
+
+    def get_aliases(self, obj):
+        aliases = obj.aliases.all()
+        serializer = GroupAliasSerializer(aliases, many=True)
+        return serializer.data
+
+    def get_members(self, obj):
+        members = obj.members.all()
+        serializer = MemberSerializer(members, many=True)
+        return serializer.data
+
     class Meta:
         model = Group
         fields = '__all__'
@@ -15,6 +28,19 @@ class GroupAliasSerializer(serializers.ModelSerializer):
 
 
 class MemberSerializer(serializers.ModelSerializer):
+    aliases = serializers.SerializerMethodField()
+    twitterMediaSources = serializers.SerializerMethodField()
+
+    def get_aliases(self, obj):
+        aliases = obj.aliases.all()
+        serializer = MemberAliasSerializer(aliases, many=True)
+        return serializer.data
+
+    def get_twitterMediaSources(self, obj):
+        sources = obj.twitter_media_sources.all()
+        serializer = TwitterMediaSourceSerializer(sources, many=True)
+        return serializer.data
+
     class Meta:
         model = Member
         fields = '__all__'

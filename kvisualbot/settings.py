@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 import dj_database_url
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -41,6 +43,17 @@ if DEBUG:
         'localhost',
         '127.0.0.1',
     ])
+
+
+# Sentry logging
+
+if not DEBUG:
+    sentry_sdk.init(
+        dsn='https://f5016ad6477147ceabb8459b73b01414@o493799.ingest.sentry.io/5563761',
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+        send_default_pii=True,
+    )
 
 
 # Application definition
@@ -92,9 +105,30 @@ WSGI_APPLICATION = 'kvisualbot.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {'default': dj_database_url.config()}
+DATABASES = {
+    'default': {
+        **dj_database_url.config(),
+        'CONN_MAX_AGE': 0,
+    }
+}
 
-DATABASES['default']['CONN_MAX_AGE'] = 0
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ]
+}
+
+
+# Cache
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': BASE_DIR / 'tmp' / 'cache',
+        'TIMEOUT': 60*60*6,
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
