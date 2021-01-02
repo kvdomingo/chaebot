@@ -5,6 +5,8 @@ from .models import *
 class GroupSerializer(serializers.ModelSerializer):
     aliases = serializers.SerializerMethodField()
     members = serializers.SerializerMethodField()
+    twitterMediaSubscribedChannels = serializers.SerializerMethodField()
+    vliveSubscribedChannels = serializers.SerializerMethodField()
 
     def get_aliases(self, obj):
         aliases = obj.aliases.all()
@@ -14,6 +16,16 @@ class GroupSerializer(serializers.ModelSerializer):
     def get_members(self, obj):
         members = obj.members.all()
         serializer = MemberSerializer(members, many=True)
+        return serializer.data
+
+    def get_twitterMediaSubscribedChannels(self, obj):
+        channels = obj.twitter_media_subscribed_channels.all()
+        serializer = TwitterMediaSubscribedChannelSerializer(channels, many=True)
+        return serializer.data
+
+    def get_vliveSubscribedChannels(self, obj):
+        channels = obj.vlive_subscribed_channels.all()
+        serializer = VliveSubscribedChannelSerializer(channels, many=True)
         return serializer.data
 
     class Meta:

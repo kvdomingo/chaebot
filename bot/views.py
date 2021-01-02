@@ -15,6 +15,14 @@ class GroupApi(APIView):
         serializer = GroupSerializer(query, many=many)
         return Response(serializer.data)
 
+    def patch(self, request, pk):
+        group = Group.objects.get(pk=pk)
+        serializer = GroupSerializer(group, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class GroupAliasApi(APIView):
     def get(self, request, pk=None):
@@ -93,14 +101,24 @@ class TwitterMediaSubscribedChannelApi(APIView):
         serializer = TwitterMediaSubscribedChannelSerializer(query, many=many)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = TwitterMediaSubscribedChannelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        channel = TwitterMediaSubscribedChannel.objects.get(pk=pk)
+        channel.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class VliveSubscribedChannelApi(APIView):
-    def get(self, request, pk=None):
-        if pk is None:
-            many = True
+    def get(self, request, channel_id=None):
+        if channel_id is None:
             query = VliveSubscribedChannel.objects.all()
         else:
-            many = False
-            query = VliveSubscribedChannel.objects.get(pk=pk)
-        serializer = VliveSubscribedChannelSerializer(query, many=many)
+            query = VliveSubscribedChannel.objects.filter(channel_id=channel_id).all()
+        serializer = VliveSubscribedChannelSerializer(query, many=True)
         return Response(serializer.data)

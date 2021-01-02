@@ -1,54 +1,43 @@
 import aiohttp
-import os
 import discord
-from asgiref.sync import sync_to_async
+from ..utils.endpoints import Api
 from datetime import datetime, timedelta
-from ..models import *
-from typing import Optional
 
 
-BASE_URL = 'http://api.vfan.vlive.tv/vproxy/channelplus'
-APP_ID = os.environ['VLIVE_APP_ID']
-
-
-@sync_to_async
-def vlive_handler(group: str):
-    obj = Group.objects.get(name=group)
-    if obj.vlive_channel_seq is None:
+async def vlive_handler(group: dict):
+    obj = group
+    if obj['vlive_channel_seq'] is None:
         return
     payload = {
-        'app_id': APP_ID,
-        'channelSeq': obj.vlive_channel_seq,
+        'app_id': '8c6cc7b45d2568fb668be6e05b6e5a3b',
+        'channelSeq': obj['vlive_channel_seq'],
         'maxNumOfRows': 10,
         'pageNo': 1,
     }
+    base_url = 'http://api.vfan.vlive.tv/vproxy/channelplus'
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"{BASE_URL}/getChannelVideoList", params=payload) as res:
-            if res.status//100 != 2:
+        async with session.get(f"{base_url}/getChannelVideoList", params=payload) as res:
+            if res.status >= 400:
                 print("VLIVE retrieve failed.")
                 return None
             res = await res.json()
             channel_info = res['result']['channelInfo']
             video_list = res['result']['videoList']
             latest_vid = video_list[0]
-            if latest_vid['videoSeq'] != obj.vlive_last_seq:
-                print(f"New VLIVE detected for {obj.name}")
-                obj.vlive_last_seq = latest_vid['videoSeq']
-                obj.save()
+            if latest_vid['videoSeq'] != obj['vlive_last_seq']:
+                print(f'New VLIVE detected for {obj["name"]}')
+                obj, _ = await Api.group(group["id"], 'patch', dict(vlive_last_seq=latest_vid['videoSeq']))
                 release_timestamp = datetime.strptime(latest_vid['onAirStartAt'], '%Y-%m-%d %H:%M:%S')
-                release_timestamp -= timedelta(hours=1)
-                # now_timestamp = datetime.now()
-                release_timestamp -= timedelta(hours=8)
-                # delay_timestamp = now_timestamp - release_timestamp
+                release_timestamp -= timedelta(hours=9)
                 live = latest_vid['videoType'] == 'LIVE'
                 title = "**[LIVE]** " if live else "**[VOD]** "
                 title += latest_vid['title']
                 name = latest_vid['representChannelName']
                 name += " Now Live!" if live else " New Upload"
                 if live:
-                    description = f"{obj.name.upper()} started streaming"
+                    description = f"{obj['name']} started streaming"
                 else:
-                    description = f"{obj.name.upper()} uploaded a new video"
+                    description = f"{obj['name']} uploaded a new video"
                 embed = discord.Embed(
                     title=title,
                     url=f"https://www.vlive.tv/video/{latest_vid['videoSeq']}",
