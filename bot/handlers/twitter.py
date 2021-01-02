@@ -6,7 +6,7 @@ import re
 import twitter
 from ..utils.endpoints import Api
 from random import SystemRandom
-from typing import List, Union
+from typing import List, Union, Tuple
 
 
 random = SystemRandom()
@@ -18,7 +18,7 @@ api = twitter.Api(
 )
 
 
-async def group_name_matcher(name: str) -> int:
+async def group_name_matcher(name: str) -> dict:
     groups = await Api.groups()
     group_names = {}
     for group in groups:
@@ -33,19 +33,17 @@ async def group_name_matcher(name: str) -> int:
                 re.search(alias, name, re.I),
             ])
             if any(search_params):
-                print(f'Group query matched: {group_names[id_][0]}.')
-                return id_
-    print(f'No group query matched, choosing random.')
-    return random.choice(list(group_names.keys()))
+                return list(filter(lambda x: x['id'] == id_, groups))[0]
+    return random.choice(groups)
 
 
-async def member_name_matcher(member: List[str], group: str, hourly: bool) -> list:
-    group_id = await group_name_matcher(group)
-    members = await Api.group_members(group_id)
+async def member_name_matcher(member: List[str], group: str, hourly: bool) -> Tuple[list, dict]:
+    group = await group_name_matcher(group)
+    members = group['members']
     if hourly or not member:
         member = random.choice(members)
         accounts = member['twitterMediaSources']
-        return accounts
+        return accounts, group
     member = ' '.join(member)
     for key in members:
         search_parameters = [
@@ -63,21 +61,22 @@ async def member_name_matcher(member: List[str], group: str, hourly: bool) -> li
             ])
         if any(search_parameters):
             print(f'Member query matched: {key["stage_name"]}')
-            return key['twitterMediaSources']
+            return key['twitterMediaSources'], group
         for alias in key['aliases']:
             if re.search(alias['alias'], member, re.I) or re.search(member, alias['alias'], re.I):
                 print(f'Member query matched: {str(key)}')
-                return key['twitterMediaSources']
+                return key['twitterMediaSources'], group
     print('No member query matched, choosing random')
-    return random.choice(members)['twitterMediaSources']
+    accounts = random.choice(members)['twitterMediaSources']
+    return accounts, group
 
 
 async def twitter_handler(
         group: str,
         member: List[str] = None,
         hourly: bool = False
-) -> Union[list, str]:
-    account_cat = await member_name_matcher(member, group, hourly)
+) -> Tuple[list, dict]:
+    account_cat, group = await member_name_matcher(member, group, hourly)
     screen_name = random.choice(account_cat)['account_name']
     try:
         tl = api.GetUserTimeline(
@@ -87,7 +86,7 @@ async def twitter_handler(
             count=50,
         )
     except twitter.error.TwitterError:
-        return []
+        return [], {}
     media_post = (random.choice(tl)).media
     while media_post is None or len(media_post) == 0:
         media_post = random.choice(tl).media
@@ -109,7 +108,7 @@ async def twitter_handler(
                     return []
                 data = io.BytesIO(await res.read())
                 file = discord.File(data, 'video_0.mp4')
-                return [file]
+                return [file], group
     else:
         links = [media.media_url_https for media in media_post]
         files = []
@@ -120,4 +119,4 @@ async def twitter_handler(
                         return []
                     data = io.BytesIO(await res.read())
                     files.append(discord.File(data, f'image_{i}.jpg'))
-            return files
+            return files, group

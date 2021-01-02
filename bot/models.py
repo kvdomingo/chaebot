@@ -70,15 +70,18 @@ class TwitterMediaSource(models.Model):
 
 
 class TwitterMediaSubscribedChannel(models.Model):
-    channel_id = models.BigIntegerField(unique=True)
+    channel_id = models.BigIntegerField()
     group = models.ForeignKey(Group, related_name='twitter_media_subscribed_channels', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.channel_id} ({self.group.name})'
 
+    class Meta:
+        unique_together = ['channel_id', 'group']
+
 
 class VliveSubscribedChannel(models.Model):
-    channel_id = models.BigIntegerField(unique=True)
+    channel_id = models.BigIntegerField()
     group = models.ForeignKey(Group, related_name='vlive_subscribed_channels', on_delete=models.CASCADE)
     dev_channel = models.BooleanField(default=False)
 
@@ -87,3 +90,4 @@ class VliveSubscribedChannel(models.Model):
 
     class Meta:
         ordering = ['group__name', 'channel_id']
+        unique_together = ['channel_id', 'group']

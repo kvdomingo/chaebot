@@ -1,4 +1,3 @@
-import requests
 from random import SystemRandom
 from discord.ext import commands
 from ..handlers.twitter import twitter_handler
@@ -15,9 +14,13 @@ class Query(commands.Cog):
     @commands.command(aliases=['q'], help='Get a random member pic from the specified group')
     async def query(self, ctx, group: str, *person: str):
         person = escape_quote(person)
-        response = await twitter_handler(group, person)
+        response, _ = await twitter_handler(group, person)
+        timeout = 0
         while not len(response):
-            response = await twitter_handler(group, person)
+            if timeout == 5:
+                return
+            response, _ = await twitter_handler(group, person)
+            timeout += 1
 
         if isinstance(response, list):
             await ctx.send(files=response)

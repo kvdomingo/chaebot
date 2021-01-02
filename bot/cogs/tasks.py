@@ -1,11 +1,9 @@
 import asyncio
 import discord
-from asgiref.sync import sync_to_async
-from django import db
 from datetime import datetime
 from discord.ext import commands, tasks
 from django.conf import settings
-from ..models import Group
+from ..utils.endpoints import Api
 from ..handlers.twitter import twitter_handler
 from ..handlers.vlive import vlive_handler
 
@@ -33,17 +31,15 @@ class Tasks(commands.Cog):
         self.hourly_blackpink.start()
         self.vlive_listener.start()
 
-    @sync_to_async
-    def send_hourly_to_channels(self, group: str):
-        channels = Group.objects.get(name=group).twitter_media_subscribed_channels.all()
-        media = twitter_handler(group, [], True)
+    async def send_hourly_to_channels(self, group: str):
+        media, _group = await twitter_handler(group, [], True)
         while not media:
-            media = twitter_handler(group, [], True)
+            media, _group = await twitter_handler(group, [], True)
+        channels = _group['twitterMediaSubscribedChannels']
         for channel in channels:
-            ch = self.client.get_channel(channel.channel_id)
-            print(f'Connected to {group.upper()} channel {ch}')
-            ch.send(files=media)
-        db.close_old_connections()
+            ch = self.client.get_channel(channel['channel_id'])
+            print(f'Connected to {_group["name"]} channel {ch}')
+            await ch.send(files=media)
 
     @tasks.loop(hours=1)
     async def hourly_itzy(self):
@@ -61,21 +57,18 @@ class Tasks(commands.Cog):
         await self.send_hourly_to_channels(group)
 
     @tasks.loop(seconds=30)
-    @sync_to_async
-    def vlive_listener(self):
-        groups = Group.objects.all()
+    async def vlive_listener(self):
+        groups = await Api.groups()
         for group in groups:
-            embed = await vlive_handler(group.name)
+            embed = await vlive_handler(group)
             if embed:
-                channels = group.vlive_subscribed_channels.all()
+                channels = group['vliveSubscribedChannels']
                 for channel in channels:
-                    if settings.DEBUG and not channel.dev_channel:
-                        db.close_old_connections()
+                    if settings.DEBUG and not channel['dev_channel']:
                         return
-                    ch = self.client.get_channel(channel.channel_id)
+                    ch = self.client.get_channel(channel['channel_id'])
                     if ch:
                         await ch.send(embed=embed)
-        db.close_old_connections()
 
     @hourly_itzy.before_loop
     async def itzy_hour(self):
