@@ -69,7 +69,7 @@ async def member_name_matcher(member: List[str], group: str, hourly: bool) -> li
                 print(f'Member query matched: {str(key)}')
                 return key['twitterMediaSources']
     print('No member query matched, choosing random')
-    return random.choice(members)['twitter_media_sources']
+    return random.choice(members)['twitterMediaSources']
 
 
 async def twitter_handler(

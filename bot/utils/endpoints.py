@@ -1,7 +1,11 @@
 import aiohttp
 from django.conf import settings
 
-BASE_URL = 'http://localhost:8000' if settings.DEBUG else 'https://kvisualbot.herokuapp.com'
+# if settings.PYTHON_ENV == 'development':
+#     BASE_URL = 'http://localhost:8000'
+# else:
+BASE_URL = 'https://kvisualbot-django.herokuapp.com'
+
 BASE_URL += '/v1.0'
 
 
