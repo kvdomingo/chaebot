@@ -6,7 +6,7 @@ import re
 import twitter
 from ..utils.endpoints import Api
 from random import SystemRandom
-from typing import List, Union, Tuple
+from typing import List, Tuple
 
 
 random = SystemRandom()
@@ -60,11 +60,11 @@ async def member_name_matcher(member: List[str], group: str, hourly: bool) -> Tu
                 re.search(member, key['english_name']),
             ])
         if any(search_parameters):
-            print(f'Member query matched: {key["stage_name"]}')
+            print(f'Member query matched: {key["stage_name"]} of {group["name"]}')
             return key['twitterMediaSources'], group
         for alias in key['aliases']:
             if re.search(alias['alias'], member, re.I) or re.search(member, alias['alias'], re.I):
-                print(f'Member query matched: {str(key)}')
+                print(f'Member query matched: {str(key)} of {group["name"]}')
                 return key['twitterMediaSources'], group
     print('No member query matched, choosing random')
     accounts = random.choice(members)['twitterMediaSources']
@@ -74,49 +74,59 @@ async def member_name_matcher(member: List[str], group: str, hourly: bool) -> Tu
 async def twitter_handler(
         group: str,
         member: List[str] = None,
-        hourly: bool = False
+        hourly: bool = False,
+        spam_number: int = 1,
 ) -> Tuple[list, dict]:
     account_cat, group = await member_name_matcher(member, group, hourly)
     screen_name = random.choice(account_cat)['account_name']
+    spam_number = min(spam_number, 50)
+
+    if spam_number <= 25:
+        tl_count = 50
+    else:
+        tl_count = 100
+
     try:
         tl = api.GetUserTimeline(
             screen_name=screen_name,
             exclude_replies=True,
             include_rts=False,
-            count=50,
+            count=tl_count,
         )
     except twitter.error.TwitterError:
         return [], {}
-    media_post = (random.choice(tl)).media
-    while media_post is None or len(media_post) == 0:
-        media_post = random.choice(tl).media
-    video_info = media_post[0].video_info
-    if video_info is not None:
-        variants = video_info['variants']
-        bitrates = []
-        for variant in variants:
-            if 'bitrate' in variant.keys():
-                bitrates.append(variant['bitrate'])
-            else:
-                bitrates.append(0)
-        max_bitrate_loc = bitrates.index(max(bitrates))
-        vid = variants[max_bitrate_loc]
-        link = vid['url']
-        async with aiohttp.ClientSession() as session:
-            async with session.get(link) as res:
-                if res.status != 200:
-                    return []
-                data = io.BytesIO(await res.read())
-                file = discord.File(data, 'video_0.mp4')
-                return [file], group
-    else:
-        links = [media.media_url_https for media in media_post]
-        files = []
-        async with aiohttp.ClientSession() as session:
-            for i, link in enumerate(links):
+
+    files = []
+    while len(files) < spam_number:
+        media_post = (random.choice(tl)).media
+        while media_post is None or len(media_post) == 0:
+            media_post = random.choice(tl).media
+        video_info = media_post[0].video_info
+        if video_info is not None:
+            variants = video_info['variants']
+            bitrates = []
+            for variant in variants:
+                if 'bitrate' in variant.keys():
+                    bitrates.append(variant['bitrate'])
+                else:
+                    bitrates.append(0)
+            max_bitrate_loc = bitrates.index(max(bitrates))
+            vid = variants[max_bitrate_loc]
+            link = vid['url']
+            async with aiohttp.ClientSession() as session:
                 async with session.get(link) as res:
                     if res.status != 200:
-                        return []
+                        continue
                     data = io.BytesIO(await res.read())
-                    files.append(discord.File(data, f'image_{i}.jpg'))
-            return files, group
+                    file = discord.File(data, f'video_{len(files)}.mp4')
+                    files.append(file)
+        else:
+            links = [media.media_url_https for media in media_post]
+            async with aiohttp.ClientSession() as session:
+                for i, link in enumerate(links):
+                    async with session.get(link) as res:
+                        if res.status != 200:
+                            continue
+                        data = io.BytesIO(await res.read())
+                        files.append(discord.File(data, f'image_{len(files)}.jpg'))
+    return files, group

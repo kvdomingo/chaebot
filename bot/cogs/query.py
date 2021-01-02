@@ -1,3 +1,5 @@
+import os
+import discord
 from random import SystemRandom
 from discord.ext import commands
 from ..handlers.twitter import twitter_handler
@@ -5,6 +7,11 @@ from ..utils import escape_quote
 from ..utils.endpoints import Api
 
 random = SystemRandom()
+
+
+async def arange(count):
+    for i in range(count):
+        yield i
 
 
 class Query(commands.Cog):
@@ -26,6 +33,24 @@ class Query(commands.Cog):
             await ctx.send(files=response)
         elif isinstance(response, str):
             await ctx.send(response)
+
+    @commands.command()
+    async def spam(self, ctx, number: int, group: str, *person: str):
+        if str(ctx.message.author.id) != os.environ.get('DISCORD_ADMIN_ID'):
+            embed = discord.Embed(
+                description='Sorry, only bot owner is allowed to `spam`.',
+                color=discord.Color.red(),
+            )
+            await ctx.send(embed=embed)
+            return
+        person = escape_quote(person)
+        sent = 0
+        async for _ in arange(number):
+            response, _ = await twitter_handler(group, person)
+            await ctx.send(files=response)
+            sent += len(response)
+            if sent >= number:
+                break
 
     @commands.command(aliases=['list'], help='List all supported groups')
     async def list_(self, ctx):
