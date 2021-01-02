@@ -1,0 +1,3656 @@
+[
+  {
+    "model": "bot.group",
+    "pk": 1,
+    "fields": {
+      "name": "itzy",
+      "vlive_channel_code": "BAE889",
+      "vlive_channel_seq": 1093,
+      "vlive_last_seq": 229645,
+      "twitter_user_name": "",
+      "instagram_user_name": ""
+    }
+  },
+  {
+    "model": "bot.group",
+    "pk": 2,
+    "fields": {
+      "name": "blackpink",
+      "vlive_channel_code": "F001E5",
+      "vlive_channel_seq": 243,
+      "vlive_last_seq": 229192,
+      "twitter_user_name": "",
+      "instagram_user_name": ""
+    }
+  },
+  {
+    "model": "bot.group",
+    "pk": 3,
+    "fields": {
+      "name": "twice",
+      "vlive_channel_code": "EDBF",
+      "vlive_channel_seq": 6,
+      "vlive_last_seq": 229971,
+      "twitter_user_name": "",
+      "instagram_user_name": ""
+    }
+  },
+  {
+    "model": "bot.group",
+    "pk": 4,
+    "fields": {
+      "name": "redvelvet",
+      "vlive_channel_code": "DCF447",
+      "vlive_channel_seq": 548,
+      "vlive_last_seq": 218761,
+      "twitter_user_name": "",
+      "instagram_user_name": ""
+    }
+  },
+  {
+    "model": "bot.group",
+    "pk": 5,
+    "fields": {
+      "name": "iu",
+      "vlive_channel_code": "FA895",
+      "vlive_channel_seq": 75,
+      "vlive_last_seq": 229599,
+      "twitter_user_name": "",
+      "instagram_user_name": ""
+    }
+  },
+  {
+    "model": "bot.group",
+    "pk": 6,
+    "fields": {
+      "name": "bts",
+      "vlive_channel_code": "FE619",
+      "vlive_channel_seq": 13,
+      "vlive_last_seq": 228562,
+      "twitter_user_name": "",
+      "instagram_user_name": ""
+    }
+  },
+  {
+    "model": "bot.group",
+    "pk": 7,
+    "fields": {
+      "name": "mamamoo",
+      "vlive_channel_code": "FCD4B",
+      "vlive_channel_seq": 38,
+      "vlive_last_seq": 229904,
+      "twitter_user_name": "",
+      "instagram_user_name": ""
+    }
+  },
+  {
+    "model": "bot.group",
+    "pk": 8,
+    "fields": {
+      "name": "somi",
+      "vlive_channel_code": "B4595B",
+      "vlive_channel_seq": 1198,
+      "vlive_last_seq": 220909,
+      "twitter_user_name": "",
+      "instagram_user_name": ""
+    }
+  },
+  {
+    "model": "bot.group",
+    "pk": 9,
+    "fields": {
+      "name": "aespa",
+      "vlive_channel_code": null,
+      "vlive_channel_seq": null,
+      "vlive_last_seq": null,
+      "twitter_user_name": "",
+      "instagram_user_name": ""
+    }
+  },
+  {
+    "model": "bot.group",
+    "pk": 10,
+    "fields": {
+      "name": "exo",
+      "vlive_channel_code": "F94BD",
+      "vlive_channel_seq": null,
+      "vlive_last_seq": null,
+      "twitter_user_name": "",
+      "instagram_user_name": ""
+    }
+  },
+  {
+    "model": "bot.groupalias",
+    "pk": 1,
+    "fields": {
+      "alias": "itz",
+      "group": 1
+    }
+  },
+  {
+    "model": "bot.groupalias",
+    "pk": 2,
+    "fields": {
+      "alias": "rv",
+      "group": 4
+    }
+  },
+  {
+    "model": "bot.groupalias",
+    "pk": 3,
+    "fields": {
+      "alias": "mink",
+      "group": 2
+    }
+  },
+  {
+    "model": "bot.groupalias",
+    "pk": 4,
+    "fields": {
+      "alias": "more",
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.groupalias",
+    "pk": 5,
+    "fields": {
+      "alias": "tdoong",
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.groupalias",
+    "pk": 6,
+    "fields": {
+      "alias": "red-velvet",
+      "group": 4
+    }
+  },
+  {
+    "model": "bot.groupalias",
+    "pk": 7,
+    "fields": {
+      "alias": "red_velvet",
+      "group": 4
+    }
+  },
+  {
+    "model": "bot.groupalias",
+    "pk": 8,
+    "fields": {
+      "alias": "æ",
+      "group": 9
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 1,
+    "fields": {
+      "stage_name": "Ryujin",
+      "given_name": "Ryujin",
+      "family_name": "Shin",
+      "english_name": null,
+      "birthday": null,
+      "group": 1
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 2,
+    "fields": {
+      "stage_name": "Yuna",
+      "given_name": "Yuna",
+      "family_name": "Shin",
+      "english_name": null,
+      "birthday": null,
+      "group": 1
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 3,
+    "fields": {
+      "stage_name": "Yeji",
+      "given_name": "Yeji",
+      "family_name": "Hwang",
+      "english_name": null,
+      "birthday": null,
+      "group": 1
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 4,
+    "fields": {
+      "stage_name": "Lia",
+      "given_name": "Jisu",
+      "family_name": "Choi",
+      "english_name": null,
+      "birthday": null,
+      "group": 1
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 5,
+    "fields": {
+      "stage_name": "Chaeryeong",
+      "given_name": "Chaeryeong",
+      "family_name": "Lee",
+      "english_name": null,
+      "birthday": null,
+      "group": 1
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 6,
+    "fields": {
+      "stage_name": "Jennie",
+      "given_name": "Jennie Ruby Jane",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 2
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 7,
+    "fields": {
+      "stage_name": "Jisoo",
+      "given_name": "Jisoo",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 2
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 8,
+    "fields": {
+      "stage_name": "Rosé",
+      "given_name": "Chaeyoung",
+      "family_name": "Park",
+      "english_name": null,
+      "birthday": null,
+      "group": 2
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 9,
+    "fields": {
+      "stage_name": "Lisa",
+      "given_name": "Lalisa",
+      "family_name": "Manoban",
+      "english_name": null,
+      "birthday": null,
+      "group": 2
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 10,
+    "fields": {
+      "stage_name": "Nayeon",
+      "given_name": "Nayeon",
+      "family_name": "Im",
+      "english_name": null,
+      "birthday": null,
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 11,
+    "fields": {
+      "stage_name": "Jeongyeon",
+      "given_name": "Jeongyeon",
+      "family_name": "Yoo",
+      "english_name": null,
+      "birthday": null,
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 12,
+    "fields": {
+      "stage_name": "Momo",
+      "given_name": "Momo",
+      "family_name": "Hirai",
+      "english_name": null,
+      "birthday": null,
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 13,
+    "fields": {
+      "stage_name": "Sana",
+      "given_name": "Sana",
+      "family_name": "Minatozaki",
+      "english_name": null,
+      "birthday": null,
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 14,
+    "fields": {
+      "stage_name": "Jihyo",
+      "given_name": "Jisoo",
+      "family_name": "Park",
+      "english_name": null,
+      "birthday": null,
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 15,
+    "fields": {
+      "stage_name": "Mina",
+      "given_name": "Minari",
+      "family_name": "Myoui",
+      "english_name": null,
+      "birthday": null,
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 16,
+    "fields": {
+      "stage_name": "Dahyun",
+      "given_name": "Dahyun",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 17,
+    "fields": {
+      "stage_name": "Chaeyoung",
+      "given_name": "Chaeyoung",
+      "family_name": "Son",
+      "english_name": null,
+      "birthday": null,
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 18,
+    "fields": {
+      "stage_name": "Tzuyu",
+      "given_name": "Tzuyu",
+      "family_name": "Chou",
+      "english_name": null,
+      "birthday": null,
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 19,
+    "fields": {
+      "stage_name": "Irene",
+      "given_name": "Joohyun",
+      "family_name": "Bae",
+      "english_name": null,
+      "birthday": null,
+      "group": 4
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 20,
+    "fields": {
+      "stage_name": "Seulgi",
+      "given_name": "Seulgi",
+      "family_name": "Kang",
+      "english_name": null,
+      "birthday": null,
+      "group": 4
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 21,
+    "fields": {
+      "stage_name": "Wendy",
+      "given_name": "Seungwan",
+      "family_name": "Shon",
+      "english_name": null,
+      "birthday": null,
+      "group": 4
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 22,
+    "fields": {
+      "stage_name": "Joy",
+      "given_name": "Sooyoung",
+      "family_name": "Park",
+      "english_name": null,
+      "birthday": null,
+      "group": 4
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 23,
+    "fields": {
+      "stage_name": "Yeri",
+      "given_name": "Yerim",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 4
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 24,
+    "fields": {
+      "stage_name": "IU",
+      "given_name": "Jieun",
+      "family_name": "Lee",
+      "english_name": null,
+      "birthday": null,
+      "group": 5
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 25,
+    "fields": {
+      "stage_name": "Jin",
+      "given_name": "Seokjin",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 6
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 26,
+    "fields": {
+      "stage_name": "Suga",
+      "given_name": "Yoongi",
+      "family_name": "Min",
+      "english_name": null,
+      "birthday": null,
+      "group": 6
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 27,
+    "fields": {
+      "stage_name": "J-Hope",
+      "given_name": "Hoseok",
+      "family_name": "Jung",
+      "english_name": null,
+      "birthday": null,
+      "group": 6
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 28,
+    "fields": {
+      "stage_name": "RM",
+      "given_name": "Namjoon",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 6
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 29,
+    "fields": {
+      "stage_name": "Jimin",
+      "given_name": "Jimin",
+      "family_name": "Park",
+      "english_name": null,
+      "birthday": null,
+      "group": 6
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 30,
+    "fields": {
+      "stage_name": "V",
+      "given_name": "Taehyung",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 6
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 31,
+    "fields": {
+      "stage_name": "Jungkook",
+      "given_name": "Jungkook",
+      "family_name": "Jeon",
+      "english_name": null,
+      "birthday": null,
+      "group": 6
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 32,
+    "fields": {
+      "stage_name": "Solar",
+      "given_name": "Yongsun",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 7
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 33,
+    "fields": {
+      "stage_name": "Moonbyul",
+      "given_name": "Byulyi",
+      "family_name": "Moon",
+      "english_name": null,
+      "birthday": null,
+      "group": 7
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 34,
+    "fields": {
+      "stage_name": "Wheein",
+      "given_name": "Wheein",
+      "family_name": "Jung",
+      "english_name": null,
+      "birthday": null,
+      "group": 7
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 35,
+    "fields": {
+      "stage_name": "Hwasa",
+      "given_name": "Hyejin",
+      "family_name": "Ahn",
+      "english_name": null,
+      "birthday": null,
+      "group": 7
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 36,
+    "fields": {
+      "stage_name": "Somi",
+      "given_name": "Somi",
+      "family_name": "Jeon",
+      "english_name": null,
+      "birthday": null,
+      "group": 8
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 37,
+    "fields": {
+      "stage_name": "Karina",
+      "given_name": "Jimin",
+      "family_name": "Yoo",
+      "english_name": null,
+      "birthday": null,
+      "group": 9
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 38,
+    "fields": {
+      "stage_name": "Giselle",
+      "given_name": "Aeri",
+      "family_name": "Uchinaga",
+      "english_name": null,
+      "birthday": null,
+      "group": 9
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 39,
+    "fields": {
+      "stage_name": "Winter",
+      "given_name": "Minjeong",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 9
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 40,
+    "fields": {
+      "stage_name": "Ningning",
+      "given_name": "Yizhuo",
+      "family_name": "Ning",
+      "english_name": null,
+      "birthday": null,
+      "group": 9
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 41,
+    "fields": {
+      "stage_name": "Xiumin",
+      "given_name": "Minseok",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 42,
+    "fields": {
+      "stage_name": "Suho",
+      "given_name": "Junmyeon",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 43,
+    "fields": {
+      "stage_name": "Lay",
+      "given_name": "Yixing",
+      "family_name": "Zhang",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 44,
+    "fields": {
+      "stage_name": "Baekhyun",
+      "given_name": "Baekhyun",
+      "family_name": "Byun",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 45,
+    "fields": {
+      "stage_name": "Chen",
+      "given_name": "Jongdae",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 46,
+    "fields": {
+      "stage_name": "Chanyeol",
+      "given_name": "Chanyeol",
+      "family_name": "Park",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 47,
+    "fields": {
+      "stage_name": "D.O.",
+      "given_name": "Kyungsoo",
+      "family_name": "Doh",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 48,
+    "fields": {
+      "stage_name": "Kai",
+      "given_name": "Jongin",
+      "family_name": "Kim",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 49,
+    "fields": {
+      "stage_name": "Sehun",
+      "given_name": "Sehun",
+      "family_name": "Oh",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 50,
+    "fields": {
+      "stage_name": "Luhan",
+      "given_name": "Han",
+      "family_name": "Lu",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 51,
+    "fields": {
+      "stage_name": "Kris",
+      "given_name": "Yifan",
+      "family_name": "Wu",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.member",
+    "pk": 52,
+    "fields": {
+      "stage_name": "Tao",
+      "given_name": "Zitao",
+      "family_name": "Huang",
+      "english_name": null,
+      "birthday": null,
+      "group": 10
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 1,
+    "fields": {
+      "alias": "joanne",
+      "member": 1
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 2,
+    "fields": {
+      "alias": "julia",
+      "member": 4
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 3,
+    "fields": {
+      "alias": "hussey",
+      "member": 2
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 4,
+    "fields": {
+      "alias": "lucy",
+      "member": 3
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 5,
+    "fields": {
+      "alias": "judy",
+      "member": 5
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 7,
+    "fields": {
+      "alias": "chaeng",
+      "member": 8
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 8,
+    "fields": {
+      "alias": "roseanne",
+      "member": 8
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 9,
+    "fields": {
+      "alias": "pranpriya",
+      "member": 9
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 11,
+    "fields": {
+      "alias": "jisoo",
+      "member": 4
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 15,
+    "fields": {
+      "alias": "maknae",
+      "member": 2
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 16,
+    "fields": {
+      "alias": "maknÃ¦",
+      "member": 2
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 18,
+    "fields": {
+      "alias": "jisu",
+      "member": 4
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 20,
+    "fields": {
+      "alias": "gentle monster",
+      "member": 6
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 21,
+    "fields": {
+      "alias": "sooya",
+      "member": 7
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 22,
+    "fields": {
+      "alias": "nabong",
+      "member": 10
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 23,
+    "fields": {
+      "alias": "dance machine",
+      "member": 12
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 24,
+    "fields": {
+      "alias": "gae",
+      "member": 13
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 25,
+    "fields": {
+      "alias": "gummy",
+      "member": 15
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 26,
+    "fields": {
+      "alias": "myoi",
+      "member": 15
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 27,
+    "fields": {
+      "alias": "dubu",
+      "member": 16
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 28,
+    "fields": {
+      "alias": "chaeng",
+      "member": 17
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 29,
+    "fields": {
+      "alias": "maknae",
+      "member": 18
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 30,
+    "fields": {
+      "alias": "maknÃ¦",
+      "member": 18
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 31,
+    "fields": {
+      "alias": "chewy",
+      "member": 18
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 32,
+    "fields": {
+      "alias": "bÃ¦",
+      "member": 19
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 33,
+    "fields": {
+      "alias": "original",
+      "member": 19
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 34,
+    "fields": {
+      "alias": "visual",
+      "member": 19
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 35,
+    "fields": {
+      "alias": "orihinal",
+      "member": 19
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 36,
+    "fields": {
+      "alias": "biswal",
+      "member": 19
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 37,
+    "fields": {
+      "alias": "son",
+      "member": 21
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 38,
+    "fields": {
+      "alias": "maknae",
+      "member": 23
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 39,
+    "fields": {
+      "alias": "maknÃ¦",
+      "member": 23
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 40,
+    "fields": {
+      "alias": "rosie",
+      "member": 8
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 41,
+    "fields": {
+      "alias": "ros",
+      "member": 8
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 42,
+    "fields": {
+      "alias": "jhope",
+      "member": 27
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 43,
+    "fields": {
+      "alias": "maknae",
+      "member": 31
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 44,
+    "fields": {
+      "alias": "ysl",
+      "member": 8
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 45,
+    "fields": {
+      "alias": "turtle",
+      "member": 7
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 46,
+    "fields": {
+      "alias": "rabbit",
+      "member": 7
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 47,
+    "fields": {
+      "alias": "agust",
+      "member": 26
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 48,
+    "fields": {
+      "alias": "maknæ",
+      "member": 31
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 49,
+    "fields": {
+      "alias": "monster",
+      "member": 28
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 50,
+    "fields": {
+      "alias": "maknæ",
+      "member": 31
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 51,
+    "fields": {
+      "alias": "maknæ",
+      "member": 2
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 52,
+    "fields": {
+      "alias": "DO",
+      "member": 47
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 53,
+    "fields": {
+      "alias": "center",
+      "member": 1
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 54,
+    "fields": {
+      "alias": "SRABU",
+      "member": 1
+    }
+  },
+  {
+    "model": "bot.memberalias",
+    "pk": 55,
+    "fields": {
+      "alias": "salamat",
+      "member": 1
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 1,
+    "fields": {
+      "account_name": "ryujinpics",
+      "member": 1,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 2,
+    "fields": {
+      "account_name": "shinryujinpic",
+      "member": 1,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 3,
+    "fields": {
+      "account_name": "hourlyryu",
+      "member": 1,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 4,
+    "fields": {
+      "account_name": "hourlylia",
+      "member": 4,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 5,
+    "fields": {
+      "account_name": "liarchive",
+      "member": 4,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 6,
+    "fields": {
+      "account_name": "yunaspics",
+      "member": 2,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 7,
+    "fields": {
+      "account_name": "yunasarchive",
+      "member": 2,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 8,
+    "fields": {
+      "account_name": "picyuna",
+      "member": 2,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 9,
+    "fields": {
+      "account_name": "littIeyuna",
+      "member": 2,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 10,
+    "fields": {
+      "account_name": "hourlyyeji",
+      "member": 3,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 11,
+    "fields": {
+      "account_name": "yejigallery",
+      "member": 3,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 12,
+    "fields": {
+      "account_name": "yejiarchives",
+      "member": 3,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 13,
+    "fields": {
+      "account_name": "chaerpics",
+      "member": 5,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 14,
+    "fields": {
+      "account_name": "jenniesarchive",
+      "member": 6,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 15,
+    "fields": {
+      "account_name": "jenniexpics",
+      "member": 6,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 16,
+    "fields": {
+      "account_name": "kimjenniepics",
+      "member": 6,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 17,
+    "fields": {
+      "account_name": "archivejisoo",
+      "member": 7,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 18,
+    "fields": {
+      "account_name": "jisoosjpg",
+      "member": 7,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 19,
+    "fields": {
+      "account_name": "jisooarchives",
+      "member": 7,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 20,
+    "fields": {
+      "account_name": "milkylisapics",
+      "member": 9,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 21,
+    "fields": {
+      "account_name": "lisapics_",
+      "member": 9,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 22,
+    "fields": {
+      "account_name": "BLACKPINK_LISA",
+      "member": 9,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 23,
+    "fields": {
+      "account_name": "archivesrosie",
+      "member": 8,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 24,
+    "fields": {
+      "account_name": "roseyarchive",
+      "member": 8,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 25,
+    "fields": {
+      "account_name": "rosesarchive",
+      "member": 8,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 26,
+    "fields": {
+      "account_name": "nayeonpics",
+      "member": 10,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 27,
+    "fields": {
+      "account_name": "imnayeonarchive",
+      "member": 10,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 28,
+    "fields": {
+      "account_name": "archivenayeon",
+      "member": 10,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 29,
+    "fields": {
+      "account_name": "nayeonarchives",
+      "member": 10,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 30,
+    "fields": {
+      "account_name": "myjeongarchives",
+      "member": 11,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 31,
+    "fields": {
+      "account_name": "1101_yjy",
+      "member": 11,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 32,
+    "fields": {
+      "account_name": "TWICE_JYY",
+      "member": 11,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 33,
+    "fields": {
+      "account_name": "yjyworld",
+      "member": 11,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 34,
+    "fields": {
+      "account_name": "dailyhiraimomo",
+      "member": 12,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 35,
+    "fields": {
+      "account_name": "hiraimomopics",
+      "member": 12,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 36,
+    "fields": {
+      "account_name": "momosarchives",
+      "member": 12,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 37,
+    "fields": {
+      "account_name": "hiraidotjpg",
+      "member": 12,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 38,
+    "fields": {
+      "account_name": "sanapics",
+      "member": 13,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 39,
+    "fields": {
+      "account_name": "sanaarchive",
+      "member": 13,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 40,
+    "fields": {
+      "account_name": "sanaspics",
+      "member": 13,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 41,
+    "fields": {
+      "account_name": "sanarchives",
+      "member": 13,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 42,
+    "fields": {
+      "account_name": "jihyopictures",
+      "member": 14,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 43,
+    "fields": {
+      "account_name": "jihyosarchive",
+      "member": 14,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 44,
+    "fields": {
+      "account_name": "loopjihyo",
+      "member": 14,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 45,
+    "fields": {
+      "account_name": "jihyospic",
+      "member": 14,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 46,
+    "fields": {
+      "account_name": "minapics",
+      "member": 15,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 47,
+    "fields": {
+      "account_name": "archivemina",
+      "member": 15,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 48,
+    "fields": {
+      "account_name": "minajpgs",
+      "member": 15,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 50,
+    "fields": {
+      "account_name": "dubupics",
+      "member": 16,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 51,
+    "fields": {
+      "account_name": "dahyunniepics",
+      "member": 16,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 52,
+    "fields": {
+      "account_name": "loopsdubu",
+      "member": 16,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 53,
+    "fields": {
+      "account_name": "bestofdahyun",
+      "member": 16,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 54,
+    "fields": {
+      "account_name": "chaeyoungpic",
+      "member": 17,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 55,
+    "fields": {
+      "account_name": "chaeypics",
+      "member": 17,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 56,
+    "fields": {
+      "account_name": "loopschaeng",
+      "member": 17,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 57,
+    "fields": {
+      "account_name": "chaengspic",
+      "member": 17,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 58,
+    "fields": {
+      "account_name": "tzuyudotjpg",
+      "member": 18,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 59,
+    "fields": {
+      "account_name": "ctzuyupics",
+      "member": 18,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 60,
+    "fields": {
+      "account_name": "tzuyu",
+      "member": 18,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 61,
+    "fields": {
+      "account_name": "tzuyuzones",
+      "member": 18,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 62,
+    "fields": {
+      "account_name": "archivedirene",
+      "member": 19,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 63,
+    "fields": {
+      "account_name": "picsofirene",
+      "member": 19,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 64,
+    "fields": {
+      "account_name": "picsofjoo",
+      "member": 19,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 65,
+    "fields": {
+      "account_name": "bjharchives",
+      "member": 19,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 66,
+    "fields": {
+      "account_name": "seulgiphotos",
+      "member": 20,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 67,
+    "fields": {
+      "account_name": "seulpics",
+      "member": 20,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 68,
+    "fields": {
+      "account_name": "seulgiarchives",
+      "member": 20,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 69,
+    "fields": {
+      "account_name": "seulgipicts",
+      "member": 20,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 70,
+    "fields": {
+      "account_name": "archivedwendy",
+      "member": 21,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 71,
+    "fields": {
+      "account_name": "sonseungwanpics",
+      "member": 21,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 72,
+    "fields": {
+      "account_name": "wendygallery",
+      "member": 21,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 73,
+    "fields": {
+      "account_name": "wenpics",
+      "member": 21,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 74,
+    "fields": {
+      "account_name": "joyjpgs",
+      "member": 22,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 75,
+    "fields": {
+      "account_name": "picsofsooyoung",
+      "member": 22,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 76,
+    "fields": {
+      "account_name": "joypics",
+      "member": 22,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 77,
+    "fields": {
+      "account_name": "joysooyoungpics",
+      "member": 22,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 78,
+    "fields": {
+      "account_name": "yeripics",
+      "member": 23,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 79,
+    "fields": {
+      "account_name": "cuteyeripics",
+      "member": 23,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 80,
+    "fields": {
+      "account_name": "picsofyeri",
+      "member": 23,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 81,
+    "fields": {
+      "account_name": "archivedyeri",
+      "member": 23,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 82,
+    "fields": {
+      "account_name": "jieunphotos",
+      "member": 24,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 84,
+    "fields": {
+      "account_name": "iusarchive",
+      "member": 24,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 85,
+    "fields": {
+      "account_name": "jieunpic",
+      "member": 24,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 86,
+    "fields": {
+      "account_name": "iu_archive",
+      "member": 24,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 87,
+    "fields": {
+      "account_name": "seokjinpicss",
+      "member": 25,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 88,
+    "fields": {
+      "account_name": "jingallery",
+      "member": 25,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 89,
+    "fields": {
+      "account_name": "jinspicture",
+      "member": 25,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 90,
+    "fields": {
+      "account_name": "sugapics",
+      "member": 26,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 91,
+    "fields": {
+      "account_name": "sugapicshd",
+      "member": 26,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 92,
+    "fields": {
+      "account_name": "suga_pics",
+      "member": 26,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 93,
+    "fields": {
+      "account_name": "archivehoseok",
+      "member": 27,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 94,
+    "fields": {
+      "account_name": "jhopepics",
+      "member": 27,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 95,
+    "fields": {
+      "account_name": "hopepics",
+      "member": 27,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 96,
+    "fields": {
+      "account_name": "rmpics4",
+      "member": 28,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 97,
+    "fields": {
+      "account_name": "rmpics_94",
+      "member": 28,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 98,
+    "fields": {
+      "account_name": "namupic",
+      "member": 28,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 99,
+    "fields": {
+      "account_name": "parkjiminpics",
+      "member": 29,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 100,
+    "fields": {
+      "account_name": "jamjampics",
+      "member": 29,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 101,
+    "fields": {
+      "account_name": "jiminpics",
+      "member": 29,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 102,
+    "fields": {
+      "account_name": "kimvpics",
+      "member": 30,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 103,
+    "fields": {
+      "account_name": "_vantae_k",
+      "member": 30,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 104,
+    "fields": {
+      "account_name": "taehypic",
+      "member": 30,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 105,
+    "fields": {
+      "account_name": "kookpiics",
+      "member": 31,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 106,
+    "fields": {
+      "account_name": "kookpics",
+      "member": 31,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 107,
+    "fields": {
+      "account_name": "archiveskook",
+      "member": 31,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 108,
+    "fields": {
+      "account_name": "archiveryujin",
+      "member": 1,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 109,
+    "fields": {
+      "account_name": "ryujinthings",
+      "member": 1,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 110,
+    "fields": {
+      "account_name": "ryujinsarchives",
+      "member": 1,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 111,
+    "fields": {
+      "account_name": "ryudetail",
+      "member": 1,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 112,
+    "fields": {
+      "account_name": "kimyongsunpics",
+      "member": 32,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 113,
+    "fields": {
+      "account_name": "solarpics",
+      "member": 32,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 114,
+    "fields": {
+      "account_name": "yongsunarchive",
+      "member": 32,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 115,
+    "fields": {
+      "account_name": "filesmoonbyul",
+      "member": 33,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 116,
+    "fields": {
+      "account_name": "archivebyulyi",
+      "member": 33,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 117,
+    "fields": {
+      "account_name": "byulgallery",
+      "member": 33,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 118,
+    "fields": {
+      "account_name": "wheeinjpgs",
+      "member": 34,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 119,
+    "fields": {
+      "account_name": "bestofwheein",
+      "member": 34,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 120,
+    "fields": {
+      "account_name": "wheein_pics",
+      "member": 34,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 121,
+    "fields": {
+      "account_name": "archivehwasa",
+      "member": 35,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 122,
+    "fields": {
+      "account_name": "hwasagallery",
+      "member": 35,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 123,
+    "fields": {
+      "account_name": "ahnhyejinpics",
+      "member": 35,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 124,
+    "fields": {
+      "account_name": "ryujloops",
+      "member": 1,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 125,
+    "fields": {
+      "account_name": "_somipics",
+      "member": 36,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 126,
+    "fields": {
+      "account_name": "somsomiarchive",
+      "member": 36,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 127,
+    "fields": {
+      "account_name": "somiloops",
+      "member": 36,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 128,
+    "fields": {
+      "account_name": "karinaspics",
+      "member": 37,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 129,
+    "fields": {
+      "account_name": "aespakarinapic",
+      "member": 37,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 130,
+    "fields": {
+      "account_name": "karinaarchives",
+      "member": 37,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 131,
+    "fields": {
+      "account_name": "karinapiics",
+      "member": 37,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 132,
+    "fields": {
+      "account_name": "giselle_pics",
+      "member": 38,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 133,
+    "fields": {
+      "account_name": "gisellepiics",
+      "member": 38,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 134,
+    "fields": {
+      "account_name": "gisellespics",
+      "member": 38,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 135,
+    "fields": {
+      "account_name": "GISELLEPIC",
+      "member": 38,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 136,
+    "fields": {
+      "account_name": "winterpic",
+      "member": 39,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 137,
+    "fields": {
+      "account_name": "minjeongallery",
+      "member": 39,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 138,
+    "fields": {
+      "account_name": "wntrpics",
+      "member": 39,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 139,
+    "fields": {
+      "account_name": "archivedwinter",
+      "member": 39,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 140,
+    "fields": {
+      "account_name": "ningningpics",
+      "member": 40,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 141,
+    "fields": {
+      "account_name": "ningningspics",
+      "member": 40,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 142,
+    "fields": {
+      "account_name": "ningspics",
+      "member": 40,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 143,
+    "fields": {
+      "account_name": "ningningfolder",
+      "member": 40,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 144,
+    "fields": {
+      "account_name": "minseokpics",
+      "member": 41,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 145,
+    "fields": {
+      "account_name": "minseokpcs",
+      "member": 41,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 146,
+    "fields": {
+      "account_name": "archivejunmyeon",
+      "member": 42,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 147,
+    "fields": {
+      "account_name": "suhopictures",
+      "member": 42,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 148,
+    "fields": {
+      "account_name": "laypics_",
+      "member": 43,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 149,
+    "fields": {
+      "account_name": "picszhang",
+      "member": 43,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 150,
+    "fields": {
+      "account_name": "baekhyunpics",
+      "member": 44,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 151,
+    "fields": {
+      "account_name": "baeksarchive",
+      "member": 44,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 152,
+    "fields": {
+      "account_name": "cutekjdpics",
+      "member": 45,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 153,
+    "fields": {
+      "account_name": "kjdpics",
+      "member": 45,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 154,
+    "fields": {
+      "account_name": "chanyeol_pic",
+      "member": 46,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 155,
+    "fields": {
+      "account_name": "pchanyeolpic",
+      "member": 46,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 156,
+    "fields": {
+      "account_name": "DOpics2",
+      "member": 47,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 157,
+    "fields": {
+      "account_name": "twelfthkelebek",
+      "member": 47,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 158,
+    "fields": {
+      "account_name": "kimjipics",
+      "member": 48,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 159,
+    "fields": {
+      "account_name": "jonginpic",
+      "member": 48,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 160,
+    "fields": {
+      "account_name": "sehunspics",
+      "member": 49,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 161,
+    "fields": {
+      "account_name": "hunarchive",
+      "member": 49,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 162,
+    "fields": {
+      "account_name": "luhanpics",
+      "member": 49,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 163,
+    "fields": {
+      "account_name": "archiveluhan",
+      "member": 49,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 164,
+    "fields": {
+      "account_name": "wuyifan_pics",
+      "member": 49,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 166,
+    "fields": {
+      "account_name": "hztpics",
+      "member": 52,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasource",
+    "pk": 168,
+    "fields": {
+      "account_name": "huangzitaopics",
+      "member": 52,
+      "last_tweet_id": null
+    }
+  },
+  {
+    "model": "bot.twittermediasubscribedchannel",
+    "pk": 1,
+    "fields": {
+      "channel_id": 726831180565184603,
+      "group": 1
+    }
+  },
+  {
+    "model": "bot.twittermediasubscribedchannel",
+    "pk": 3,
+    "fields": {
+      "channel_id": 727956565390524447,
+      "group": 2
+    }
+  },
+  {
+    "model": "bot.twittermediasubscribedchannel",
+    "pk": 6,
+    "fields": {
+      "channel_id": 789385817884721164,
+      "group": 3
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 1,
+    "fields": {
+      "channel_id": 726831180565184603,
+      "group": 1,
+      "dev_channel": true
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 3,
+    "fields": {
+      "channel_id": 727956565390524447,
+      "group": 2,
+      "dev_channel": true
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 5,
+    "fields": {
+      "channel_id": 735600077296500826,
+      "group": 3,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 6,
+    "fields": {
+      "channel_id": 735594245036965918,
+      "group": 1,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 7,
+    "fields": {
+      "channel_id": 735600100604117073,
+      "group": 2,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 8,
+    "fields": {
+      "channel_id": 735600148687618089,
+      "group": 4,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 9,
+    "fields": {
+      "channel_id": 735600111345991740,
+      "group": 5,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 10,
+    "fields": {
+      "channel_id": 735600135198867527,
+      "group": 8,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 11,
+    "fields": {
+      "channel_id": 735600682291429387,
+      "group": 7,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 12,
+    "fields": {
+      "channel_id": 778317997399212043,
+      "group": 6,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 13,
+    "fields": {
+      "channel_id": 766754934271508501,
+      "group": 3,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 14,
+    "fields": {
+      "channel_id": 785442350226735114,
+      "group": 2,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 15,
+    "fields": {
+      "channel_id": 785442451951058964,
+      "group": 6,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 16,
+    "fields": {
+      "channel_id": 785461972698923008,
+      "group": 10,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 17,
+    "fields": {
+      "channel_id": 785461423186640937,
+      "group": 3,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 18,
+    "fields": {
+      "channel_id": 785461675805507594,
+      "group": 5,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 19,
+    "fields": {
+      "channel_id": 785461254663045160,
+      "group": 1,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 20,
+    "fields": {
+      "channel_id": 785461857363165194,
+      "group": 9,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 21,
+    "fields": {
+      "channel_id": 785461618620235816,
+      "group": 7,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 22,
+    "fields": {
+      "channel_id": 785461786098401300,
+      "group": 8,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 23,
+    "fields": {
+      "channel_id": 785461537770569728,
+      "group": 4,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 24,
+    "fields": {
+      "channel_id": 785510309933613057,
+      "group": 8,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 25,
+    "fields": {
+      "channel_id": 789686731829018644,
+      "group": 1,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 26,
+    "fields": {
+      "channel_id": 789687273221259314,
+      "group": 3,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 27,
+    "fields": {
+      "channel_id": 789687458409218108,
+      "group": 6,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "bot.vlivesubscribedchannel",
+    "pk": 28,
+    "fields": {
+      "channel_id": 789687904259538974,
+      "group": 9,
+      "dev_channel": false
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+      "action_time": "2020-12-25T15:28:47.914Z",
+      "user": 1,
+      "content_type": 3,
+      "object_id": "1",
+      "object_repr": "726831180565184603 (itzy)",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Dev channel\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+      "action_time": "2020-12-25T15:29:23.597Z",
+      "user": 1,
+      "content_type": 3,
+      "object_id": "3",
+      "object_repr": "727956565390524447 (blackpink)",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Dev channel\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+      "action_time": "2020-12-26T11:24:11.107Z",
+      "user": 1,
+      "content_type": 7,
+      "object_id": "1",
+      "object_repr": "itz (itzy)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+      "action_time": "2020-12-26T11:24:17.142Z",
+      "user": 1,
+      "content_type": 7,
+      "object_id": "2",
+      "object_repr": "rv (redvelvet)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+      "action_time": "2020-12-26T11:24:30.366Z",
+      "user": 1,
+      "content_type": 7,
+      "object_id": "3",
+      "object_repr": "mink (blackpink)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+      "action_time": "2020-12-26T11:24:44.572Z",
+      "user": 1,
+      "content_type": 7,
+      "object_id": "4",
+      "object_repr": "more (twice)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+      "action_time": "2020-12-26T11:24:51.741Z",
+      "user": 1,
+      "content_type": 7,
+      "object_id": "5",
+      "object_repr": "tdoong (twice)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+      "action_time": "2020-12-26T11:27:23.797Z",
+      "user": 1,
+      "content_type": 7,
+      "object_id": "6",
+      "object_repr": "red-velvet (redvelvet)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+      "action_time": "2020-12-26T11:27:32.725Z",
+      "user": 1,
+      "content_type": 7,
+      "object_id": "7",
+      "object_repr": "red_velvet (redvelvet)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+      "action_time": "2020-12-29T15:07:20.433Z",
+      "user": 1,
+      "content_type": 7,
+      "object_id": "8",
+      "object_repr": "æ (aespa)",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+      "name": "Can add group",
+      "content_type": 1,
+      "codename": "add_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+      "name": "Can change group",
+      "content_type": 1,
+      "codename": "change_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+      "name": "Can delete group",
+      "content_type": 1,
+      "codename": "delete_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+      "name": "Can view group",
+      "content_type": 1,
+      "codename": "view_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+      "name": "Can add member",
+      "content_type": 2,
+      "codename": "add_member"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+      "name": "Can change member",
+      "content_type": 2,
+      "codename": "change_member"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+      "name": "Can delete member",
+      "content_type": 2,
+      "codename": "delete_member"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+      "name": "Can view member",
+      "content_type": 2,
+      "codename": "view_member"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+      "name": "Can add vlive subscribed channel",
+      "content_type": 3,
+      "codename": "add_vlivesubscribedchannel"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+      "name": "Can change vlive subscribed channel",
+      "content_type": 3,
+      "codename": "change_vlivesubscribedchannel"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+      "name": "Can delete vlive subscribed channel",
+      "content_type": 3,
+      "codename": "delete_vlivesubscribedchannel"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+      "name": "Can view vlive subscribed channel",
+      "content_type": 3,
+      "codename": "view_vlivesubscribedchannel"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+      "name": "Can add twitter media subscribed channel",
+      "content_type": 4,
+      "codename": "add_twittermediasubscribedchannel"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+      "name": "Can change twitter media subscribed channel",
+      "content_type": 4,
+      "codename": "change_twittermediasubscribedchannel"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+      "name": "Can delete twitter media subscribed channel",
+      "content_type": 4,
+      "codename": "delete_twittermediasubscribedchannel"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+      "name": "Can view twitter media subscribed channel",
+      "content_type": 4,
+      "codename": "view_twittermediasubscribedchannel"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+      "name": "Can add twitter media source",
+      "content_type": 5,
+      "codename": "add_twittermediasource"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+      "name": "Can change twitter media source",
+      "content_type": 5,
+      "codename": "change_twittermediasource"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+      "name": "Can delete twitter media source",
+      "content_type": 5,
+      "codename": "delete_twittermediasource"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+      "name": "Can view twitter media source",
+      "content_type": 5,
+      "codename": "view_twittermediasource"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+      "name": "Can add member alias",
+      "content_type": 6,
+      "codename": "add_memberalias"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+      "name": "Can change member alias",
+      "content_type": 6,
+      "codename": "change_memberalias"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+      "name": "Can delete member alias",
+      "content_type": 6,
+      "codename": "delete_memberalias"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+      "name": "Can view member alias",
+      "content_type": 6,
+      "codename": "view_memberalias"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+      "name": "Can add group alias",
+      "content_type": 7,
+      "codename": "add_groupalias"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+      "name": "Can change group alias",
+      "content_type": 7,
+      "codename": "change_groupalias"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+      "name": "Can delete group alias",
+      "content_type": 7,
+      "codename": "delete_groupalias"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+      "name": "Can view group alias",
+      "content_type": 7,
+      "codename": "view_groupalias"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+      "name": "Can add log entry",
+      "content_type": 8,
+      "codename": "add_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+      "name": "Can change log entry",
+      "content_type": 8,
+      "codename": "change_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+      "name": "Can delete log entry",
+      "content_type": 8,
+      "codename": "delete_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+      "name": "Can view log entry",
+      "content_type": 8,
+      "codename": "view_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+      "name": "Can add permission",
+      "content_type": 9,
+      "codename": "add_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+      "name": "Can change permission",
+      "content_type": 9,
+      "codename": "change_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+      "name": "Can delete permission",
+      "content_type": 9,
+      "codename": "delete_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+      "name": "Can view permission",
+      "content_type": 9,
+      "codename": "view_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+      "name": "Can add group",
+      "content_type": 10,
+      "codename": "add_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+      "name": "Can change group",
+      "content_type": 10,
+      "codename": "change_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+      "name": "Can delete group",
+      "content_type": 10,
+      "codename": "delete_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+      "name": "Can view group",
+      "content_type": 10,
+      "codename": "view_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+      "name": "Can add user",
+      "content_type": 11,
+      "codename": "add_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+      "name": "Can change user",
+      "content_type": 11,
+      "codename": "change_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+      "name": "Can delete user",
+      "content_type": 11,
+      "codename": "delete_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+      "name": "Can view user",
+      "content_type": 11,
+      "codename": "view_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+      "name": "Can add content type",
+      "content_type": 12,
+      "codename": "add_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+      "name": "Can change content type",
+      "content_type": 12,
+      "codename": "change_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+      "name": "Can delete content type",
+      "content_type": 12,
+      "codename": "delete_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+      "name": "Can view content type",
+      "content_type": 12,
+      "codename": "view_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+      "name": "Can add session",
+      "content_type": 13,
+      "codename": "add_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+      "name": "Can change session",
+      "content_type": 13,
+      "codename": "change_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+      "name": "Can delete session",
+      "content_type": 13,
+      "codename": "delete_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+      "name": "Can view session",
+      "content_type": 13,
+      "codename": "view_session"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$vos78CNSi2V6$BQicVAhV9cel2KqtaRhJuhyNhAZitZ8YwJvikfy2HTE\u003d",
+      "last_login": "2020-12-25T14:37:34.195Z",
+      "is_superuser": true,
+      "username": "kvdomingo",
+      "first_name": "",
+      "last_name": "",
+      "email": "kvdomingo@up.edu.ph",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2020-12-25T14:37:30.549Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+      "app_label": "bot",
+      "model": "group"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+      "app_label": "bot",
+      "model": "member"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+      "app_label": "bot",
+      "model": "vlivesubscribedchannel"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+      "app_label": "bot",
+      "model": "twittermediasubscribedchannel"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+      "app_label": "bot",
+      "model": "twittermediasource"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+      "app_label": "bot",
+      "model": "memberalias"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+      "app_label": "bot",
+      "model": "groupalias"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+      "app_label": "admin",
+      "model": "logentry"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+      "app_label": "auth",
+      "model": "permission"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+      "app_label": "auth",
+      "model": "group"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+      "app_label": "auth",
+      "model": "user"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+      "app_label": "contenttypes",
+      "model": "contenttype"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+      "app_label": "sessions",
+      "model": "session"
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "jb3e3v7ierqkrm5v4srfa7eq506hd5pl",
+    "fields": {
+      "session_data": ".eJxVjEEOwiAQRe_C2pAZGhjq0r1nIMBMpWogKe3KeHdt0oVu_3vvv1SI21rC1mUJM6uzQnX63VLMD6k74Hust6Zzq-syJ70r-qBdXxvL83K4fwcl9vKtSQCzCMPIaLIDNwllZ2wC4w2x82jtMMKEAxvywEYQkBzZOAgl8Or9AdBsNtk:1ksoDm:dxHda0VZZBqKFRE2GykggmC0yJhsgDvXAkI1tnVUs9k",
+      "expire_date": "2021-01-08T14:37:34.198Z"
+    }
+  }
+]

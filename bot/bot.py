@@ -17,7 +17,7 @@ if not settings.DEBUG:
 
 
 def main():
-    command_prefix = '$' if settings.DEBUG else '!'
+    command_prefix = '!' if settings.PYTHON_ENV == 'production' else '$'
     client = commands.Bot(command_prefix=command_prefix, description='Hi, I\'m Botbot de Leon!')
     for fn in os.listdir(settings.BASE_DIR / 'bot' / 'cogs'):
         if fn.endswith('.py'):
