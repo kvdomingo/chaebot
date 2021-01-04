@@ -6,6 +6,8 @@ import sentry_sdk
 import logging
 from django.conf import settings
 from discord.ext import commands
+from django.core.cache import cache
+from .utils.endpoints import Api
 
 logging.basicConfig(level=logging.INFO)
 
@@ -17,6 +19,9 @@ if not settings.DEBUG:
 
 
 def main():
+    groups = Api.sync_groups()
+    cache.set('groups', groups)
+
     command_prefix = '!' if settings.PYTHON_ENV == 'production' else '$'
     client = commands.Bot(command_prefix=command_prefix, description='Hi, I\'m Botbot de Leon!')
     for fn in os.listdir(settings.BASE_DIR / 'bot' / 'cogs'):

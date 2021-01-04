@@ -1,4 +1,5 @@
 import aiohttp
+import requests
 from django.conf import settings
 
 if settings.PYTHON_ENV == 'development':
@@ -21,6 +22,12 @@ async def _arequest(endpoint: str, method: str = 'get', body: dict = None):
 
 
 class Api:
+    @staticmethod
+    def sync_groups():
+        with requests.Session() as session:
+            with session.get(f'{BASE_URL}/groups') as res:
+                return res.json()
+
     @staticmethod
     async def groups():
         return await _arequest('groups')

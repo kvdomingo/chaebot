@@ -2,6 +2,7 @@ import os
 import discord
 from random import SystemRandom
 from discord.ext import commands
+from django.core.cache import cache
 from ..handlers.twitter import twitter_handler
 from ..utils import escape_quote
 from ..utils.endpoints import Api
@@ -17,6 +18,7 @@ async def arange(count):
 class Query(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.groups = cache.get('groups')
 
     @commands.command(aliases=['q'], help='Get a random member pic from the specified group')
     async def query(self, ctx, group: str, *person: str):
@@ -54,8 +56,7 @@ class Query(commands.Cog):
 
     @commands.command(aliases=['list'], help='List all supported groups')
     async def list_(self, ctx):
-        groups = await Api.groups()
-        await ctx.send('\n'.join([group['name'] for group in groups]))
+        await ctx.send('\n'.join([group['name'] for group in self.groups]))
 
 
 def setup(client):
