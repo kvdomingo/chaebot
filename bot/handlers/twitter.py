@@ -4,6 +4,7 @@ import io
 import os
 import re
 import twitter
+from django.core.cache import cache
 from ..utils.endpoints import Api
 from random import SystemRandom
 from typing import List, Tuple
@@ -19,7 +20,7 @@ api = twitter.Api(
 
 
 async def group_name_matcher(name: str) -> dict:
-    groups = await Api.groups()
+    groups = cache.get('groups')
     group_names = {}
     for group in groups:
         group_names[group['id']] = [group['name']]

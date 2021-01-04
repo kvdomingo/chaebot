@@ -3,6 +3,7 @@ import discord
 from datetime import datetime
 from discord.ext import commands, tasks
 from django.conf import settings
+from django.core.cache import cache
 from ..utils.endpoints import Api
 from ..handlers.twitter import twitter_handler
 from ..handlers.vlive import vlive_handler
@@ -11,6 +12,7 @@ from ..handlers.vlive import vlive_handler
 class Tasks(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.groups = cache.get('groups')
 
     def cog_unload(self):
         self.hourly_itzy.cancel()
@@ -44,7 +46,10 @@ class Tasks(commands.Cog):
     @tasks.loop(hours=1)
     async def hourly_itzy(self):
         group = 'itzy'
-        await self.send_hourly_to_channels(group)
+        try:
+            await self.send_hourly_to_channels(group)
+        except discord.errors.HTTPException:
+            await self.send_hourly_to_channels(group)
 
     @tasks.loop(hours=1)
     async def hourly_blackpink(self):
@@ -58,10 +63,10 @@ class Tasks(commands.Cog):
 
     @tasks.loop(seconds=30)
     async def vlive_listener(self):
-        groups = await Api.groups()
-        for group in groups:
+        for group in self.groups:
             embed = await vlive_handler(group)
             if embed:
+                self.groups = await Api.groups()
                 channels = group['vliveSubscribedChannels']
                 for channel in channels:
                     if settings.DEBUG and not channel['dev_channel']:

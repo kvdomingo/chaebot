@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from django.core.cache import cache
 from ..utils.endpoints import Api
 from ..handlers.twitter import group_name_matcher
 
@@ -7,6 +8,7 @@ from ..handlers.twitter import group_name_matcher
 class Subscription(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.groups = cache.get('groups')
 
     @commands.group(hidden=True)
     async def hourly(self, ctx):
@@ -14,8 +16,7 @@ class Subscription(commands.Cog):
 
     @hourly.command(aliases=['list'], help='List all hourly subscriptions for the channel')
     async def hourly_list(self, ctx):
-        groups = await Api.groups()
-        subs_exist = list(filter(lambda x: len(x['twitterMediaSubscribedChannels']) > 0, groups))
+        subs_exist = list(filter(lambda x: len(x['twitterMediaSubscribedChannels']) > 0, self.groups))
         subbed_groups = []
         for sub in subs_exist:
             for channel in sub['twitterMediaSubscribedChannels']:
@@ -90,8 +91,7 @@ class Subscription(commands.Cog):
 
     @vlive.command(aliases=['list'], help='List all VLIVE subscriptions for the channel')
     async def vlive_list(self, ctx):
-        groups = await Api.groups()
-        subs_exist = list(filter(lambda x: len(x['vliveSubscribedChannels']) > 0, groups))
+        subs_exist = list(filter(lambda x: len(x['vliveSubscribedChannels']) > 0, self.groups))
         subbed_groups = []
         for sub in subs_exist:
             for channel in sub['vliveSubscribedChannels']:
