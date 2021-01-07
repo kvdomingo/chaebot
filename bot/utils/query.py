@@ -1,14 +1,14 @@
 import discord
 from typing import Iterable
 from . import escape_quote
-from ..handlers.twitter import twitter_handler
+from ..handlers.hourly import hourly_handler
 
 
 async def query_handler(ctx, group: str, person: Iterable[str]):
     person = escape_quote(person)
-    response = await twitter_handler(group, person)
+    response = await hourly_handler(group, person)
     while not len(response):
-        response = await twitter_handler(group, person)
+        response = await hourly_handler(group, person)
 
     if isinstance(response, list):
         message = await ctx.send(files=response)

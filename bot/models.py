@@ -8,14 +8,15 @@ CharField.register_lookup(Lower)
 
 class Group(models.Model):
     name = models.CharField(max_length=32, unique=True)
+    korean_name = models.CharField(max_length=64, blank=True, null=True)
     vlive_channel_code = models.CharField(max_length=32, null=True)
-    vlive_channel_seq = models.BigIntegerField(null=True)
-    vlive_last_seq = models.BigIntegerField(null=True)
+    vlive_channel_seq = models.BigIntegerField(blank=True, null=True)
+    vlive_last_seq = models.BigIntegerField(blank=True, null=True)
     twitter_user_name = models.CharField(max_length=16, blank=True)
     instagram_user_name = models.CharField(max_length=32, blank=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name} ({self.korean_name})'
 
     class Meta:
         ordering = ['name']
@@ -37,7 +38,7 @@ class Member(models.Model):
     stage_name = models.CharField(max_length=16)
     given_name = models.CharField(max_length=16)
     family_name = models.CharField(max_length=16)
-    english_name = models.CharField(max_length=16, null=True)
+    english_name = models.CharField(max_length=16, blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
     group = models.ForeignKey(Group, related_name='members', on_delete=models.CASCADE)
 
@@ -45,7 +46,7 @@ class Member(models.Model):
         return f'{self.stage_name} ({self.group.name})'
 
     class Meta:
-        ordering = ['group__name', 'stage_name']
+        ordering = ['group__name', 'birthday', 'stage_name']
 
 
 class MemberAlias(models.Model):
@@ -63,7 +64,7 @@ class MemberAlias(models.Model):
 class TwitterMediaSource(models.Model):
     account_name = models.CharField(max_length=16, unique=True)
     member = models.ForeignKey(Member, related_name='twitter_media_sources', on_delete=models.CASCADE)
-    last_tweet_id = models.BigIntegerField(null=True)
+    last_tweet_id = models.BigIntegerField(blank=True, null=True)
 
     def __str__(self):
         return f'{self.account_name} (for {self.member.stage_name} of {self.member.group.name})'

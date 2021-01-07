@@ -5,7 +5,7 @@ from discord.ext import commands, tasks
 from django.conf import settings
 from django.core.cache import cache
 from ..utils.endpoints import Api
-from ..handlers.twitter import twitter_handler
+from ..handlers.hourly import hourly_handler
 from ..handlers.vlive import vlive_handler
 
 
@@ -34,9 +34,9 @@ class Tasks(commands.Cog):
         self.vlive_listener.start()
 
     async def send_hourly_to_channels(self, group: str):
-        media, _group = await twitter_handler(group, [], True)
+        media, _group = await hourly_handler(group, [], True)
         while not media:
-            media, _group = await twitter_handler(group, [], True)
+            media, _group = await hourly_handler(group, [], True)
         channels = _group['twitterMediaSubscribedChannels']
         for channel in channels:
             ch = self.client.get_channel(channel['channel_id'])

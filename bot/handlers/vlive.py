@@ -1,6 +1,5 @@
 import aiohttp
 import discord
-from django.core.cache import cache
 from ..utils.endpoints import Api
 from datetime import datetime, timedelta
 
@@ -36,9 +35,9 @@ async def vlive_handler(group: dict):
                 name = latest_vid['representChannelName']
                 name += " Now Live!" if live else " New Upload"
                 if live:
-                    description = f"{obj['name']} started streaming"
+                    description = f"@here {obj['name']} started streaming!"
                 else:
-                    description = f"{obj['name']} uploaded a new video"
+                    description = f"@here {obj['name']} uploaded a new video!"
                 embed = discord.Embed(
                     title=title,
                     url=f"https://www.vlive.tv/video/{latest_vid['videoSeq']}",
