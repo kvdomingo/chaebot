@@ -3,7 +3,7 @@ import discord
 from random import SystemRandom
 from discord.ext import commands
 from django.core.cache import cache
-from ..handlers.twitter import twitter_handler
+from ..handlers.hourly import hourly_handler
 from ..utils import escape_quote
 from ..utils.endpoints import Api
 
@@ -23,12 +23,12 @@ class Query(commands.Cog):
     @commands.command(aliases=['q'], help='Get a random member pic from the specified group')
     async def query(self, ctx, group: str, *person: str):
         person = escape_quote(person)
-        response, _ = await twitter_handler(group, person)
+        response, _ = await hourly_handler(group, person)
         timeout = 0
         while not len(response):
             if timeout == 5:
                 return
-            response, _ = await twitter_handler(group, person)
+            response, _ = await hourly_handler(group, person)
             timeout += 1
 
         if isinstance(response, list):
@@ -48,7 +48,7 @@ class Query(commands.Cog):
         person = escape_quote(person)
         sent = 0
         async for _ in arange(number):
-            response, _ = await twitter_handler(group, person)
+            response, _ = await hourly_handler(group, person)
             await ctx.send(files=response)
             sent += len(response)
             if sent >= number:

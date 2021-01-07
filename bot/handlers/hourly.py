@@ -5,7 +5,6 @@ import os
 import re
 import twitter
 from django.core.cache import cache
-from ..utils.endpoints import Api
 from random import SystemRandom
 from typing import List, Tuple
 
@@ -72,7 +71,7 @@ async def member_name_matcher(member: List[str], group: str, hourly: bool) -> Tu
     return accounts, group
 
 
-async def twitter_handler(
+async def hourly_handler(
         group: str,
         member: List[str] = None,
         hourly: bool = False,

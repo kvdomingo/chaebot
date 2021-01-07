@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from django.core.cache import cache
 from ..utils.endpoints import Api
-from ..handlers.twitter import group_name_matcher
+from ..handlers.hourly import group_name_matcher
 
 
 class Subscription(commands.Cog):
