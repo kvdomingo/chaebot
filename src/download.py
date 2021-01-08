@@ -1,10 +1,16 @@
+from dotenv import load_dotenv
+load_dotenv()
+
+import django
+django.setup()
+
 import os
 import sys
-from src import BASE_DIR
+from django.conf import settings
 from discord.ext import commands, tasks
 from tqdm import tqdm
 
-MEDIA_DIR = BASE_DIR / 'src' / '_media'
+MEDIA_DIR = settings.BASE_DIR / 'src' / '_media'
 
 
 class DownloaderBot(commands.Cog):
