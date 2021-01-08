@@ -168,6 +168,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+DISCORD_ADMIN_ID = int(os.environ.get('DISCORD_ADMIN_ID'))
+
 PYTHON_ENV = os.environ.get('PYTHON_ENV')
 
 if PYTHON_ENV != 'development':

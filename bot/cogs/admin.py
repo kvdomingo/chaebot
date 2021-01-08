@@ -5,9 +5,11 @@ from discord.ext import commands
 
 
 class Admin(commands.Cog):
-    def __init__(self, client):
+    def __init__(self, client: discord.Client):
         self.client = client
         self.time_up = datetime.now()
+
+
 
     @commands.group(hidden=True)
     async def admin(self, ctx):

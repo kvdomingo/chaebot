@@ -8,7 +8,7 @@ CharField.register_lookup(Lower)
 
 class Group(models.Model):
     name = models.CharField(max_length=32, unique=True)
-    korean_name = models.CharField(max_length=64, blank=True, null=True)
+    # korean_name = models.CharField(max_length=64, blank=True, null=True)
     vlive_channel_code = models.CharField(max_length=32, null=True)
     vlive_channel_seq = models.BigIntegerField(blank=True, null=True)
     vlive_last_seq = models.BigIntegerField(blank=True, null=True)
@@ -16,7 +16,7 @@ class Group(models.Model):
     instagram_user_name = models.CharField(max_length=32, blank=True)
 
     def __str__(self):
-        return f'{self.name} ({self.korean_name})'
+        return f'{self.name}'
 
     class Meta:
         ordering = ['name']
@@ -38,7 +38,10 @@ class Member(models.Model):
     stage_name = models.CharField(max_length=16)
     given_name = models.CharField(max_length=16)
     family_name = models.CharField(max_length=16)
-    english_name = models.CharField(max_length=16, blank=True, null=True)
+    # korean_name = models.CharField(max_length=32, blank=True, null=True)
+    # chinese_name = models.CharField(max_length=32, blank=True, null=True)
+    english_name = models.CharField(max_length=32, blank=True, null=True)
+    # native_name = models.CharField(max_length=32, blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
     group = models.ForeignKey(Group, related_name='members', on_delete=models.CASCADE)
 
