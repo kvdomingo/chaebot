@@ -42,11 +42,15 @@ class MemberAdmin(admin.ModelAdmin):
     inlines = [MemberAliasInline, TwitterMediaSourceInline]
 
 
+@admin.register(VliveSubscribedChannel)
+class VliveSubscribedChannelAdmin(admin.ModelAdmin):
+    list_display = ['channel_id', 'group']
+
+
 # admin.site.register(GroupAlias)
 # admin.site.register(MemberAlias)
 # admin.site.register(TwitterMediaSource)
-# admin.site.register(TwitterMediaSubscribedChannel)
-# admin.site.register(VliveSubscribedChannel)
+admin.site.register(TwitterMediaSubscribedChannel)
 
 admin.site.index_title = 'Admin'
 admin.site.site_title = 'kvisualbot'

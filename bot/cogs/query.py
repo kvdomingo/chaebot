@@ -1,11 +1,10 @@
-import os
 import discord
 from random import SystemRandom
 from discord.ext import commands
 from django.core.cache import cache
+from django.conf import settings
 from ..handlers.hourly import hourly_handler
 from ..utils import escape_quote
-from ..utils.endpoints import Api
 
 random = SystemRandom()
 
@@ -16,7 +15,7 @@ async def arange(count):
 
 
 class Query(commands.Cog):
-    def __init__(self, client):
+    def __init__(self, client: discord.Client):
         self.client = client
         self.groups = cache.get('groups')
 
@@ -38,7 +37,7 @@ class Query(commands.Cog):
 
     @commands.command()
     async def spam(self, ctx, number: int, group: str, *person: str):
-        if str(ctx.message.author.id) != os.environ.get('DISCORD_ADMIN_ID'):
+        if ctx.message.author.id != settings.DISCORD_ADMIN_ID:
             embed = discord.Embed(
                 description='Sorry, only bot owner is allowed to `spam`.',
                 color=discord.Color.red(),
@@ -56,7 +55,18 @@ class Query(commands.Cog):
 
     @commands.command(aliases=['list'], help='List all supported groups')
     async def list_(self, ctx):
-        await ctx.send('\n'.join([group['name'] for group in self.groups]))
+        supp_groups = []
+        for group in self.groups:
+            without_source = [len(member['twitterMediaSources']) == 0 for member in group['members']]
+            if any(without_source):
+                continue
+            supp_groups.append(group['name'])
+        embed = discord.Embed(
+            title='Supported groups/artists:',
+            description='\n'.join(supp_groups),
+            color=discord.Color.green(),
+        )
+        await ctx.send(embed=embed)
 
 
 def setup(client):

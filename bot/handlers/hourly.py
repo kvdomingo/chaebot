@@ -33,38 +33,41 @@ async def group_name_matcher(name: str) -> dict:
                 re.search(alias, name, re.I),
             ])
             if any(search_params):
-                return list(filter(lambda x: x['id'] == id_, groups))[0]
+                group = list(filter(lambda x: x['id'] == id_, groups))[0]
+                print(f'Group query matched: {group["name"]}')
+                return group
+    print('No group query matched, choosing random')
     return random.choice(groups)
 
 
-async def member_name_matcher(member: List[str], group: str, hourly: bool) -> Tuple[list, dict]:
+async def member_name_matcher(_member: List[str], group: str, hourly: bool) -> Tuple[list, dict]:
     group = await group_name_matcher(group)
     members = group['members']
-    if hourly or not member:
+    if hourly or not _member:
         member = random.choice(members)
         accounts = member['twitterMediaSources']
         return accounts, group
-    member = ' '.join(member)
+    _member = ' '.join(_member)
     for key in members:
         search_parameters = [
-            re.search(member, key['stage_name'], re.I),
-            re.search(key['stage_name'], member, re.I),
-            re.search(member, key['given_name'], re.I),
-            re.search(key['given_name'], member, re.I),
-            re.search(member, key['family_name'], re.I),
-            re.search(key['family_name'], member, re.I)
+            re.search(_member, key['stage_name'], re.I),
+            re.search(key['stage_name'], _member, re.I),
+            re.search(_member, key['given_name'], re.I),
+            re.search(key['given_name'], _member, re.I),
+            re.search(_member, key['family_name'], re.I),
+            re.search(key['family_name'], _member, re.I)
         ]
         if key['english_name']:
             search_parameters.extend([
-                re.search(key['english_name'], member),
-                re.search(member, key['english_name']),
+                re.search(key['english_name'], _member),
+                re.search(_member, key['english_name']),
             ])
         if any(search_parameters):
             print(f'Member query matched: {key["stage_name"]} of {group["name"]}')
             return key['twitterMediaSources'], group
         for alias in key['aliases']:
-            if re.search(alias['alias'], member, re.I) or re.search(member, alias['alias'], re.I):
-                print(f'Member query matched: {str(key)} of {group["name"]}')
+            if re.search(alias['alias'], _member, re.I) or re.search(_member, alias['alias'], re.I):
+                print(f'Member query matched: {key["stage_name"]} of {group["name"]}')
                 return key['twitterMediaSources'], group
     print('No member query matched, choosing random')
     accounts = random.choice(members)['twitterMediaSources']
