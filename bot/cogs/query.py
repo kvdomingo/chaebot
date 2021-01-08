@@ -19,7 +19,7 @@ class Query(commands.Cog):
         self.client = client
         self.groups = cache.get('groups')
 
-    @commands.command(aliases=['q'], help='Get a random member pic from the specified group')
+    @commands.command(aliases=['q'], help='Get a random pic of the specified member from the specified group')
     async def query(self, ctx, group: str, *person: str):
         person = escape_quote(person)
         response, _ = await hourly_handler(group, person)
@@ -35,19 +35,25 @@ class Query(commands.Cog):
         elif isinstance(response, str):
             await ctx.send(response)
 
-    @commands.command()
+    @commands.command(aliases=['attack', 'hell', 'raise-hell'], hidden=True)
     async def spam(self, ctx, number: int, group: str, *person: str):
         if ctx.message.author.id != settings.DISCORD_ADMIN_ID:
-            embed = discord.Embed(
-                description='Sorry, only bot owner is allowed to `spam`.',
-                color=discord.Color.red(),
-            )
+            do = lambda: discord.Embed(
+                    description='Sorry, only bot owner is allowed to `spam`.',
+                    color=discord.Color.red(),
+                )
+            embed = do()
+            while not embed:
+                embed = do()
             await ctx.send(embed=embed)
             return
         person = escape_quote(person)
         sent = 0
         async for _ in arange(number):
-            response, _ = await hourly_handler(group, person)
+            do = lambda: hourly_handler(group, person)
+            response, _ = await do()
+            while not response:
+                response, _ = await do()
             await ctx.send(files=response)
             sent += len(response)
             if sent >= number:
