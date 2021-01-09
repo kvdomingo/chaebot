@@ -5,9 +5,11 @@ from django.conf import settings
 if settings.PYTHON_ENV == 'development':
     BASE_URL = 'http://localhost:8000'
 else:
-    BASE_URL = 'https://kvisualbot.herokuapp.com'
+    BASE_URL = 'https://kvisualbot.xyz'
 
-BASE_URL += '/v1.0'
+API_VERSION = 'v1.0'
+
+BASE_URL += f'/{API_VERSION}'
 
 
 async def _arequest(endpoint: str, method: str = 'get', body: dict = None):
