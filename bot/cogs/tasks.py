@@ -22,12 +22,6 @@ class Tasks(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f'Logged in as {self.client.user}')
-        activity_name = 'under development' if settings.DEBUG else f'in {len(self.client.guilds)} servers!'
-        await self.client.change_presence(
-            status=discord.Status.online,
-            activity=discord.Game(name=activity_name),
-        )
         self.hourly_itzy.start()
         self.hourly_twice.start()
         self.hourly_blackpink.start()

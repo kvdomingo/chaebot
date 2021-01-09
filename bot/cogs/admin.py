@@ -1,5 +1,6 @@
 import os
 import discord
+from django.conf import settings
 from datetime import datetime, timedelta
 from discord.ext import commands
 
@@ -9,7 +10,19 @@ class Admin(commands.Cog):
         self.client = client
         self.time_up = datetime.now()
 
-
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'Logged in as {self.client.user}')
+        if settings.PYTHON_ENV != 'production':
+            activity_name = 'under development'
+            status = discord.Status.do_not_disturb
+        else:
+            activity_name = f'in {len(self.client.guilds)} servers!'
+            status = discord.Status.online
+        await self.client.change_presence(
+            status=status,
+            activity=discord.Game(name=activity_name),
+        )
 
     @commands.group(hidden=True)
     async def admin(self, ctx):
@@ -23,7 +36,7 @@ class Admin(commands.Cog):
         else:
             pass
 
-    @admin.command(aliases=['status'], help='Get technical bot status', hidden=True)
+    @admin.command(aliases=['status', 'meta'], help='Get technical bot status', hidden=True)
     async def admin_status(self, ctx):
         created = os.environ['HEROKU_RELEASE_CREATED_AT']
         created = datetime.strptime(created, '%Y-%m-%dT%H:%M:%SZ')
