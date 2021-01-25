@@ -1,7 +1,9 @@
 from dotenv import load_dotenv
+
 load_dotenv()
 
 import django
+
 django.setup()
 
 import os
@@ -55,7 +57,17 @@ class DownloaderBot(commands.Cog):
                     'jihyo', 'mina', 'dahyun', 'chaeyoung',
                     'tzuyu', 'mixed',
                 ],
-            }
+            },
+            {
+                'group': 'blackpink',
+                'channel': 727956565390524447,
+                'folders': ['jisoo', 'jennie', 'rose', 'lisa', 'mixed'],
+            },
+            {
+                'group': 'red-velvet',
+                'channel': 803166633257598986,
+                'folders': ['irene', 'seulgi', 'wendy', 'joy', 'yeri', 'mixed'],
+            },
         ]
         for download in downloads:
             await self.downloader(**download)

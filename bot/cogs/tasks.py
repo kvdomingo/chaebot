@@ -18,6 +18,7 @@ class Tasks(commands.Cog):
         self.hourly_itzy.cancel()
         self.hourly_twice.cancel()
         self.hourly_blackpink.cancel()
+        self.hourly_red_velvet.cancel()
         self.vlive_listener.cancel()
 
     @commands.Cog.listener()
@@ -25,6 +26,7 @@ class Tasks(commands.Cog):
         self.hourly_itzy.start()
         self.hourly_twice.start()
         self.hourly_blackpink.start()
+        self.hourly_red_velvet.start()
         self.vlive_listener.start()
 
     async def send_hourly_to_channels(self, group: str):
@@ -53,6 +55,11 @@ class Tasks(commands.Cog):
     @tasks.loop(hours=1)
     async def hourly_twice(self):
         group = 'twice'
+        await self.send_hourly_to_channels(group)
+
+    @tasks.loop(hours=1)
+    async def hourly_red_velvet(self):
+        group = 'red-velvet'
         await self.send_hourly_to_channels(group)
 
     @tasks.loop(seconds=30)
@@ -101,6 +108,18 @@ class Tasks(commands.Cog):
             print(f'Waiting for {delta_min} minutes to start hourly TWICE update...')
             await asyncio.sleep(delta_min * 60)
             print('Starting hourly TWICE update...')
+
+    @hourly_red_velvet.before_loop
+    async def red_velvet_hour(self):
+        now = datetime.now()
+        if now.minute != 5:
+            if now.minute < 5:
+                delta_min = 5 - now.minute
+            else:
+                delta_min = (60 + 5) - now.minute
+            print(f'Waiting for {delta_min} minutes to start hourly Red Velvet update...')
+            await asyncio.sleep(delta_min * 60)
+            print('Starting hourly Red Velvet update...')
 
 
 def setup(client):
