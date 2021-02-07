@@ -79,6 +79,7 @@ async def hourly_handler(
         member: List[str] = None,
         hourly: bool = False,
         spam_number: int = 1,
+        max_retries: int = 10,
 ) -> Tuple[list, dict]:
     account_cat, group = await member_name_matcher(member, group, hourly)
     screen_name = random.choice(account_cat)['account_name']
@@ -99,11 +100,31 @@ async def hourly_handler(
     except twitter.error.TwitterError:
         return [], {}
 
+    if not tl:
+        for _ in range(max_retries):
+            try:
+                tl = api.GetUserTimeline(
+                    screen_name=screen_name,
+                    exclude_replies=True,
+                    include_rts=False,
+                    count=tl_count,
+                )
+            except twitter.error.TwitterError:
+                continue
+            if tl:
+                break
+
+    if not tl:
+        return [], {}
+
     files = []
     while len(files) < spam_number:
         media_post = (random.choice(tl)).media
-        while media_post is None or len(media_post) == 0:
-            media_post = random.choice(tl).media
+        if media_post is None or len(media_post) == 0:
+            for _ in range(max_retries):
+                media_post = (random.choice(tl)).media
+                if media_post:
+                    break
         video_info = media_post[0].video_info
         if video_info is not None:
             variants = video_info['variants']

@@ -29,10 +29,14 @@ class Tasks(commands.Cog):
         self.hourly_red_velvet.start()
         self.vlive_listener.start()
 
-    async def send_hourly_to_channels(self, group: str):
-        media, _group = await hourly_handler(group, [], True)
-        while not media:
+    async def send_hourly_to_channels(self, group: str, max_retries=10):
+        media, _group = [], []
+        for _ in range(max_retries):
             media, _group = await hourly_handler(group, [], True)
+            if media:
+                break
+        if not media:
+            return
         channels = _group['twitterMediaSubscribedChannels']
         for channel in channels:
             ch = self.client.get_channel(channel['channel_id'])
