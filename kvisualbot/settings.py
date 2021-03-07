@@ -36,6 +36,7 @@ DEBUG_PROPAGATE_EXCEPTIONS = DEBUG
 ALLOWED_HOSTS = [
     '.kvisualbot.xyz',
     '.herokuapp.com',
+    '34.80.58.124',
 ]
 
 if DEBUG:
@@ -103,10 +104,7 @@ WSGI_APPLICATION = 'kvisualbot.wsgi.application'
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        **dj_database_url.config(),
-        'CONN_MAX_AGE': 0,
-    }
+    'default': dj_database_url.config()
 }
 
 REST_FRAMEWORK = {
@@ -164,8 +162,3 @@ STATIC_URL = '/static/'
 DISCORD_ADMIN_ID = int(os.environ.get('DISCORD_ADMIN_ID'))
 
 PYTHON_ENV = os.environ.get('PYTHON_ENV')
-
-if PYTHON_ENV != 'development':
-    import django_heroku
-
-    django_heroku.settings(locals())

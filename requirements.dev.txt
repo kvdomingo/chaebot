@@ -1,2 +1,0 @@
-ipython==7.19.0
--r requirements.txt
