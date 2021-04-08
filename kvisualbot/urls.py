@@ -15,10 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from bot.views import documentation
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('v1.0/', include('bot.urls')),
-    path('', documentation),
 ]

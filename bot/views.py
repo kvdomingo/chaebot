@@ -1,12 +1,7 @@
-from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import *
-
-
-def documentation(request):
-    return redirect('https://kvisualbot.vercel.app/')
 
 
 class GroupApi(APIView):

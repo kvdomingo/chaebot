@@ -36,7 +36,6 @@ DEBUG_PROPAGATE_EXCEPTIONS = DEBUG
 ALLOWED_HOSTS = [
     '.kvisualbot.xyz',
     '.herokuapp.com',
-    '34.80.58.124',
 ]
 
 if DEBUG:
