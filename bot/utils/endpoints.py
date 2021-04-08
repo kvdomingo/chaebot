@@ -5,7 +5,7 @@ from django.conf import settings
 if settings.PYTHON_ENV == 'development':
     BASE_URL = 'http://localhost:8000'
 else:
-    BASE_URL = 'https://kvisualbot.xyz'
+    BASE_URL = 'https://api.kvisualbot.xyz'
 
 API_VERSION = 'v1.0'
 
