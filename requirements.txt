@@ -32,6 +32,6 @@ six==1.15.0
 sqlparse==0.4.1
 tqdm==4.54.1
 typing-extensions==3.7.4.3
-urllib3==1.26.4
+urllib3==1.26.5
 whitenoise==5.2.0
 yarl==1.5.1
