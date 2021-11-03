@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  kvisualbot:
+    build: .
+    image: kvdomingo/kvisualbot
+    env_file: .env
+    ports:
+      - ${PORT}:${PORT}

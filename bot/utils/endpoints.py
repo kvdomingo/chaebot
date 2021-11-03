@@ -1,15 +1,12 @@
+import os
+
 import aiohttp
 import requests
 from django.conf import settings
 
-if settings.PYTHON_ENV == 'development':
-    BASE_URL = 'http://localhost:8000'
-else:
-    BASE_URL = 'https://api.kvisualbot.xyz'
+PORT = settings.PORT
 
-API_VERSION = 'v1.0'
-
-BASE_URL += f'/{API_VERSION}'
+BASE_URL = f'http://localhost:{PORT}/v1.0'
 
 
 async def _arequest(endpoint: str, method: str = 'get', body: dict = None):

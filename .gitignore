@@ -136,3 +136,5 @@ dmypy.json
 .vscode
 download.bat
 discord.log
+
+*.sql

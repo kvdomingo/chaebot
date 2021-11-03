@@ -31,18 +31,15 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG')))
 
-DEBUG_PROPAGATE_EXCEPTIONS = DEBUG
-
-ALLOWED_HOSTS = [
-    '.kvisualbot.xyz',
-    '.herokuapp.com',
-]
-
 if DEBUG:
-    ALLOWED_HOSTS.extend([
-        'localhost',
-        '127.0.0.1',
-    ])
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [
+        '.kvisualbot.xyz',
+        '.herokuapp.com',
+    ]
+
+API_PORT = os.environ.get('PORT')
 
 # Sentry logging
 
@@ -152,6 +149,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
