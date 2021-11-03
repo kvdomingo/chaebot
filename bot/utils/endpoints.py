@@ -5,7 +5,7 @@ from typing import Union
 
 PORT = settings.API_PORT
 
-BASE_URL = f'http://host.docker.internal:{PORT}/v1.0'
+BASE_URL = f'http://0.0.0.0:{PORT}/v1.0'
 
 
 async def _arequest(endpoint: str, method: str = 'get', body: dict = None) -> tuple[Union[list, dict], int]:
