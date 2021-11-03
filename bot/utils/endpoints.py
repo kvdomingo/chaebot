@@ -4,7 +4,7 @@ import aiohttp
 import requests
 from django.conf import settings
 
-PORT = settings.PORT
+PORT = settings.API_PORT
 
 BASE_URL = f'http://localhost:{PORT}/v1.0'
 
