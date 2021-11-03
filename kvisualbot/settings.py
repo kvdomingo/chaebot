@@ -68,6 +68,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -157,10 +158,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = '/static/'
 
-DISCORD_ADMIN_ID = int(os.environ.get('DISCORD_ADMIN_ID'))
+STATIC_ROOT = BASE_DIR / 'static'
+
+STATICFILES_ROOT = BASE_DIR / 'static'
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+DISCORD_ADMIN_ID = int(os.environ.get('DISCORD_ADMIN_ID', '0'))
 
 PYTHON_ENV = os.environ.get('PYTHON_ENV')
-
-if PYTHON_ENV != 'development':
-    import django_heroku
-    django_heroku.settings(locals())

@@ -1,0 +1,11 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+build:
+  docker:
+    web: Dockerfile
+    target: prod
+release:
+  command:
+    - python manage.py collectstatic --noinput && python manage.py migrate
+  image: worker
