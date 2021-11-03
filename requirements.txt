@@ -1,6 +1,6 @@
-aiohttp
+aiohttp==3.7.4.post0
 click
-discord.py
+discord.py==1.7.3
 dj-database-url
 Django
 django-filter

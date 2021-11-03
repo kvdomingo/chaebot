@@ -22,4 +22,4 @@ RUN python3 manage.py migrate
 
 RUN screen -dmS api gunicorn kvisualbot.wsgi -b 0.0.0.0:$PORT --log-file -
 
-CMD [ "python", "main.py", "runbot" ]
+CMD [ "python3", "main.py", "runbot" ]
