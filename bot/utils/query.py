@@ -1,10 +1,13 @@
 import discord
-from typing import Iterable
 from . import escape_quote
 from ..handlers.hourly import hourly_handler
 
 
-async def query_handler(ctx, group: str, person: Iterable[str]):
+def query_string_from_dict(query_dict: dict) -> str:
+    return '&'.join([f'{k}={v}' for k, v in query_dict.items()])
+
+
+async def query_handler(ctx, group: str, person: list[str]) -> None:
     person = escape_quote(person)
     response = await hourly_handler(group, person)
     while not len(response):
@@ -17,7 +20,7 @@ async def query_handler(ctx, group: str, person: Iterable[str]):
         await ctx.send(response)
 
 
-async def bombard_hearts(message: discord.Message):
+async def bombard_hearts(message: discord.Message) -> None:
     pass
     # TODO: Implement opt-in/opt-out system for individual servers
     # import asyncio
