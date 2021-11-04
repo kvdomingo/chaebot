@@ -34,13 +34,7 @@ DEBUG = bool(int(os.environ.get('DEBUG', '0')))
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = [
-        '.kvisualbot.xyz',
-        '.herokuapp.com',
-    ]
+ALLOWED_HOSTS = ['*']
 
 API_PORT = os.environ.get('PORT', '8000')
 
