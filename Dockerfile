@@ -1,6 +1,6 @@
 FROM alpine:latest as build
 
-RUN apk add --no-cache --update python3-dev py3-pip bash postgresql-dev gcc musl-dev
+RUN apk add --no-cache --update python3-dev py3-pip bash postgresql-dev gcc musl-dev curl
 
 ADD ./requirements.txt /tmp/requirements.txt
 
@@ -45,8 +45,10 @@ CMD bash -c "gunicorn kvisualbot.wsgi -b 0.0.0.0:$PORT &" && python3 main.py run
 
 FROM build as prod
 
-USER devuser
-
 WORKDIR /web/app
+
+RUN python3 manage.py collectstatic --noinput
+
+USER devuser
 
 CMD bash -c "gunicorn kvisualbot.wsgi -b 0.0.0.0:$PORT &" && python3 main.py runbot
