@@ -1,18 +1,14 @@
 import aiohttp
 import requests
 from django.conf import settings
+from typing import Union
 
-if settings.PYTHON_ENV == 'development':
-    BASE_URL = 'http://localhost:8000'
-else:
-    BASE_URL = 'https://api.kvisualbot.xyz'
+PORT = settings.API_PORT
 
-API_VERSION = 'v1.0'
-
-BASE_URL += f'/{API_VERSION}'
+BASE_URL = f'http://0.0.0.0:{PORT}/v1.0'
 
 
-async def _arequest(endpoint: str, method: str = 'get', body: dict = None):
+async def _arequest(endpoint: str, method: str = 'get', body: dict = None) -> tuple[Union[list, dict], int]:
     async with aiohttp.ClientSession() as session:
         api = getattr(session, method)
         async with api(f'{BASE_URL}/{endpoint}', data=body) as res:
@@ -25,7 +21,7 @@ async def _arequest(endpoint: str, method: str = 'get', body: dict = None):
 
 class Api:
     @staticmethod
-    def sync_groups():
+    def sync_groups() -> dict:
         with requests.Session() as session:
             with session.get(f'{BASE_URL}/groups') as res:
                 return res.json()

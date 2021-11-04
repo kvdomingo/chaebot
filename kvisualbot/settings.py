@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 import dj_database_url
 import sentry_sdk
+from django.core.management.utils import get_random_secret_key
 from sentry_sdk.integrations.django import DjangoIntegration
 from pathlib import Path
 from dotenv import load_dotenv
@@ -26,23 +27,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get('DEBUG')))
+DEBUG = bool(int(os.environ.get('DEBUG', '0')))
 
-DEBUG_PROPAGATE_EXCEPTIONS = DEBUG
-
-ALLOWED_HOSTS = [
-    '.kvisualbot.xyz',
-    '.herokuapp.com',
-]
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
 if DEBUG:
-    ALLOWED_HOSTS.extend([
-        'localhost',
-        '127.0.0.1',
-    ])
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [
+        '.kvisualbot.xyz',
+        '.herokuapp.com',
+    ]
+
+API_PORT = os.environ.get('PORT', '8000')
 
 # Sentry logging
 
@@ -71,6 +71,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -153,15 +154,17 @@ USE_L10N = True
 
 USE_TZ = True
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
-DISCORD_ADMIN_ID = int(os.environ.get('DISCORD_ADMIN_ID'))
+STATIC_ROOT = BASE_DIR / 'static'
 
-PYTHON_ENV = os.environ.get('PYTHON_ENV')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-if PYTHON_ENV != 'development':
-    import django_heroku
-    django_heroku.settings(locals())
+DISCORD_ADMIN_ID = int(os.environ.get('DISCORD_ADMIN_ID', '0'))
+
+PYTHON_ENV = os.environ.get('PYTHON_ENV', 'production')
