@@ -16,3 +16,8 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           usedocker: true
+        env:
+          DEBUG: "0"
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DATABASE_URL: ""
+          PORT: "8000"
