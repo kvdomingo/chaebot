@@ -30,7 +30,7 @@ RUN adduser -D devuser
 
 RUN mkdir ./tmp
 
-RUN chown devuser -R ./tmp
+RUN chmod -R 777 ./tmp
 
 EXPOSE $PORT
 
