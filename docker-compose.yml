@@ -4,13 +4,8 @@ services:
   kvisualbot:
     build:
       context: .
-      target: dev
-      args:
-        DEBUG: ${DEBUG}
-        SECRET_KEY: ${SECRET_KEY}
-        DATABASE_URL: ${DATABASE_URL}
-        PORT: ${PORT}
-    image: kvdomingo/kvisualbot
+      target: prod
+    image: kvdomingo/kvisualbot:latest
     env_file: .env
     ports:
       - ${PORT}:${PORT}

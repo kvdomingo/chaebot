@@ -1,54 +1,39 @@
-FROM alpine:latest as build
+FROM node:16-alpine as build
 
-RUN apk add --no-cache --update python3-dev py3-pip bash postgresql-dev gcc musl-dev curl
+WORKDIR /web/app
 
-ADD ./requirements.txt /tmp/requirements.txt
+COPY ./web/app ./
 
-RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
+RUN npm install
 
-RUN pip3 install virtualenv
+RUN npm run build
 
-COPY ./bot/ /web/app/bot/
-COPY ./kvisualbot/ /web/app/kvisualbot/
-COPY ./*.py /web/app/
+FROM python:3.9.7-alpine as prod
+
+RUN apk add --no-cache --update bash postgresql-dev gcc musl-dev curl
+
+COPY ./requirements.txt /tmp/requirements.txt
+
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+WORKDIR /backend
+
+COPY ./bot/ ./bot/
+COPY ./kvisualbot/ ./kvisualbot/
+COPY ./*.py ./
+COPY ./*.sh ./
+COPY --from=build /web/app/build ./web/app/
+
+RUN python manage.py collectstatic --noinput
 
 RUN adduser -D devuser
 
+RUN mkdir ./tmp
+
+RUN chown devuser -R ./tmp
+
 EXPOSE $PORT
 
-FROM build as dev
-
-WORKDIR /web/app
-
-RUN mkdir /web/app/tmp
-
-ARG DEBUG
-ARG SECRET_KEY
-ARG DATABASE_URL
-ARG PORT
-
-ENV PYTHONUNBUFFERED 1
-ENV DEBUG $DEBUG
-ENV SECRET_KEY $SECRET_KEY
-ENV DATABASE_URL $DATABASE_URL
-ENV PORT $PORT
-
-RUN python3 manage.py collectstatic --noinput
-
-RUN python3 manage.py migrate
-
-RUN chown -R devuser:devuser /web/app/tmp/
-
 USER devuser
 
-CMD bash -c "gunicorn kvisualbot.wsgi -b 0.0.0.0:$PORT &" && python3 main.py runbot
-
-FROM build as prod
-
-WORKDIR /web/app
-
-RUN python3 manage.py collectstatic --noinput
-
-USER devuser
-
-CMD bash -c "gunicorn kvisualbot.wsgi -b 0.0.0.0:$PORT &" && python3 main.py runbot
+CMD bash runserver.sh

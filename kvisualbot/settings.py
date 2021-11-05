@@ -79,7 +79,7 @@ ROOT_URLCONF = 'kvisualbot.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'web' / 'app'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -97,9 +97,16 @@ WSGI_APPLICATION = 'kvisualbot.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config()
-}
+_DATABASE_CONFIG = os.environ.get('DATABASE_URL')
+
+if _DATABASE_CONFIG:
+    _DATABASE_CONFIG = dj_database_url.config()
+else:
+    _DATABASE_URL = 'postgres://postgres:postgres@localhost:5432/postgres'
+    _DATABASE_CONFIG = dj_database_url.parse(_DATABASE_URL)
+
+DATABASES = {'default': _DATABASE_CONFIG}
+
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
@@ -156,6 +163,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATIC_URL = '/static/'
 
 STATIC_ROOT = BASE_DIR / 'static'
+
+STATICFILES_DIRS = [BASE_DIR / 'web' / 'app' / 'static']
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
