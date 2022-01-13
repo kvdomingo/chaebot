@@ -16,22 +16,22 @@ class Group(models.Model):
     instagram_user_name = models.CharField(max_length=32, blank=True)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
     class Meta:
-        ordering = ['name']
+        ordering = ["name"]
 
 
 class GroupAlias(models.Model):
     alias = models.CharField(max_length=16, unique=True)
-    group = models.ForeignKey(Group, related_name='aliases', on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name="aliases", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.alias} ({self.group.name})'
+        return f"{self.alias} ({self.group.name})"
 
     class Meta:
-        verbose_name_plural = 'group aliases'
-        ordering = ['group__name', 'alias']
+        verbose_name_plural = "group aliases"
+        ordering = ["group__name", "alias"]
 
 
 class Member(models.Model):
@@ -43,55 +43,63 @@ class Member(models.Model):
     english_name = models.CharField(max_length=32, blank=True, null=True)
     # native_name = models.CharField(max_length=32, blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
-    group = models.ForeignKey(Group, related_name='members', on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name="members", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.stage_name} ({self.group.name})'
+        return f"{self.stage_name} ({self.group.name})"
 
     class Meta:
-        ordering = ['group__name', 'birthday', 'stage_name']
+        ordering = ["group__name", "birthday", "stage_name"]
 
 
 class MemberAlias(models.Model):
     alias = models.CharField(max_length=32)
-    member = models.ForeignKey(Member, related_name='aliases', on_delete=models.CASCADE)
+    member = models.ForeignKey(Member, related_name="aliases", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.alias} ({self.member.stage_name} of {self.member.group.name})'
+        return f"{self.alias} ({self.member.stage_name} of {self.member.group.name})"
 
     class Meta:
-        verbose_name_plural = 'member aliases'
-        ordering = ['member__group__name', 'member__stage_name', 'alias']
+        verbose_name_plural = "member aliases"
+        ordering = ["member__group__name", "member__stage_name", "alias"]
 
 
 class TwitterMediaSource(models.Model):
     account_name = models.CharField(max_length=16, unique=True)
-    member = models.ForeignKey(Member, related_name='twitter_media_sources', on_delete=models.CASCADE)
+    member = models.ForeignKey(
+        Member, related_name="twitter_media_sources", on_delete=models.CASCADE
+    )
     last_tweet_id = models.BigIntegerField(blank=True, null=True)
 
     def __str__(self):
-        return f'{self.account_name} (for {self.member.stage_name} of {self.member.group.name})'
+        return f"{self.account_name} (for {self.member.stage_name} of {self.member.group.name})"
 
 
 class TwitterMediaSubscribedChannel(models.Model):
     channel_id = models.BigIntegerField()
-    group = models.ForeignKey(Group, related_name='twitter_media_subscribed_channels', on_delete=models.CASCADE)
+    group = models.ForeignKey(
+        Group,
+        related_name="twitter_media_subscribed_channels",
+        on_delete=models.CASCADE,
+    )
 
     def __str__(self):
-        return f'{self.channel_id} ({self.group.name})'
+        return f"{self.channel_id} ({self.group.name})"
 
     class Meta:
-        unique_together = ['channel_id', 'group']
+        unique_together = ["channel_id", "group"]
 
 
 class VliveSubscribedChannel(models.Model):
     channel_id = models.BigIntegerField()
-    group = models.ForeignKey(Group, related_name='vlive_subscribed_channels', on_delete=models.CASCADE)
+    group = models.ForeignKey(
+        Group, related_name="vlive_subscribed_channels", on_delete=models.CASCADE
+    )
     dev_channel = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.channel_id} ({self.group.name})'
+        return f"{self.channel_id} ({self.group.name})"
 
     class Meta:
-        ordering = ['group__name', 'channel_id']
-        unique_together = ['channel_id', 'group']
+        ordering = ["group__name", "channel_id"]
+        unique_together = ["channel_id", "group"]

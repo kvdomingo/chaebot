@@ -8,7 +8,7 @@ class GroupApi(APIView):
     def get(self, request, pk=None):
         if pk is None:
             many = True
-            query = Group.objects.all().order_by('name')
+            query = Group.objects.all().order_by("name")
         else:
             many = False
             query = Group.objects.get(pk=pk)

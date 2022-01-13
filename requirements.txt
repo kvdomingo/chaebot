@@ -1,8 +1,9 @@
 aiohttp==3.7.4.post0
+black
 click
 discord.py==1.7.3
 dj-database-url
-Django
+Django<4.0
 django-filter
 django-heroku
 djangorestframework
@@ -16,4 +17,5 @@ requests-oauthlib
 sentry-sdk
 tqdm
 urllib3
+watchdog[watchmedo]
 whitenoise

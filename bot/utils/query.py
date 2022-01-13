@@ -4,7 +4,7 @@ from ..handlers.hourly import hourly_handler
 
 
 def query_string_from_dict(query_dict: dict) -> str:
-    return '&'.join([f'{k}={v}' for k, v in query_dict.items()])
+    return "&".join([f"{k}={v}" for k, v in query_dict.items()])
 
 
 async def query_handler(ctx, group: str, person: list[str]) -> None:

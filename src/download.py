@@ -12,7 +12,7 @@ from django.conf import settings
 from discord.ext import commands, tasks
 from tqdm import tqdm
 
-MEDIA_DIR = settings.BASE_DIR / 'src' / '_media'
+MEDIA_DIR = settings.BASE_DIR / "src" / "_media"
 
 
 class DownloaderBot(commands.Cog):
@@ -31,42 +31,51 @@ class DownloaderBot(commands.Cog):
         for message in tqdm(messages):
             for attachment in message.attachments:
                 m_id = str(attachment.id)
-                ext = attachment.url.split('.')[-1]
+                ext = attachment.url.split(".")[-1]
                 existing_files = os.listdir(MEDIA_DIR)
                 for folder in folders:
-                    existing_files.extend(os.listdir(MEDIA_DIR / group.lower() / folder))
+                    existing_files.extend(
+                        os.listdir(MEDIA_DIR / group.lower() / folder)
+                    )
                 if len(existing_files) > 0:
-                    existing_files = [f.split('.')[0] for f in existing_files]
+                    existing_files = [f.split(".")[0] for f in existing_files]
                 if m_id not in existing_files:
                     await attachment.save(MEDIA_DIR / group.lower() / f"{m_id}.{ext}")
-        print(f'Download for {group.upper()} complete.')
+        print(f"Download for {group.upper()} complete.")
 
     @tasks.loop(count=1)
     async def download(self):
         downloads = [
             {
-                'group': 'itzy',
-                'channel': 726831180565184603,
-                'folders': ['yeji', 'lia', 'ryujin', 'chaeryeong', 'yuna', 'mixed'],
+                "group": "itzy",
+                "channel": 726831180565184603,
+                "folders": ["yeji", "lia", "ryujin", "chaeryeong", "yuna", "mixed"],
             },
             {
-                'group': 'twice',
-                'channel': 789385817884721164,
-                'folders': [
-                    'nayeon', 'jeongyeon', 'momo', 'sana',
-                    'jihyo', 'mina', 'dahyun', 'chaeyoung',
-                    'tzuyu', 'mixed',
+                "group": "twice",
+                "channel": 789385817884721164,
+                "folders": [
+                    "nayeon",
+                    "jeongyeon",
+                    "momo",
+                    "sana",
+                    "jihyo",
+                    "mina",
+                    "dahyun",
+                    "chaeyoung",
+                    "tzuyu",
+                    "mixed",
                 ],
             },
             {
-                'group': 'blackpink',
-                'channel': 727956565390524447,
-                'folders': ['jisoo', 'jennie', 'rose', 'lisa', 'mixed'],
+                "group": "blackpink",
+                "channel": 727956565390524447,
+                "folders": ["jisoo", "jennie", "rose", "lisa", "mixed"],
             },
             {
-                'group': 'red-velvet',
-                'channel': 803166633257598986,
-                'folders': ['irene', 'seulgi', 'wendy', 'joy', 'yeri', 'mixed'],
+                "group": "red-velvet",
+                "channel": 803166633257598986,
+                "folders": ["irene", "seulgi", "wendy", "joy", "yeri", "mixed"],
             },
         ]
         for download in downloads:
@@ -78,16 +87,16 @@ class DownloaderBot(commands.Cog):
 
     @download.after_loop
     async def after_download(self):
-        print('Done')
+        print("Done")
         sys.exit(0)
 
 
 def main(*args):
-    limit, = args
-    client = commands.Bot(command_prefix='!')
+    (limit,) = args
+    client = commands.Bot(command_prefix="!")
     client.add_cog(DownloaderBot(client, limit))
-    client.run(os.environ.get('DISCORD_TOKEN'))
+    client.run(os.environ.get("DISCORD_TOKEN"))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

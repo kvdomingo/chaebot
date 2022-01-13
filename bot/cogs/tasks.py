@@ -12,7 +12,7 @@ from ..handlers.vlive import vlive_handler
 class Tasks(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.groups = cache.get('groups')
+        self.groups = cache.get("groups")
 
     def cog_unload(self):
         self.hourly_itzy.cancel()
@@ -37,15 +37,15 @@ class Tasks(commands.Cog):
                 break
         if not media:
             return
-        channels = _group['twitterMediaSubscribedChannels']
+        channels = _group["twitterMediaSubscribedChannels"]
         for channel in channels:
-            ch = self.client.get_channel(channel['channel_id'])
+            ch = self.client.get_channel(channel["channel_id"])
             print(f'Connected to {_group["name"]} channel {ch}')
             await ch.send(files=media)
 
     @tasks.loop(hours=1)
     async def hourly_itzy(self):
-        group = 'itzy'
+        group = "itzy"
         try:
             await self.send_hourly_to_channels(group)
         except discord.errors.HTTPException:
@@ -53,17 +53,17 @@ class Tasks(commands.Cog):
 
     @tasks.loop(hours=1)
     async def hourly_blackpink(self):
-        group = 'blackpink'
+        group = "blackpink"
         await self.send_hourly_to_channels(group)
 
     @tasks.loop(hours=1)
     async def hourly_twice(self):
-        group = 'twice'
+        group = "twice"
         await self.send_hourly_to_channels(group)
 
     @tasks.loop(hours=1)
     async def hourly_red_velvet(self):
-        group = 'red-velvet'
+        group = "red-velvet"
         await self.send_hourly_to_channels(group)
 
     @tasks.loop(seconds=30)
@@ -72,11 +72,11 @@ class Tasks(commands.Cog):
             embed = await vlive_handler(group)
             if embed:
                 self.groups = await Api.groups()
-                channels = group['vliveSubscribedChannels']
+                channels = group["vliveSubscribedChannels"]
                 for channel in channels:
-                    if settings.DEBUG and not channel['dev_channel']:
+                    if settings.DEBUG and not channel["dev_channel"]:
                         return
-                    ch = self.client.get_channel(channel['channel_id'])
+                    ch = self.client.get_channel(channel["channel_id"])
                     if ch:
                         await ch.send(embed=embed)
 
@@ -85,9 +85,9 @@ class Tasks(commands.Cog):
         now = datetime.now()
         if now.minute != 0:
             delta_min = 60 - now.minute
-            print(f'Waiting for {delta_min} minutes to start hourly ITZY update...')
+            print(f"Waiting for {delta_min} minutes to start hourly ITZY update...")
             await asyncio.sleep(delta_min * 60)
-            print('Starting hourly ITZY update...')
+            print("Starting hourly ITZY update...")
 
     @hourly_blackpink.before_loop
     async def blackpink_hour(self):
@@ -97,9 +97,11 @@ class Tasks(commands.Cog):
                 delta_min = 30 - now.minute
             else:
                 delta_min = 90 - now.minute
-            print(f'Waiting for {delta_min} minutes to start hourly BLACKPINK update...')
+            print(
+                f"Waiting for {delta_min} minutes to start hourly BLACKPINK update..."
+            )
             await asyncio.sleep(delta_min * 60)
-            print('Starting hourly BLACKPINK update...')
+            print("Starting hourly BLACKPINK update...")
 
     @hourly_twice.before_loop
     async def twice_hour(self):
@@ -109,9 +111,9 @@ class Tasks(commands.Cog):
                 delta_min = 29 - now.minute
             else:
                 delta_min = (60 + 29) - now.minute
-            print(f'Waiting for {delta_min} minutes to start hourly TWICE update...')
+            print(f"Waiting for {delta_min} minutes to start hourly TWICE update...")
             await asyncio.sleep(delta_min * 60)
-            print('Starting hourly TWICE update...')
+            print("Starting hourly TWICE update...")
 
     @hourly_red_velvet.before_loop
     async def red_velvet_hour(self):
@@ -121,9 +123,11 @@ class Tasks(commands.Cog):
                 delta_min = 5 - now.minute
             else:
                 delta_min = (60 + 5) - now.minute
-            print(f'Waiting for {delta_min} minutes to start hourly Red Velvet update...')
+            print(
+                f"Waiting for {delta_min} minutes to start hourly Red Velvet update..."
+            )
             await asyncio.sleep(delta_min * 60)
-            print('Starting hourly Red Velvet update...')
+            print("Starting hourly Red Velvet update...")
 
 
 def setup(client):

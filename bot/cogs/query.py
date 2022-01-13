@@ -17,9 +17,12 @@ async def arange(count):
 class Query(commands.Cog):
     def __init__(self, client: discord.Client):
         self.client = client
-        self.groups = cache.get('groups')
+        self.groups = cache.get("groups")
 
-    @commands.command(aliases=['q'], help='Get a random pic of the specified member from the specified group')
+    @commands.command(
+        aliases=["q"],
+        help="Get a random pic of the specified member from the specified group",
+    )
     async def query(self, ctx, group: str, *person: str):
         person = escape_quote(person)
         response, _ = await hourly_handler(group, person)
@@ -35,13 +38,13 @@ class Query(commands.Cog):
         elif isinstance(response, str):
             await ctx.send(response)
 
-    @commands.command(aliases=['attack', 'hell', 'raise-hell'], hidden=True)
+    @commands.command(aliases=["attack", "hell", "raise-hell"], hidden=True)
     async def spam(self, ctx, number: int, group: str, *person: str):
         if ctx.message.author.id != settings.DISCORD_ADMIN_ID:
             do = lambda: discord.Embed(
-                    description='Sorry, only bot owner is allowed to `spam`.',
-                    color=discord.Color.red(),
-                )
+                description="Sorry, only bot owner is allowed to `spam`.",
+                color=discord.Color.red(),
+            )
             embed = do()
             while not embed:
                 embed = do()
@@ -59,17 +62,19 @@ class Query(commands.Cog):
             if sent >= number:
                 break
 
-    @commands.command(aliases=['list'], help='List all supported groups')
+    @commands.command(aliases=["list"], help="List all supported groups")
     async def list_(self, ctx):
         supp_groups = []
         for group in self.groups:
-            without_source = [len(member['twitterMediaSources']) == 0 for member in group['members']]
+            without_source = [
+                len(member["twitterMediaSources"]) == 0 for member in group["members"]
+            ]
             if any(without_source):
                 continue
-            supp_groups.append(group['name'])
+            supp_groups.append(group["name"])
         embed = discord.Embed(
-            title='Supported groups/artists:',
-            description='\n'.join(supp_groups),
+            title="Supported groups/artists:",
+            description="\n".join(supp_groups),
             color=discord.Color.green(),
         )
         await ctx.send(embed=embed)

@@ -13,14 +13,16 @@ class Mama2020(commands.Cog):
     async def mama(self, ctx):
         pass
 
-    @mama.command(aliases=['top'])
+    @mama.command(aliases=["top"])
     async def top1(self, ctx):
-        base_url = 'https://mama.mwave.me/en/api/rankingDetailData.json'
-        params = query_string_from_dict(dict(
-            sectionID=0,
-            type='top1',
-        ))
-        endpoint = f'{base_url}?{params}'
+        base_url = "https://mama.mwave.me/en/api/rankingDetailData.json"
+        params = query_string_from_dict(
+            dict(
+                sectionID=0,
+                type="top1",
+            )
+        )
+        endpoint = f"{base_url}?{params}"
 
         async with aiohttp.ClientSession() as session:
             async with session.get(endpoint) as res:
@@ -28,10 +30,10 @@ class Mama2020(commands.Cog):
                     raise ConnectionError
                 else:
                     top = await res.read()
-                    top = top.decode('utf-8')
-                    top = json.loads(top)['rankList']
+                    top = top.decode("utf-8")
+                    top = json.loads(top)["rankList"]
 
-        base_url = 'https://mama.mwave.me/en/api/totalVoteCnt.json'
+        base_url = "https://mama.mwave.me/en/api/totalVoteCnt.json"
 
         async with aiohttp.ClientSession() as session:
             async with session.get(base_url) as res:
@@ -39,14 +41,14 @@ class Mama2020(commands.Cog):
                     raise ConnectionError
                 else:
                     total = await res.read()
-                    total = total.decode('utf-8')
+                    total = total.decode("utf-8")
                     total = json.loads(total)
 
         embed = discord.Embed(
-            title='MAMA 2020 Current Voting Results',
-            url='https://mama.mwave.me/en/ranking',
+            title="MAMA 2020 Current Voting Results",
+            url="https://mama.mwave.me/en/ranking",
             color=discord.Color.gold(),
-            description=f'Total number of votes: **{total["data"]["totalVoteCnt"]:,d}**'
+            description=f'Total number of votes: **{total["data"]["totalVoteCnt"]:,d}**',
         )
         embed.add_field(
             name=f'{top[0]["SECTION_NAME_M_BRR_ENG"]}',
@@ -60,9 +62,9 @@ class Mama2020(commands.Cog):
         )
         embed.add_field(
             name=f'{top[2]["SECTION_NAME_M_BRR_ENG"]}',
-            value=f'**{top[2]["ARTIST_NAME_ENG"]}** ' +
-                  f'[{top[2]["HASH_TAG_NAME"]}](https://twitter.com/hashtag/{top[2]["HASH_TAG_NAME"][1:]}) ' +
-                  f'({top[2]["CANDIDATE_VOTE_PERCENT"]}%)',
+            value=f'**{top[2]["ARTIST_NAME_ENG"]}** '
+            + f'[{top[2]["HASH_TAG_NAME"]}](https://twitter.com/hashtag/{top[2]["HASH_TAG_NAME"][1:]}) '
+            + f'({top[2]["CANDIDATE_VOTE_PERCENT"]}%)',
             inline=False,
         )
         for category in top[3:9]:
@@ -74,20 +76,20 @@ class Mama2020(commands.Cog):
         for category in top[9:]:
             embed.add_field(
                 name=f'{category["SECTION_NAME_M_BRR_ENG"].replace("<br/>", " ")}',
-                value=f'**{category["ARTIST_NAME_ENG"]} - ' +
-                      f'{category["SONG_NAME_ENG"]}** ' +
-                      f'({category["CANDIDATE_VOTE_PERCENT"]}%)',
+                value=f'**{category["ARTIST_NAME_ENG"]} - '
+                + f'{category["SONG_NAME_ENG"]}** '
+                + f'({category["CANDIDATE_VOTE_PERCENT"]}%)',
                 inline=False,
             )
         embed.set_footer(text=f'Last update: {total["data"]["currentTime"]} (KST)')
 
         await ctx.send(embed=embed)
 
-    @mama.command(aliases=['aoty', 'artist-of-the-year'])
+    @mama.command(aliases=["aoty", "artist-of-the-year"])
     async def album_of_the_year(self, ctx):
-        base_url = 'https://mama.mwave.me/en/api/rankingDetailData.json'
+        base_url = "https://mama.mwave.me/en/api/rankingDetailData.json"
         params = query_string_from_dict(dict(sectionID=1))
-        endpoint = f'{base_url}?{params}'
+        endpoint = f"{base_url}?{params}"
 
         async with aiohttp.ClientSession() as session:
             async with session.get(endpoint) as res:
@@ -95,16 +97,16 @@ class Mama2020(commands.Cog):
                     raise ConnectionError
                 else:
                     aoty = await res.read()
-                    aoty = aoty.decode('utf-8')
+                    aoty = aoty.decode("utf-8")
                     aoty = json.loads(aoty)
 
         embed = discord.Embed(
-            title='MAMA 2020 Current Voting Results - Artist of the Year',
-            url='https://mama.mwave.me/en/rankingDetail?sectionID=1',
+            title="MAMA 2020 Current Voting Results - Artist of the Year",
+            url="https://mama.mwave.me/en/rankingDetail?sectionID=1",
             color=discord.Color.gold(),
-            description=f'Total number of votes: **{aoty["sectionVoteSum"]:,d}**'
+            description=f'Total number of votes: **{aoty["sectionVoteSum"]:,d}**',
         )
-        for i, artist in enumerate(aoty['rankList']):
+        for i, artist in enumerate(aoty["rankList"]):
             embed.add_field(
                 name=f'{i+1}. {artist["ARTIST_NAME_ENG"]}',
                 value=f'{artist["CANDIDATE_VOTE_PERCENT"]}%',
@@ -113,11 +115,11 @@ class Mama2020(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @mama.command(aliases=['soty', 'song-of-the-year'])
+    @mama.command(aliases=["soty", "song-of-the-year"])
     async def song_of_the_year(self, ctx):
-        base_url = 'https://mama.mwave.me/en/api/rankingDetailData.json'
+        base_url = "https://mama.mwave.me/en/api/rankingDetailData.json"
         params = query_string_from_dict(dict(sectionID=2))
-        endpoint = f'{base_url}?{params}'
+        endpoint = f"{base_url}?{params}"
 
         async with aiohttp.ClientSession() as session:
             async with session.get(endpoint) as res:
@@ -125,16 +127,16 @@ class Mama2020(commands.Cog):
                     raise ConnectionError
                 else:
                     soty = await res.read()
-                    soty = soty.decode('utf-8')
+                    soty = soty.decode("utf-8")
                     soty = json.loads(soty)
 
         embed = discord.Embed(
-            title='MAMA 2020 Current Voting Results - Song of the Year',
-            url='https://mama.mwave.me/en/rankingDetail?sectionID=2',
+            title="MAMA 2020 Current Voting Results - Song of the Year",
+            url="https://mama.mwave.me/en/rankingDetail?sectionID=2",
             color=discord.Color.gold(),
-            description=f'Total number of votes: **{soty["sectionVoteSum"]:,d}**'
+            description=f'Total number of votes: **{soty["sectionVoteSum"]:,d}**',
         )
-        for i, artist in enumerate(soty['rankList']):
+        for i, artist in enumerate(soty["rankList"]):
             embed.add_field(
                 name=f'{i + 1}. {artist["ARTIST_NAME_ENG"]}',
                 value=f'**{artist["SONG_NAME_ENG"]}** ({artist["CANDIDATE_VOTE_PERCENT"]}%)',

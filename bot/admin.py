@@ -38,13 +38,13 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ['stage_name', 'group', 'birthday']
+    list_display = ["stage_name", "group", "birthday"]
     inlines = [MemberAliasInline, TwitterMediaSourceInline]
 
 
 @admin.register(VliveSubscribedChannel)
 class VliveSubscribedChannelAdmin(admin.ModelAdmin):
-    list_display = ['channel_id', 'group']
+    list_display = ["channel_id", "group"]
 
 
 # admin.site.register(GroupAlias)
@@ -52,6 +52,6 @@ class VliveSubscribedChannelAdmin(admin.ModelAdmin):
 # admin.site.register(TwitterMediaSource)
 admin.site.register(TwitterMediaSubscribedChannel)
 
-admin.site.index_title = 'Admin'
-admin.site.site_title = 'kvisualbot'
-admin.site.site_header = 'kvisualbot administration'
+admin.site.index_title = "Admin"
+admin.site.site_title = "kvisualbot"
+admin.site.site_header = "kvisualbot administration"

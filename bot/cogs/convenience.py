@@ -8,23 +8,23 @@ class Convenience(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send(f'Pong ({round(self.client.latency * 1000)}ms)')
+        await ctx.send(f"Pong ({round(self.client.latency * 1000)}ms)")
 
-    @commands.command(aliases=['purge', 'sanitize'])
+    @commands.command(aliases=["purge", "sanitize"])
     async def clear(self, ctx, amount: int = 0):
         if amount < 1:
-            await ctx.send('Please specify a positive number.')
+            await ctx.send("Please specify a positive number.")
         else:
             await ctx.channel.purge(limit=amount + 1)
 
     @commands.command()
     async def changelog(self, ctx):
         embed = Embed(
-            title='Update v1.0 20210108',
+            title="Update v1.0 20210108",
             color=Color.green(),
         )
         embed.add_field(
-            name='Commands changelog',
+            name="Commands changelog",
             value="""
             - All commands previously under the Query category should now be called behind !query or shorthand !q (e.g. before you would say !twice chaeyoung, now you need to say !q twice chaeyoung. Names don't have to be exact; aliases/common nicknames exist for each group/member name and will mostly match your target member given sensible aliases. For example, any of the following will give you TWICE's Chaeyoung: !q twice chae, !q twice chaeng, !q tdoong chaeng, !q teudoongie chaengie.
 - !twitter commands have been renamed to !hourly
