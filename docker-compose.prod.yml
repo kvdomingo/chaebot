@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  bot:
+    build:
+      context: .
+      target: prod
+    image: kvdomingo/kvisualbot:latest
+    env_file: .env

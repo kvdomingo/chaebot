@@ -17,5 +17,4 @@ requests-oauthlib
 sentry-sdk
 tqdm
 urllib3
-watchdog[watchmedo]
 whitenoise
