@@ -1,6 +1,6 @@
 import aiohttp
 import discord
-from ..utils.endpoints import Api
+from bot.api.internal import Api
 from datetime import datetime, timedelta
 
 

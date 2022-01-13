@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands
 from django.core.cache import cache
-from ..utils.endpoints import Api
+from .. import api
+from ..api.internal import Api
 from ..handlers.hourly import group_name_matcher
 
 
@@ -138,32 +139,39 @@ class Subscription(commands.Cog):
         help="Subscribe the channel to VLIVE notifications of the selected group",
     )
     async def vlive_subscribe(self, ctx, group: str):
-        group = await group_name_matcher(group)
-        body = dict(
-            channel_id=ctx.channel.id,
-            group=group["id"],
-        )
-        res, status = await Api.vlive_subscribed_channels(None, "post", body)
-        if status == 201:
-            message = discord.Embed(
-                title="Adding VLIVE subscription success",
-                description=f'This channel has been subscribed to VLIVE updates from {group["name"]}',
-                color=discord.Color.green(),
-            )
+        matched_group = await group_name_matcher(group, random_on_no_match=False)
+        if len(matched_group.values()) == 0:
+            channels: list = await api.vlive.search_channels(group)
+            if len(channels) == 1:
+                Api.group()
         else:
-            message = discord.Embed(
-                title="Adding VLIVE subscription failed",
-                description="due to the following error(s):",
-                color=discord.Color.red(),
+            body = dict(
+                channel_id=ctx.channel.id,
+                group=matched_group["id"],
             )
-            for key, val in res.items():
-                message.add_field(
-                    name=key,
-                    value=str(val),
-                    inline=False,
+            res, status = await Api.vlive_subscribed_channels(None, "post", body)
+            if status == 201:
+                message = discord.Embed(
+                    title="Adding VLIVE subscription success",
+                    description=f'This channel has been subscribed to VLIVE updates from {matched_group["name"]}',
+                    color=discord.Color.green(),
                 )
-            message.set_footer(text="Please check the errors above or try again later.")
-        await ctx.send(embed=message)
+            else:
+                message = discord.Embed(
+                    title="Adding VLIVE subscription failed",
+                    description="due to the following error(s):",
+                    color=discord.Color.red(),
+                )
+                for key, val in res.items():
+                    message.add_field(
+                        name=key,
+                        value=str(val),
+                        inline=False,
+                    )
+                message.set_footer(
+                    text="Please check the errors above or try again later."
+                )
+            await ctx.send(embed=message)
 
     @vlive.command(
         aliases=["unsubscribe", "usub"],

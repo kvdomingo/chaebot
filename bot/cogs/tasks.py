@@ -4,7 +4,7 @@ from datetime import datetime
 from discord.ext import commands, tasks
 from django.conf import settings
 from django.core.cache import cache
-from ..utils.endpoints import Api
+from bot.api.internal import Api
 from ..handlers.hourly import hourly_handler
 from ..handlers.vlive import vlive_handler
 

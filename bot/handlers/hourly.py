@@ -18,7 +18,7 @@ api = twitter.Api(
 )
 
 
-async def group_name_matcher(name: str) -> dict:
+async def group_name_matcher(name: str, random_on_no_match: bool = True) -> dict:
     groups = cache.get("groups")
     group_names = {}
     for group in groups:
@@ -38,8 +38,11 @@ async def group_name_matcher(name: str) -> dict:
                 group = list(filter(lambda x: x["id"] == id_, groups))[0]
                 print(f'Group query matched: {group["name"]}')
                 return group
-    print("No group query matched, choosing random")
-    return random.choice(groups)
+    if random_on_no_match:
+        print("No group query matched, choosing random")
+        return random.choice(groups)
+    else:
+        return {}
 
 
 async def member_name_matcher(

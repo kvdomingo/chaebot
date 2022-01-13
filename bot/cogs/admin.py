@@ -3,10 +3,14 @@ import discord
 from django.conf import settings
 from datetime import datetime, timedelta
 from discord.ext import commands
+from discord.ext.commands import Bot
+from ..utils.cog_handler import reload_cogs
+
+PYTHON_ENV: str = settings.PYTHON_ENV
 
 
 class Admin(commands.Cog):
-    def __init__(self, client: discord.Client):
+    def __init__(self, client: Bot):
         self.client = client
         self.time_up = datetime.now()
 
@@ -28,13 +32,23 @@ class Admin(commands.Cog):
     async def admin(self, ctx):
         if str(ctx.message.author.id) != os.environ.get("DISCORD_ADMIN_ID"):
             embed = discord.Embed(
-                description="Sorry, only bot owner is allowed to use `admin` commands.",
+                description="Sorry, you do not have sufficient permissions to use `admin` commands.",
                 color=discord.Color.red(),
             )
             await ctx.send(embed=embed)
             return
         else:
             pass
+
+    @admin.command(hidden=True)
+    async def reload(self, ctx):
+        if PYTHON_ENV == "development":
+            await ctx.send(":recycle: Reloading...")
+            errs = reload_cogs(self.client)
+            if len(errs) == 0:
+                await ctx.send(":white_check_mark: Reloaded successfully.")
+            else:
+                await ctx.send(":x: An error occurred. Reason:\n\n" + "\n\n".join(errs))
 
     @admin.command(
         aliases=["status", "meta"], help="Get technical bot status", hidden=True

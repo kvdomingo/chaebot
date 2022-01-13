@@ -8,7 +8,8 @@ import logging
 from django.conf import settings
 from discord.ext import commands
 from django.core.cache import cache
-from .utils.endpoints import Api
+from bot.api.internal import Api
+from .utils.cog_handler import load_cogs
 
 logging.basicConfig(level=logging.INFO)
 
@@ -27,9 +28,7 @@ def main():
     client = commands.Bot(
         command_prefix=command_prefix, description="Hi, I'm Botbot de Leon!"
     )
-    for fn in os.listdir(settings.BASE_DIR / "bot" / "cogs"):
-        if fn.endswith(".py"):
-            client.load_extension(f"bot.cogs.{fn[:-3]}")
+    load_cogs(client)
     client.run(os.environ.get("DISCORD_TOKEN"))
 
 

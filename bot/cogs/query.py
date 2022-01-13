@@ -42,7 +42,7 @@ class Query(commands.Cog):
     async def spam(self, ctx, number: int, group: str, *person: str):
         if ctx.message.author.id != settings.DISCORD_ADMIN_ID:
             do = lambda: discord.Embed(
-                description="Sorry, only bot owner is allowed to `spam`.",
+                description="Sorry, you do not have sufficient permissions to use this command.",
                 color=discord.Color.red(),
             )
             embed = do()
@@ -73,7 +73,7 @@ class Query(commands.Cog):
                 continue
             supp_groups.append(group["name"])
         embed = discord.Embed(
-            title="Supported groups/artists:",
+            title="Groups/artists in database:",
             description="\n".join(supp_groups),
             color=discord.Color.green(),
         )
