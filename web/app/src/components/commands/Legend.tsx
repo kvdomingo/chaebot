@@ -1,7 +1,6 @@
-import React from "react";
 import { Card, CardHeader, CardBody, ListGroup, ListGroupItem } from "reactstrap";
 
-export default function Legend() {
+function Legend() {
   return (
     <Card className="my-3">
       <CardHeader>Legend</CardHeader>
@@ -15,3 +14,5 @@ export default function Legend() {
     </Card>
   );
 }
+
+export default Legend;

@@ -1,4 +1,3 @@
-import React from "react";
 import { Container } from "reactstrap";
 import Legend from "./Legend";
 import Header from "./Header";
@@ -15,7 +14,7 @@ export const commands = [
   { header: "Restricted/Experimental", commands: admin },
 ];
 
-export default function Content() {
+function Content() {
   return (
     <Container className="my-5">
       <Header />
@@ -26,3 +25,5 @@ export default function Content() {
     </Container>
   );
 }
+
+export default Content;

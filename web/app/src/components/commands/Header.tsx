@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardHeader, CardBody } from "reactstrap";
 
 export default function Legend() {

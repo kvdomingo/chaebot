@@ -1,8 +1,21 @@
-import React from "react";
+import { Fragment } from "react";
 import { Badge, Card, CardHeader, CardBody, Row, Col, ListGroup, ListGroupItem } from "reactstrap";
 import PropTypes from "prop-types";
 
-function Commands({ header, commands, labeledCommand, labelColor, labelName }) {
+interface CommandsProps {
+  header: string;
+  commands: {
+    command: string;
+    required?: string[];
+    optional?: string[];
+    description: string;
+  }[];
+  labeledCommand?: boolean;
+  labelColor?: string;
+  labelName?: string;
+}
+
+function Commands({ header, commands, labeledCommand, labelColor, labelName }: CommandsProps) {
   return (
     <Card className="my-3" id={header.toLowerCase()}>
       <CardHeader>
@@ -16,11 +29,11 @@ function Commands({ header, commands, labeledCommand, labelColor, labelName }) {
                 <Col sm="4">
                   <code>
                     !{command.command}
-                    {command.required.map((req, i) => (
-                      <React.Fragment key={i}>{` [${req}]`}</React.Fragment>
+                    {command.required?.map((req, i) => (
+                      <Fragment key={i}>{` [${req}]`}</Fragment>
                     ))}
-                    {command.optional.map((opt, i) => (
-                      <React.Fragment key={i}>{` (${opt})`}</React.Fragment>
+                    {command.optional?.map((opt, i) => (
+                      <Fragment key={i}>{` (${opt})`}</Fragment>
                     ))}
                   </code>
                 </Col>

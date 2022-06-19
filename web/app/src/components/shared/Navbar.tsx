@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Collapse,
   Navbar,
@@ -73,7 +73,7 @@ export default function Navigation() {
               </Dropdown>
             </NavItem>
           </Nav>
-          <Nav className="ml-auto" navbar>
+          <Nav className="ml-auto d-flex align-items-center" navbar>
             <NavItem className="mx-1">
               <a
                 href="https://discord.com/api/oauth2/authorize?client_id=726835246892580865&permissions=256064&scope=bot"
