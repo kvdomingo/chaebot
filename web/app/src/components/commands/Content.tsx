@@ -5,12 +5,10 @@ import Commands from "./Commands";
 import main from "./Main.json";
 import subscriptions from "./Subscriptions.json";
 import admin from "./Admin.json";
-import mama21 from "./Mama.json";
 
 export const commands = [
   { header: "Main", commands: main },
   { header: "Subscription", commands: subscriptions },
-  { header: "MAMA 2021", commands: mama21 },
   { header: "Restricted/Experimental", commands: admin },
 ];
 
