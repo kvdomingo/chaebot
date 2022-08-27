@@ -1,22 +1,17 @@
+from typing import Union
+
 import aiohttp
 import requests
 from django.conf import settings
-from typing import Union
 
 PORT = settings.API_PORT
 
 PYTHON_ENV = settings.PYTHON_ENV
 
-BASE_URL = (
-    f"http://0.0.0.0:{PORT}/v1.0"
-    if PYTHON_ENV == "production"
-    else f"http://api:{PORT}/v1.0"
-)
+BASE_URL = f"http://0.0.0.0:{PORT}/api/v1.0" if PYTHON_ENV == "production" else f"http://api:{PORT}/api/v1.0"
 
 
-async def _arequest(
-    endpoint: str, method: str = "get", body: dict = None
-) -> tuple[Union[list, dict], int]:
+async def _arequest(endpoint: str, method: str = "get", body: dict = None) -> tuple[Union[list, dict], int]:
     async with aiohttp.ClientSession() as session:
         api = getattr(session, method)
         async with api(f"{BASE_URL}/{endpoint}", data=body) as res:

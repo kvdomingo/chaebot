@@ -1,31 +1,38 @@
-FROM python:3.9.7-alpine as base
-
-RUN apk add --no-cache --update bash postgresql-dev gcc musl-dev curl
+FROM python:3.10-bullseye as base
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONFAULTHANDLER 1
+ENV PYTHONHASHSEED random
+ENV PIP_NO_CACHE_DIR off
+ENV PIP_DISABLE_PIP_VERSION_CHECK on
+ENV PIP_DEFAULT_TIMEOUT 100
+ENV POETRY_VERSION 1.1.13
+ENV VERSION $VERSION
+ARG PORT
 
-COPY ./requirements.txt /tmp/requirements.txt
+FROM base as base-dev
 
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+RUN pip install "poetry==$POETRY_VERSION"
 
-FROM base as dev
+COPY poetry.lock pyproject.toml gunicorn.conf.py ./
+
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi
+
+ENV VERSION $VERSION
+
+FROM base-dev as dev
 
 WORKDIR /bot
 
-ENTRYPOINT python main.py runbot
+ENTRYPOINT [ "python", "main.py", "runbot" ]
 
-FROM node:16-alpine as web-dev
-
-WORKDIR /bot
-
-ENTRYPOINT [ "sh", "rundevserver.sh" ]
-
-FROM base as api-dev
+FROM base-dev as api-dev
 
 WORKDIR /bot
 
-ENTRYPOINT gunicorn kvisualbot.wsgi -b 0.0.0.0:${PORT} --reload
+ENTRYPOINT [ "gunicorn", "kvisualbot.wsgi", "-b", "0.0.0.0:5000", "-c", "./gunicorn.conf.py", "--reload" ]
 
 FROM node:16-alpine as build
 
@@ -33,30 +40,36 @@ WORKDIR /web/app
 
 COPY ./web/app ./
 
-RUN yarn install
-
-RUN yarn build
+RUN yarn install && yarn build
 
 FROM base as prod
+
+RUN apk add supervisor
+
+RUN mkdir /var/log/supervisor
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+RUN pip install "poetry==$POETRY_VERSION"
+
+WORKDIR /tmp
+
+COPY poetry.lock pyproject.toml ./
+
+RUN poetry export --without-hashes -f requirements.txt | pip install -r /dev/stdin
 
 WORKDIR /bot
 
 COPY ./bot/ ./bot/
 COPY ./kvisualbot/ ./kvisualbot/
 COPY ./*.py ./
-COPY runserver.sh .
+COPY ./*.sh ./
 COPY --from=build /web/app/build ./web/app/
-
-RUN python manage.py collectstatic --noinput
-
-RUN adduser -D devuser
-
-RUN mkdir ./tmp
 
 RUN chmod -R 777 ./tmp
 
+RUN chmod +x docker-entrypoint.sh
+
 EXPOSE $PORT
 
-USER devuser
-
-CMD bash runserver.sh
+ENTRYPOINT [ "/usr/bin/supervisord" ]

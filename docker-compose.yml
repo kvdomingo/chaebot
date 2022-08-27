@@ -1,5 +1,9 @@
 version: "3.8"
 
+networks:
+  gateway:
+    external: true
+
 services:
   api:
     build:
@@ -7,30 +11,21 @@ services:
       target: api-dev
     image: kvdomingo/kvisualapi:latest
     env_file: .env
-    ports:
-      - ${PORT}:${PORT}
     volumes:
       - .:/bot
-    healthcheck:
-      test:
-        - CMD
-        - bash
-        - -c
-        - 'while [[ "$$(curl -s -o /dev/null -I -L -w ''%{http_code}'' http://api:8000/admin/)" != "200" ]]; do echo ..; sleep 5; done;'
-      interval: 5s
-      timeout: 10s
-      retries: 3
 
   docs:
-    build:
-      context: .
-      target: web-dev
+    build: ./web/app
     image: kvdomingo/kvisualdocs:latest
-    env_file: web/app/.env
-    ports:
-      - 3000:3000
+    environment:
+      - HOST=0.0.0.0
+      - PORT=3000
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - TSC_WATCHFILE=UseFsEventsWithFallbackDynamicPolling
+      - WDS_SOCKET_PORT=0
     volumes:
-      - .:/bot
+      - ./web/app:/web
 
   bot:
     build:
@@ -42,5 +37,21 @@ services:
       - .:/bot
     restart: always
     depends_on:
-      api:
-        condition: service_healthy
+      - api
+
+  proxy:
+    image: bitnami/nginx:latest
+    environment:
+      - NGINX_HTTP_PORT_NUMBER=${HTTP_PORT}
+    volumes:
+      - ./proxy/nginx.conf:/opt/bitnami/nginx/conf/server_blocks/time_machine.conf:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kvisualbot.rule=Host(`kvisualbot.localhost`)"
+      - "traefik.http.routers.kvisualbot.entrypoints=http"
+      - "traefik.docker.network=gateway"
+      - "traefik.http.services.kvisualbot.loadbalancer.server.port=${HTTP_PORT}"
+    restart: unless-stopped
+    networks:
+      - default
+      - gateway
