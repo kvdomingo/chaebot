@@ -15,13 +15,9 @@ class Subscription(commands.Cog):
     async def hourly(self, ctx):
         pass
 
-    @hourly.command(
-        aliases=["list"], help="List all hourly subscriptions for the channel"
-    )
+    @hourly.command(aliases=["list"], help="List all hourly subscriptions for the channel")
     async def hourly_list(self, ctx):
-        subs_exist = list(
-            filter(lambda x: len(x["twitterMediaSubscribedChannels"]) > 0, self.groups)
-        )
+        subs_exist = list(filter(lambda x: len(x["twitterMediaSubscribedChannels"]) > 0, self.groups))
         subbed_groups = []
         for sub in subs_exist:
             for channel in sub["twitterMediaSubscribedChannels"]:
@@ -82,15 +78,12 @@ class Subscription(commands.Cog):
         channels = group["twitterMediaSubscribedChannels"]
         channel = list(
             filter(
-                lambda x: x["channel_id"] == ctx.channel.id
-                and x["group"] == group["id"],
+                lambda x: x["channel_id"] == ctx.channel.id and x["group"] == group["id"],
                 channels,
             )
         )
         if channel:
-            _, status = await Api.twitter_media_subscribed_channels(
-                channel[0]["id"], "delete"
-            )
+            _, status = await Api.twitter_media_subscribed_channels(channel[0]["id"], "delete")
             message = discord.Embed(
                 title="Hourly media subscription removed",
                 description=f'This channel has been unsubscribed from hourly media from {group["name"]}',
@@ -108,13 +101,9 @@ class Subscription(commands.Cog):
     async def vlive(self, ctx):
         pass
 
-    @vlive.command(
-        aliases=["list"], help="List all VLIVE subscriptions for the channel"
-    )
+    @vlive.command(aliases=["list"], help="List all VLIVE subscriptions for the channel")
     async def vlive_list(self, ctx):
-        subs_exist = list(
-            filter(lambda x: len(x["vliveSubscribedChannels"]) > 0, self.groups)
-        )
+        subs_exist = list(filter(lambda x: len(x["vliveSubscribedChannels"]) > 0, self.groups))
         subbed_groups = []
         for sub in subs_exist:
             for channel in sub["vliveSubscribedChannels"]:
@@ -168,9 +157,7 @@ class Subscription(commands.Cog):
                         value=str(val),
                         inline=False,
                     )
-                message.set_footer(
-                    text="Please check the errors above or try again later."
-                )
+                message.set_footer(text="Please check the errors above or try again later.")
             await ctx.send(embed=message)
 
     @vlive.command(
@@ -182,8 +169,7 @@ class Subscription(commands.Cog):
         channels = group["vliveSubscribedChannels"]
         channel = list(
             filter(
-                lambda x: x["channel_id"] == ctx.channel.id
-                and x["group"] == group["id"],
+                lambda x: x["channel_id"] == ctx.channel.id and x["group"] == group["id"],
                 channels,
             )
         )

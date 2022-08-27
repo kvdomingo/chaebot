@@ -45,9 +45,7 @@ async def group_name_matcher(name: str, random_on_no_match: bool = True) -> dict
         return {}
 
 
-async def member_name_matcher(
-    _member: List[str], group: str, hourly: bool
-) -> Tuple[list, dict]:
+async def member_name_matcher(_member: List[str], group: str, hourly: bool) -> Tuple[list, dict]:
     group = await group_name_matcher(group)
     members = group["members"]
     if hourly or not _member:
@@ -75,9 +73,7 @@ async def member_name_matcher(
             print(f'Member query matched: {key["stage_name"]} of {group["name"]}')
             return key["twitterMediaSources"], group
         for alias in key["aliases"]:
-            if re.search(alias["alias"], _member, re.I) or re.search(
-                _member, alias["alias"], re.I
-            ):
+            if re.search(alias["alias"], _member, re.I) or re.search(_member, alias["alias"], re.I):
                 print(f'Member query matched: {key["stage_name"]} of {group["name"]}')
                 return key["twitterMediaSources"], group
     print("No member query matched, choosing random")

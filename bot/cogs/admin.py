@@ -50,9 +50,7 @@ class Admin(commands.Cog):
             else:
                 await ctx.send(":x: An error occurred. Reason:\n\n" + "\n\n".join(errs))
 
-    @admin.command(
-        aliases=["status", "meta"], help="Get technical bot status", hidden=True
-    )
+    @admin.command(aliases=["status", "meta"], help="Get technical bot status", hidden=True)
     async def admin_status(self, ctx):
         created = os.environ["HEROKU_RELEASE_CREATED_AT"]
         created = datetime.strptime(created, "%Y-%m-%dT%H:%M:%SZ")

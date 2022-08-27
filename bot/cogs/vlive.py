@@ -16,9 +16,7 @@ class VliveApi(commands.Cog):
     async def search(self, ctx: Context, search: str):
         channels: list = await api.vlive.search_channels(search)
         if len(channels) > 0:
-            channels = list(
-                filter(lambda channel: "+" not in channel["name"], channels)
-            )
+            channels = list(filter(lambda channel: "+" not in channel["name"], channels))
             channels = list(
                 map(
                     lambda channel: {

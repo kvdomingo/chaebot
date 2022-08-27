@@ -16,9 +16,7 @@ async def vlive_handler(group: dict):
     }
     base_url = "http://api.vfan.vlive.tv/vproxy/channelplus"
     async with aiohttp.ClientSession() as session:
-        async with session.get(
-            f"{base_url}/getChannelVideoList", params=payload
-        ) as res:
+        async with session.get(f"{base_url}/getChannelVideoList", params=payload) as res:
             if res.status >= 400:
                 print("VLIVE retrieve failed.")
                 return None
@@ -28,12 +26,8 @@ async def vlive_handler(group: dict):
             latest_vid = video_list[0]
             if latest_vid["videoSeq"] != obj["vlive_last_seq"]:
                 print(f'New VLIVE detected for {obj["name"]}')
-                obj, _ = await Api.group(
-                    group["id"], "patch", dict(vlive_last_seq=latest_vid["videoSeq"])
-                )
-                release_timestamp = datetime.strptime(
-                    latest_vid["onAirStartAt"], "%Y-%m-%d %H:%M:%S"
-                )
+                obj, _ = await Api.group(group["id"], "patch", dict(vlive_last_seq=latest_vid["videoSeq"]))
+                release_timestamp = datetime.strptime(latest_vid["onAirStartAt"], "%Y-%m-%d %H:%M:%S")
                 release_timestamp -= timedelta(hours=9)
                 live = latest_vid["videoType"] == "LIVE"
                 title = "**[LIVE]** " if live else "**[VOD]** "
