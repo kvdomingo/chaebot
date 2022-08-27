@@ -11,12 +11,13 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
+from pathlib import Path
+
 import dj_database_url
 import sentry_sdk
 from django.core.management.utils import get_random_secret_key
-from sentry_sdk.integrations.django import DjangoIntegration
-from pathlib import Path
 from dotenv import load_dotenv
+from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
@@ -25,26 +26,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+PYTHON_ENV = os.environ.get("PYTHON_ENV", "production")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get("DEBUG", "0")))
+DEBUG = PYTHON_ENV != "production"
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
 ALLOWED_HOSTS = ["*"]
 
-API_PORT = os.environ.get("PORT", "8000")
+API_PORT = os.environ.get("PORT", "5000")
 
 # Sentry logging
 
-if not DEBUG:
+SENTRY_DSN = os.environ.get("SENTRY_DSN")
+
+
+if not DEBUG and SENTRY_DSN is not None:
     sentry_sdk.init(
-        dsn="https://f5016ad6477147ceabb8459b73b01414@o493799.ingest.sentry.io/5563761",
+        dsn=SENTRY_DSN,
         integrations=[DjangoIntegration()],
-        traces_sample_rate=1.0,
+        traces_sample_rate=0.9,
         send_default_pii=True,
     )
 
@@ -118,8 +123,7 @@ REST_FRAMEWORK = {
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        "LOCATION": BASE_DIR / "tmp" / "cache",
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "TIMEOUT": None,
     }
 }
@@ -170,4 +174,4 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DISCORD_ADMIN_ID = int(os.environ.get("DISCORD_ADMIN_ID", "0"))
 
-PYTHON_ENV = os.environ.get("PYTHON_ENV", "production")
+DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
