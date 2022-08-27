@@ -1,10 +1,14 @@
 import asyncio
-import discord
 from datetime import datetime
+
+import discord
 from discord.ext import commands, tasks
 from django.conf import settings
 from django.core.cache import cache
-from bot.api.internal import Api
+
+from kvisualbot.logging import logger
+
+from ..api.internal import Api
 from ..handlers.hourly import hourly_handler
 from ..handlers.vlive import vlive_handler
 
@@ -40,7 +44,9 @@ class Tasks(commands.Cog):
         channels = _group["twitterMediaSubscribedChannels"]
         for channel in channels:
             ch = self.client.get_channel(channel["channel_id"])
-            print(f'Connected to {_group["name"]} channel {ch}')
+            if not ch:
+                return
+            logger.info(f'Connected to {_group["name"]} channel {ch}')
             await ch.send(files=media)
 
     @tasks.loop(hours=1)
@@ -85,9 +91,9 @@ class Tasks(commands.Cog):
         now = datetime.now()
         if now.minute != 0:
             delta_min = 60 - now.minute
-            print(f"Waiting for {delta_min} minutes to start hourly ITZY update...")
+            logger.info(f"Waiting for {delta_min} minutes to start hourly ITZY update...")
             await asyncio.sleep(delta_min * 60)
-            print("Starting hourly ITZY update...")
+            logger.info("Starting hourly ITZY update...")
 
     @hourly_blackpink.before_loop
     async def blackpink_hour(self):
@@ -97,11 +103,9 @@ class Tasks(commands.Cog):
                 delta_min = 30 - now.minute
             else:
                 delta_min = 90 - now.minute
-            print(
-                f"Waiting for {delta_min} minutes to start hourly BLACKPINK update..."
-            )
+            logger.info(f"Waiting for {delta_min} minutes to start hourly BLACKPINK update...")
             await asyncio.sleep(delta_min * 60)
-            print("Starting hourly BLACKPINK update...")
+            logger.info("Starting hourly BLACKPINK update...")
 
     @hourly_twice.before_loop
     async def twice_hour(self):
@@ -111,9 +115,9 @@ class Tasks(commands.Cog):
                 delta_min = 29 - now.minute
             else:
                 delta_min = (60 + 29) - now.minute
-            print(f"Waiting for {delta_min} minutes to start hourly TWICE update...")
+            logger.info(f"Waiting for {delta_min} minutes to start hourly TWICE update...")
             await asyncio.sleep(delta_min * 60)
-            print("Starting hourly TWICE update...")
+            logger.info("Starting hourly TWICE update...")
 
     @hourly_red_velvet.before_loop
     async def red_velvet_hour(self):
@@ -123,11 +127,9 @@ class Tasks(commands.Cog):
                 delta_min = 5 - now.minute
             else:
                 delta_min = (60 + 5) - now.minute
-            print(
-                f"Waiting for {delta_min} minutes to start hourly Red Velvet update..."
-            )
+            logger.info(f"Waiting for {delta_min} minutes to start hourly Red Velvet update...")
             await asyncio.sleep(delta_min * 60)
-            print("Starting hourly Red Velvet update...")
+            logger.info("Starting hourly Red Velvet update...")
 
 
 def setup(client):

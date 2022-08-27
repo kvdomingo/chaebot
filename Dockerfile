@@ -26,7 +26,7 @@ FROM base-dev as dev
 
 WORKDIR /bot
 
-ENTRYPOINT [ "python", "main.py", "runbot" ]
+ENTRYPOINT [ "watchmedo", "auto-restart", "-d", "./bot/", "-R", "--debug-force-polling", "python", "--", "main.py", "runbot" ]
 
 FROM base-dev as api-dev
 
@@ -36,19 +36,19 @@ ENTRYPOINT [ "gunicorn", "kvisualbot.wsgi", "-b", "0.0.0.0:5000", "-c", "./gunic
 
 FROM node:16-alpine as build
 
-WORKDIR /web/app
+WORKDIR /web
 
-COPY ./web/app ./
+COPY ./web/app/public/ ./public/
+COPY ./web/app/src/ ./src/
+COPY ./web/app/package.json ./web/app/tsconfig.json ./web/app/yarn.lock ./
 
 RUN yarn install && yarn build
 
 FROM base as prod
 
-RUN apk add supervisor
+RUN apt update && apt install supervisor -y
 
-RUN mkdir /var/log/supervisor
-
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN mkdir -p /var/log/supervisor
 
 RUN pip install "poetry==$POETRY_VERSION"
 
@@ -64,12 +64,11 @@ COPY ./bot/ ./bot/
 COPY ./kvisualbot/ ./kvisualbot/
 COPY ./*.py ./
 COPY ./*.sh ./
-COPY --from=build /web/app/build ./web/app/
-
-RUN chmod -R 777 ./tmp
+COPY supervisord.conf ./
+COPY --from=build /web/build ./web/app/
 
 RUN chmod +x docker-entrypoint.sh
 
 EXPOSE $PORT
 
-ENTRYPOINT [ "/usr/bin/supervisord" ]
+ENTRYPOINT [ "/usr/bin/supervisord", "-c", "supervisord.conf" ]
