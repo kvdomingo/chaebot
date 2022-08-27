@@ -1,7 +1,9 @@
 import json
-from .. import api
+
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
+
+from .. import api
 
 
 class VliveApi(commands.Cog):
@@ -17,15 +19,7 @@ class VliveApi(commands.Cog):
         channels: list = await api.vlive.search_channels(search)
         if len(channels) > 0:
             channels = list(filter(lambda channel: "+" not in channel["name"], channels))
-            channels = list(
-                map(
-                    lambda channel: {
-                        **channel,
-                        "name": channel["name"].encode("utf-16").decode("utf-16"),
-                    },
-                    channels,
-                )
-            )
+            channels = [{**channel, "name": channel["name"].encode("utf-16").decode("utf-16")} for channel in channels]
             await ctx.send(json.dumps(channels, indent=2))
         else:
             await ctx.send("No results matched.")

@@ -1,7 +1,8 @@
 import os
 from pathlib import Path
-from django.conf import settings
+
 from discord.ext.commands import Bot
+from django.conf import settings
 
 BASE_DIR: Path = settings.BASE_DIR
 

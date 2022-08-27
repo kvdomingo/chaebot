@@ -1,9 +1,13 @@
 import os
-import discord
-from django.conf import settings
 from datetime import datetime, timedelta
+
+import discord
 from discord.ext import commands
 from discord.ext.commands import Bot
+from django.conf import settings
+
+from kvisualbot.logging import logger
+
 from ..utils.cog_handler import reload_cogs
 
 PYTHON_ENV: str = settings.PYTHON_ENV
@@ -16,7 +20,7 @@ class Admin(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"Logged in as {self.client.user}")
+        logger.info(f"Logged in as {self.client.user}")
         if settings.PYTHON_ENV != "production":
             activity_name = "under development"
             status = discord.Status.do_not_disturb

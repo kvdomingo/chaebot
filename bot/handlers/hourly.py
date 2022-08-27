@@ -1,20 +1,22 @@
+import io
+import re
+from random import SystemRandom
+
 import aiohttp
 import discord
-import io
-import os
-import re
 import twitter
+from django.conf import settings
 from django.core.cache import cache
-from random import SystemRandom
-from typing import List, Tuple
 
+from kvisualbot.logging import logger
 
 random = SystemRandom()
+
 api = twitter.Api(
-    consumer_key=os.environ.get("TWITTER_CONSUMER_KEY"),
-    consumer_secret=os.environ.get("TWITTER_CONSUMER_SECRET"),
-    access_token_key=os.environ.get("TWITTER_ACCESS_KEY"),
-    access_token_secret=os.environ.get("TWITTER_ACCESS_SECRET"),
+    consumer_key=settings.TWITTER_CONSUMER_KEY,
+    consumer_secret=settings.TWITTER_CONSUMER_SECRET,
+    access_token_key=settings.TWITTER_ACCESS_KEY,
+    access_token_secret=settings.TWITTER_ACCESS_SECRET,
 )
 
 
@@ -36,16 +38,16 @@ async def group_name_matcher(name: str, random_on_no_match: bool = True) -> dict
             )
             if any(search_params):
                 group = list(filter(lambda x: x["id"] == id_, groups))[0]
-                print(f'Group query matched: {group["name"]}')
+                logger.info(f'Group query matched: {group["name"]}')
                 return group
     if random_on_no_match:
-        print("No group query matched, choosing random")
+        logger.info("No group query matched, choosing random")
         return random.choice(groups)
     else:
         return {}
 
 
-async def member_name_matcher(_member: List[str], group: str, hourly: bool) -> Tuple[list, dict]:
+async def member_name_matcher(_member: list[str], group: str, hourly: bool) -> tuple[list, dict]:
     group = await group_name_matcher(group)
     members = group["members"]
     if hourly or not _member:
@@ -70,24 +72,24 @@ async def member_name_matcher(_member: List[str], group: str, hourly: bool) -> T
                 ]
             )
         if any(search_parameters):
-            print(f'Member query matched: {key["stage_name"]} of {group["name"]}')
+            logger.info(f'Member query matched: {key["stage_name"]} of {group["name"]}')
             return key["twitterMediaSources"], group
         for alias in key["aliases"]:
             if re.search(alias["alias"], _member, re.I) or re.search(_member, alias["alias"], re.I):
-                print(f'Member query matched: {key["stage_name"]} of {group["name"]}')
+                logger.info(f'Member query matched: {key["stage_name"]} of {group["name"]}')
                 return key["twitterMediaSources"], group
-    print("No member query matched, choosing random")
+    logger.info("No member query matched, choosing random")
     accounts = random.choice(members)["twitterMediaSources"]
     return accounts, group
 
 
 async def hourly_handler(
     group: str,
-    member: List[str] = None,
+    member: list[str] = None,
     hourly: bool = False,
     spam_number: int = 1,
     max_retries: int = 10,
-) -> Tuple[list, dict]:
+) -> tuple[list, dict]:
     account_cat, group = await member_name_matcher(member, group, hourly)
     screen_name = random.choice(account_cat)["account_name"]
     spam_number = min(spam_number, 50)

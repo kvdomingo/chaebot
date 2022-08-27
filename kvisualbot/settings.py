@@ -172,6 +172,20 @@ STATICFILES_DIRS = [BASE_DIR / "web" / "app" / "static"]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+
+# Discord
+
 DISCORD_ADMIN_ID = int(os.environ.get("DISCORD_ADMIN_ID", "0"))
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
+
+
+# Twitter
+
+TWITTER_CONSUMER_KEY = os.environ.get("TWITTER_CONSUMER_KEY")
+
+TWITTER_CONSUMER_SECRET = os.environ.get("TWITTER_CONSUMER_SECRET")
+
+TWITTER_ACCESS_KEY = os.environ.get("TWITTER_ACCESS_KEY")
+
+TWITTER_ACCESS_SECRET = os.environ.get("TWITTER_ACCESS_SECRET")

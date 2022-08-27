@@ -1,6 +1,7 @@
 import discord
-from . import escape_quote
+
 from ..handlers.hourly import hourly_handler
+from . import escape_quote
 
 
 def query_string_from_dict(query_dict: dict) -> str:
@@ -21,7 +22,6 @@ async def query_handler(ctx, group: str, person: list[str]) -> None:
 
 
 async def bombard_hearts(message: discord.Message) -> None:
-    pass
     # TODO: Implement opt-in/opt-out system for individual servers
     # import asyncio
     # reactions = [
@@ -33,3 +33,4 @@ async def bombard_hearts(message: discord.Message) -> None:
     # for react in reactions:
     #     await message.add_reaction(react)
     #     await asyncio.sleep(0.5)
+    pass
