@@ -9,6 +9,6 @@ class Mama2022(commands.Cog):
         self.base_url = "https://mama.mwave.me/en/api"
 
 
-def setup(client):
+async def setup(client):
     # client.add_cog(Mama2022(client))
     pass

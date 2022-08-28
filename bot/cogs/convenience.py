@@ -17,5 +17,5 @@ class Convenience(commands.Cog):
             await ctx.channel.purge(limit=amount + 1)
 
 
-def setup(client):
-    client.add_cog(Convenience(client))
+async def setup(client):
+    await client.add_cog(Convenience(client))

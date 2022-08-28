@@ -3,14 +3,10 @@ from datetime import datetime, timedelta
 
 import discord
 from discord.ext import commands
-from discord.ext.commands import Bot
+from discord.ext.commands import Bot, Context
 from django.conf import settings
 
 from kvisualbot.logging import logger
-
-from ..utils.cog_handler import reload_cogs
-
-PYTHON_ENV: str = settings.PYTHON_ENV
 
 
 class Admin(commands.Cog):
@@ -44,20 +40,8 @@ class Admin(commands.Cog):
         else:
             pass
 
-    @admin.command(hidden=True)
-    async def reload(self, ctx):
-        if PYTHON_ENV == "development":
-            await ctx.send(":recycle: Reloading...")
-            errs = reload_cogs(self.client)
-            if len(errs) > 0:
-                for e in errs:
-                    logger.error(e)
-                await ctx.send(":x: An error occurred. Reason:\n\n" + "\n\n".join(errs))
-            else:
-                await ctx.send(":white_check_mark: Reloaded successfully.")
-
     @admin.command(aliases=["status", "meta"], help="Get technical bot status", hidden=True)
-    async def admin_status(self, ctx):
+    async def admin_status(self, ctx: Context):
         created = os.environ["HEROKU_RELEASE_CREATED_AT"]
         created = datetime.strptime(created, "%Y-%m-%dT%H:%M:%SZ")
         created += timedelta(hours=8)
@@ -90,5 +74,5 @@ class Admin(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(client):
-    client.add_cog(Admin(client))
+async def setup(client: Bot):
+    await client.add_cog(Admin(client))

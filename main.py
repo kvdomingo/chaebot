@@ -1,3 +1,5 @@
+import asyncio
+
 import click
 
 from bot import bot
@@ -17,7 +19,7 @@ def download(limit):
 
 @click.command()
 def runbot():
-    bot.main()
+    asyncio.run(bot.main())
 
 
 manage.add_command(download)

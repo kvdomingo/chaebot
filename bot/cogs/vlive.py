@@ -27,5 +27,5 @@ class VliveApi(commands.Cog):
             await ctx.send("No results matched.")
 
 
-def setup(client):
-    client.add_cog(VliveApi(client))
+async def setup(client):
+    await client.add_cog(VliveApi(client))

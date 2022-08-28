@@ -1,35 +1,24 @@
 import os
-from pathlib import Path
 
 from discord.ext.commands import Bot
 from django.conf import settings
 
-BASE_DIR: Path = settings.BASE_DIR
+from kvisualbot.logging import logger
 
 
-def load_cogs(client: Bot) -> list:
-    errs = []
-    for f in os.listdir(BASE_DIR / "bot" / "cogs"):
+async def load_cogs(bot: Bot):
+    for f in os.listdir(settings.BASE_DIR / "bot" / "cogs"):
         if f.endswith(".py"):
             try:
-                client.load_extension(f"bot.cogs.{f[:-3]}")
+                await bot.load_extension(f"bot.cogs.{f[:-3]}")
             except Exception as e:
-                errs.append(str(e))
-                continue
-    return errs
+                logger.exception(e)
 
 
-def unload_cogs(client: Bot) -> list:
-    errs = []
-    for f in os.listdir(BASE_DIR / "bot" / "cogs"):
+async def unload_cogs(bot: Bot):
+    for f in os.listdir(settings.BASE_DIR / "bot" / "cogs"):
         if f.endswith(".py"):
             try:
-                client.unload_extension(f"bot.cogs.{f[:-3]}")
+                await bot.unload_extension(f"bot.cogs.{f[:-3]}")
             except Exception as e:
-                errs.append(str(e))
-                continue
-    return errs
-
-
-def reload_cogs(client: Bot) -> list:
-    return [*unload_cogs(client), *load_cogs(client)]
+                logger.exception(e)

@@ -1,2 +1,2 @@
-def setup(*args, **kwargs):
+async def setup(*args, **kwargs):
     pass

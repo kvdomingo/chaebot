@@ -189,3 +189,8 @@ TWITTER_CONSUMER_SECRET = os.environ.get("TWITTER_CONSUMER_SECRET")
 TWITTER_ACCESS_KEY = os.environ.get("TWITTER_ACCESS_KEY")
 
 TWITTER_ACCESS_SECRET = os.environ.get("TWITTER_ACCESS_SECRET")
+
+
+# Bot
+
+BOT_PREFIX = "!" if PYTHON_ENV == "production" else "$"

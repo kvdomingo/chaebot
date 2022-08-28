@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from django.core.cache import cache
+
 from .. import api
 from ..api.internal import Api
 from ..handlers.hourly import group_name_matcher
@@ -189,5 +190,5 @@ class Subscription(commands.Cog):
         await ctx.send(embed=message)
 
 
-def setup(client):
-    client.add_cog(Subscription(client))
+async def setup(client):
+    await client.add_cog(Subscription(client))

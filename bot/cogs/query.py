@@ -1,8 +1,10 @@
-import discord
 from random import SystemRandom
+
+import discord
 from discord.ext import commands
-from django.core.cache import cache
 from django.conf import settings
+from django.core.cache import cache
+
 from ..handlers.hourly import hourly_handler
 from ..utils import escape_quote
 
@@ -78,5 +80,5 @@ class Query(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(client):
-    client.add_cog(Query(client))
+async def setup(client):
+    await client.add_cog(Query(client))

@@ -1,7 +1,9 @@
 import json
+
 import aiohttp
 import discord
 from discord.ext import commands
+
 from bot.utils.query import query_string_from_dict
 
 
@@ -177,6 +179,6 @@ class Mama2021(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(client):
+async def setup(client):
     # client.add_cog(Mama2021(client))
     pass

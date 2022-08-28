@@ -8,8 +8,8 @@ license = "GPLv3"
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "<4.1"
-aiohttp = "3.7.4.post0"
-"discord.py" = "1.7.3"
+aiohttp = "^3.8.1"
+"discord.py" = "2.0.1"
 django-filter = "^22.1"
 djangorestframework = "^3.13.1"
 gunicorn = {extras = ["gthread"], version = "^20.1.0"}
