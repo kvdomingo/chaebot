@@ -1,9 +1,7 @@
-import json
-
+import vlive
+from discord import Embed
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
-
-from .. import api
 
 
 class VliveApi(commands.Cog):
@@ -15,12 +13,16 @@ class VliveApi(commands.Cog):
         pass
 
     @vlive_api.command(help="Search groups")
-    async def search(self, ctx: Context, search: str):
-        channels: list = await api.vlive.search_channels(search)
+    async def search(self, ctx: Context, search: str = ""):
+        if not search:
+            return await ctx.send("Error: missing search query")
+        channels = vlive.search.channels(search)
         if len(channels) > 0:
-            channels = list(filter(lambda channel: "+" not in channel["name"], channels))
-            channels = [{**channel, "name": channel["name"].encode("utf-16").decode("utf-16")} for channel in channels]
-            await ctx.send(json.dumps(channels, indent=2))
+            channels = [channel for channel in channels if "+" not in channel.name]
+            message = Embed(title=f'Search results for "{search}"')
+            for channel in channels:
+                message.add_field(name=channel.name, value=channel.code, inline=False)
+            await ctx.send(embed=message)
         else:
             await ctx.send("No results matched.")
 

@@ -49,10 +49,12 @@ class Admin(commands.Cog):
         if PYTHON_ENV == "development":
             await ctx.send(":recycle: Reloading...")
             errs = reload_cogs(self.client)
-            if len(errs) == 0:
-                await ctx.send(":white_check_mark: Reloaded successfully.")
-            else:
+            if len(errs) > 0:
+                for e in errs:
+                    logger.error(e)
                 await ctx.send(":x: An error occurred. Reason:\n\n" + "\n\n".join(errs))
+            else:
+                await ctx.send(":white_check_mark: Reloaded successfully.")
 
     @admin.command(aliases=["status", "meta"], help="Get technical bot status", hidden=True)
     async def admin_status(self, ctx):

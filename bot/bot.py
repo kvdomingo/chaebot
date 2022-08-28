@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.cache import cache
 
 from bot.api.internal import Api
+from kvisualbot.logging import logger
 
 from .utils.cog_handler import load_cogs
 
@@ -21,7 +22,10 @@ def main():
 
     command_prefix = "!" if settings.PYTHON_ENV == "production" else "$"
     client = commands.Bot(command_prefix=command_prefix, description="Hi, I'm Botbot de Leon!")
-    load_cogs(client)
+    errs = load_cogs(client)
+    if len(errs) > 0:
+        for e in errs:
+            logger.error(e)
     client.run(settings.DISCORD_TOKEN)
 
 

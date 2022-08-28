@@ -1,14 +1,13 @@
-import aiohttp
 from typing import Awaitable, Union
 
-BASE_URL = "https://www.vlive.tv"
+import aiohttp
 
-JsonResponse = Union[dict, list]
+BASE_URL = "https://www.vlive.tv"
 
 
 async def _arequest(
     endpoint: str, method: str = "get", body: dict = None, params: dict = None
-) -> Awaitable[JsonResponse]:
+) -> Awaitable[Union[dict, list]]:
     async with aiohttp.ClientSession() as session:
         api = getattr(session, method)
         url = f"{BASE_URL}/{endpoint}"
@@ -18,7 +17,7 @@ async def _arequest(
             return await res.json()
 
 
-def search_channels(search: str) -> Awaitable[JsonResponse]:
+def search_channels(search: str) -> Awaitable[Union[dict, list]]:
     return _arequest(
         "search/auto/channels",
         params={
