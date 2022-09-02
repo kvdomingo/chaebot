@@ -1,21 +1,16 @@
-from discord.ext import commands
+from discord import Interaction
+from discord.app_commands import command, describe
 
 
-class Convenience(commands.Cog):
-    def __init__(self, client):
-        self.client = client
-
-    @commands.command()
-    async def ping(self, ctx):
-        await ctx.send(f"Pong ({round(self.client.latency * 1000)}ms)")
-
-    @commands.command(aliases=["purge", "sanitize"])
-    async def clear(self, ctx, amount: int = 0):
-        if amount < 1:
-            await ctx.send("Please specify a positive number.")
-        else:
-            await ctx.channel.purge(limit=amount + 1)
+@command(description="Get client latency")
+async def ping(itx: Interaction):
+    await itx.response.send_message(f"Pong ({round(itx.client.latency * 1000)}ms)")
 
 
-async def setup(client):
-    await client.add_cog(Convenience(client))
+@command(description="Delete the specified number of messages from the channel")
+@describe(amount="Number of messages to purge")
+async def purge(itx: Interaction, amount: int = 0):
+    if amount < 1:
+        await itx.response.send_message("Please specify a positive number.")
+    else:
+        await itx.channel.purge(limit=amount + 1)

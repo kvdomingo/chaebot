@@ -177,6 +177,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DISCORD_ADMIN_ID = int(os.environ.get("DISCORD_ADMIN_ID", "0"))
 
+DISCORD_TEST_GUILD_ID = int(os.environ.get("DISCORD_TEST_GUILD_ID", "0"))
+
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 
 

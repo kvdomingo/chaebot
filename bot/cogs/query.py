@@ -1,12 +1,12 @@
 from random import SystemRandom
 
-import discord
-from discord.ext import commands
+from discord import Color, Embed, Interaction
+from discord.app_commands import choices, command, describe
 from django.conf import settings
 from django.core.cache import cache
 
 from ..handlers.hourly import hourly_handler
-from ..utils import escape_quote
+from ..utils import escape_quote, get_group_choices
 
 random = SystemRandom()
 
@@ -16,69 +16,58 @@ async def arange(count):
         yield i
 
 
-class Query(commands.Cog):
-    def __init__(self, client: discord.Client):
-        self.client = client
-        self.groups = cache.get("groups")
-
-    @commands.command(
-        aliases=["q"],
-        help="Get a random pic of the specified member from the specified group",
-    )
-    async def query(self, ctx, group: str, *person: str):
-        person = escape_quote(person)
-        response, _ = await hourly_handler(group, person)
-        timeout = 0
-        while not len(response):
-            if timeout == 5:
-                return
-            response, _ = await hourly_handler(group, person)
-            timeout += 1
-
-        if isinstance(response, list):
-            await ctx.send(files=response)
-        elif isinstance(response, str):
-            await ctx.send(response)
-
-    @commands.command(aliases=["attack", "hell", "raise-hell"], hidden=True)
-    async def spam(self, ctx, number: int, group: str, *person: str):
-        if ctx.message.author.id != settings.DISCORD_ADMIN_ID:
-            do = lambda: discord.Embed(
-                description="Sorry, you do not have sufficient permissions to use this command.",
-                color=discord.Color.red(),
-            )
-            embed = do()
-            while not embed:
-                embed = do()
-            await ctx.send(embed=embed)
+@command(description="Get a random pic of the specified member from the specified group")
+@describe(group="Name or alias for a group")
+@choices(group=get_group_choices())
+@describe(person="Name or alias for a group member/idol")
+async def query(itx: Interaction, group: str, person: str = ""):
+    person = escape_quote([person])
+    response, _ = await hourly_handler(group, person)
+    timeout = 0
+    while not len(response):
+        if timeout == 5:
             return
-        person = escape_quote(person)
-        sent = 0
-        async for _ in arange(number):
-            do = lambda: hourly_handler(group, person)
+        response, _ = await hourly_handler(group, person)
+        timeout += 1
+
+    if isinstance(response, list):
+        await itx.response.send_message(files=response)
+    elif isinstance(response, str):
+        await itx.response.send_message(response)
+
+
+@command(description="Spam the channel with media of a group member/idol (maximum of 10)")
+@describe(number="Number of media to spam")
+@describe(group="Name or alias for a group")
+@choices(group=get_group_choices())
+@describe(person="Name or alias for a group member/idol")
+async def spam(itx: Interaction, number: int, group: str, person: str):
+    if itx.message.author.id != settings.DISCORD_ADMIN_ID:
+        number = min([number, 10])
+    person = escape_quote([person])
+    sent = 0
+    async for _ in arange(number):
+        do = lambda: hourly_handler(group, person)
+        response, _ = await do()
+        while not response:
             response, _ = await do()
-            while not response:
-                response, _ = await do()
-            await ctx.send(files=response)
-            sent += len(response)
-            if sent >= number:
-                break
-
-    @commands.command(aliases=["list"], help="List all supported groups")
-    async def list_(self, ctx):
-        supp_groups = []
-        for group in self.groups:
-            without_source = [len(member["twitterMediaSources"]) == 0 for member in group["members"]]
-            if any(without_source):
-                continue
-            supp_groups.append(group["name"])
-        embed = discord.Embed(
-            title="Groups/artists in database:",
-            description="\n".join(supp_groups),
-            color=discord.Color.green(),
-        )
-        await ctx.send(embed=embed)
+        await itx.response.send_message(files=response)
+        sent += len(response)
+        if sent >= number:
+            break
 
 
-async def setup(client):
-    await client.add_cog(Query(client))
+@command(name="list")
+async def list_(itx: Interaction):
+    supp_groups = []
+    for group in cache.get("groups"):
+        without_source = [len(member["twitterMediaSources"]) == 0 for member in group["members"]]
+        if any(without_source):
+            continue
+        supp_groups.append(group["name"])
+    embed = Embed(
+        title="Groups/artists in database:",
+        description="\n".join(supp_groups),
+        color=Color.green(),
+    )
+    await itx.response.send_message(embed=embed)

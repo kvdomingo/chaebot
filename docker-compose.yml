@@ -35,7 +35,7 @@ services:
     env_file: .env
     volumes:
       - .:/bot
-    restart: always
+    restart: unless-stopped
     depends_on:
       - api
 
