@@ -3,7 +3,7 @@ services:
     build:
       context: .
       target: prod
-    image: kvdomingo/kvisualbot:latest
+    image: kvdomingo/kvisualbot-prod:latest
     env_file: .env
     ports:
       - ${PORT}:${PORT}

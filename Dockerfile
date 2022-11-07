@@ -1,17 +1,12 @@
-FROM python:3.10-bullseye as base
+FROM python:3.10-bullseye AS base
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONFAULTHANDLER 1
-ENV PYTHONHASHSEED random
-ENV PIP_NO_CACHE_DIR off
-ENV PIP_DISABLE_PIP_VERSION_CHECK on
-ENV PIP_DEFAULT_TIMEOUT 100
 ENV POETRY_VERSION 1.2.2
 ENV VERSION $VERSION
 ARG PORT
 
-FROM base as base-dev
+FROM base AS base-dev
 
 RUN pip install "poetry==$POETRY_VERSION"
 
@@ -24,7 +19,7 @@ RUN poetry config virtualenvs.create false && \
 
 ENV VERSION $VERSION
 
-FROM base-dev as dev
+FROM base-dev AS dev
 
 WORKDIR /bot
 
@@ -34,9 +29,9 @@ FROM base-dev as api-dev
 
 WORKDIR /bot
 
-ENTRYPOINT [ "gunicorn", "kvisualbot.wsgi", "-b", "0.0.0.0:5000", "-c", "./gunicorn.conf.py", "--reload" ]
+ENTRYPOINT [ "gunicorn", "kvisualbot.wsgi", "--bind", "0.0.0.0:5000", "--config", "./gunicorn.conf.py", "--pid", "/tmp/gunicorn", "--reload" ]
 
-FROM node:16-alpine as build
+FROM node:16-alpine AS build
 
 WORKDIR /web
 
@@ -46,7 +41,7 @@ COPY ./web/app/package.json ./web/app/tsconfig.json ./web/app/yarn.lock ./
 
 RUN yarn install && yarn build
 
-FROM base as prod
+FROM base AS prod
 
 RUN apt update && apt install supervisor -y
 
@@ -58,7 +53,7 @@ WORKDIR /tmp
 
 COPY poetry.lock pyproject.toml ./
 
-RUN poetry export --without-hashes -f requirements.txt | pip install -r /dev/stdin
+RUN poetry export --without-hashes -f requirements.txt | pip install --no-cache-dir -r /dev/stdin
 
 WORKDIR /bot
 
@@ -69,6 +64,6 @@ COPY ./*.sh ./
 COPY supervisord.conf ./
 COPY --from=build /web/build ./web/app/
 
-EXPOSE $PORT
+RUN chmod +x ./docker-release.sh
 
-ENTRYPOINT [ "/usr/bin/supervisord", "-c", "supervisord.conf" ]
+EXPOSE $PORT
