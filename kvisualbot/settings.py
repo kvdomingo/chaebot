@@ -28,6 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 PYTHON_ENV = os.environ.get("PYTHON_ENV", "production")
 
+PRODUCTION = PYTHON_ENV == "production"
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", default=get_random_secret_key())
 
