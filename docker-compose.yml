@@ -1,9 +1,3 @@
-version: "3.8"
-
-networks:
-  gateway:
-    external: true
-
 services:
   api:
     build:
@@ -15,8 +9,7 @@ services:
       - .:/bot
 
   docs:
-    build: ./web/app
-    image: kvdomingo/kvisualdocs:latest
+    image: node:16-alpine
     environment:
       - HOST=0.0.0.0
       - PORT=3000
@@ -24,6 +17,11 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - TSC_WATCHFILE=UseFsEventsWithFallbackDynamicPolling
       - WDS_SOCKET_PORT=0
+    working_dir: /web
+    entrypoint:
+      - /bin/sh
+      - "-c"
+      - "yarn install && yarn start"
     volumes:
       - ./web/app:/web
 
@@ -55,3 +53,7 @@ services:
     networks:
       - default
       - gateway
+
+networks:
+  gateway:
+    external: true

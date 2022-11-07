@@ -7,13 +7,15 @@ ENV PYTHONHASHSEED random
 ENV PIP_NO_CACHE_DIR off
 ENV PIP_DISABLE_PIP_VERSION_CHECK on
 ENV PIP_DEFAULT_TIMEOUT 100
-ENV POETRY_VERSION 1.1.13
+ENV POETRY_VERSION 1.2.2
 ENV VERSION $VERSION
 ARG PORT
 
 FROM base as base-dev
 
 RUN pip install "poetry==$POETRY_VERSION"
+
+WORKDIR /tmp
 
 COPY poetry.lock pyproject.toml gunicorn.conf.py ./
 
@@ -26,7 +28,7 @@ FROM base-dev as dev
 
 WORKDIR /bot
 
-ENTRYPOINT [ "watchmedo", "auto-restart", "-d", "./bot/", "-R", "--debug-force-polling", "python", "--", "main.py", "runbot" ]
+ENTRYPOINT [ "watchmedo", "auto-restart", "--directory", "./bot/", "--recursive", "--debug-force-polling", "python", "--", "main.py", "runbot" ]
 
 FROM base-dev as api-dev
 
@@ -66,8 +68,6 @@ COPY ./*.py ./
 COPY ./*.sh ./
 COPY supervisord.conf ./
 COPY --from=build /web/build ./web/app/
-
-RUN chmod +x docker-entrypoint.sh
 
 EXPOSE $PORT
 
