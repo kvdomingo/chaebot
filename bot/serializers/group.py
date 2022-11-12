@@ -8,31 +8,31 @@ from .vlive import VliveSubscribedChannelSerializer
 
 
 class GroupSerializer(ModelSerializer):
+    class Meta:
+        model = Group
+        fields = "__all__"
+
     aliases = SerializerMethodField()
     members = SerializerMethodField()
     twitterMediaSubscribedChannels = SerializerMethodField()
     vliveSubscribedChannels = SerializerMethodField()
 
-    def get_aliases(self, obj):
+    def get_aliases(self, obj: Meta.model):
         aliases = obj.aliases.all()
         serializer = GroupAliasSerializer(aliases, many=True)
         return serializer.data
 
-    def get_members(self, obj):
+    def get_members(self, obj: Meta.model):
         members = obj.members.all()
         serializer = MemberSerializer(members, many=True)
         return serializer.data
 
-    def get_twitterMediaSubscribedChannels(self, obj):
+    def get_twitterMediaSubscribedChannels(self, obj: Meta.model):
         channels = obj.twitter_media_subscribed_channels.all()
         serializer = TwitterMediaSubscribedChannelSerializer(channels, many=True)
         return serializer.data
 
-    def get_vliveSubscribedChannels(self, obj):
+    def get_vliveSubscribedChannels(self, obj: Meta.model):
         channels = obj.vlive_subscribed_channels.all()
         serializer = VliveSubscribedChannelSerializer(channels, many=True)
         return serializer.data
-
-    class Meta:
-        model = Group
-        fields = "__all__"

@@ -6,8 +6,8 @@ import aiohttp
 import discord
 import twitter
 from django.conf import settings
-from django.core.cache import cache
 
+from bot.api.internal import Api
 from kvisualbot.logging import logger
 
 random = SystemRandom()
@@ -21,7 +21,7 @@ api = twitter.Api(
 
 
 async def group_name_matcher(name: str, random_on_no_match: bool = True) -> dict:
-    groups = cache.get("groups")
+    groups = Api.sync_groups()
     group_names = {}
     for group in groups:
         group_names[group["id"]] = [group["name"]]
@@ -106,7 +106,8 @@ async def hourly_handler(
             include_rts=False,
             count=tl_count,
         )
-    except twitter.error.TwitterError:
+    except twitter.error.TwitterError as e:
+        logger.error(str(e))
         return [], {}
 
     if not tl:
@@ -134,32 +135,43 @@ async def hourly_handler(
                 media_post = (random.choice(tl)).media
                 if media_post:
                     break
-        video_info = media_post[0].video_info
-        if video_info is not None:
-            variants = video_info["variants"]
-            bitrates = []
-            for variant in variants:
-                if "bitrate" in variant.keys():
-                    bitrates.append(variant["bitrate"])
-                else:
-                    bitrates.append(0)
-            max_bitrate_loc = bitrates.index(max(bitrates))
-            vid = variants[max_bitrate_loc]
-            link = vid["url"]
-            async with aiohttp.ClientSession() as session:
-                async with session.get(link) as res:
-                    if res.status != 200:
-                        continue
-                    data = io.BytesIO(await res.read())
-                    file = discord.File(data, f"video_{len(files)}.mp4")
-                    files.append(file)
-        else:
-            links = [media.media_url_https for media in media_post]
-            async with aiohttp.ClientSession() as session:
-                for i, link in enumerate(links):
+
+        async with aiohttp.ClientSession() as session:
+            match media_post[0].type:
+                case "video":
+                    video_info = media_post[0].video_info
+                    variants = video_info["variants"]
+                    bitrates = [variant.get("bit_rate") or 0 for variant in variants]
+                    max_bitrate_loc = bitrates.index(max(bitrates))
+                    vid = variants[max_bitrate_loc]
+                    link = vid["url"]
                     async with session.get(link) as res:
                         if res.status != 200:
                             continue
-                        data = io.BytesIO(await res.read())
-                        files.append(discord.File(data, f"image_{len(files)}.jpg"))
+                        buffer = io.BytesIO(await res.read())
+                        buffer.seek(0)
+                        file = discord.File(buffer, f"video_{len(files)}.mp4")
+                        files.append(file)
+                case "animated_gif":
+                    video_info = media_post[0].video_info
+                    variants = video_info["variants"]
+                    url = variants[0]["url"]
+                    async with session.get(url) as res:
+                        if res.status != 200:
+                            continue
+                        buffer = io.BytesIO(await res.read())
+                        buffer.seek(0)
+                        file = discord.File(buffer, f"gif_{len(files)}.mp4")
+                        files.append(file)
+                case "photo":
+                    links = [media.media_url_https for media in media_post]
+                    for i, link in enumerate(links):
+                        async with session.get(link) as res:
+                            if res.status != 200:
+                                continue
+                            buffer = io.BytesIO(await res.read())
+                            buffer.seek(0)
+                            files.append(discord.File(buffer, f"image_{len(files)}.jpg"))
+                case _:
+                    return [], {}
     return files, group

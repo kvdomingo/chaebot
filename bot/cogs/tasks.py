@@ -4,7 +4,6 @@ from datetime import datetime
 import discord
 from discord.ext import commands, tasks
 from django.conf import settings
-from django.core.cache import cache
 
 from kvisualbot.logging import logger
 
@@ -16,7 +15,7 @@ from ..handlers.vlive import vlive_handler
 class Tasks(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.groups = cache.get("groups")
+        self.groups = Api.sync_groups()
 
     def cog_unload(self):
         self.hourly_itzy.cancel()

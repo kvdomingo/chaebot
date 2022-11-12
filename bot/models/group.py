@@ -3,7 +3,6 @@ from django.db import models
 
 class Group(models.Model):
     name = models.CharField(max_length=32, unique=True)
-    # korean_name = models.CharField(max_length=64, blank=True, null=True)
     vlive_channel_code = models.CharField(max_length=32, blank=True, null=True)
     vlive_channel_seq = models.BigIntegerField(blank=True, null=True)
     vlive_last_seq = models.BigIntegerField(blank=True, null=True)

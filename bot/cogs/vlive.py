@@ -1,7 +1,6 @@
 import vlive
 from discord import Color, Embed, Interaction
 from discord.app_commands import Group, choices, command, describe
-from django.core.cache import cache
 
 from ..api.internal import Api
 from ..handlers.hourly import api, group_name_matcher
@@ -25,7 +24,7 @@ class Vlive(Group):
 
     @command(name="list", description="List all VLIVE subscriptions for the channel")
     async def list_(self, itx: Interaction):
-        groups = cache.get("groups") or []
+        groups = Api.sync_groups() or []
         subs_exist = list(filter(lambda x: len(x["vliveSubscribedChannels"]) > 0, groups))
         subbed_groups = []
         for sub in subs_exist:

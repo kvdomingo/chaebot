@@ -3,8 +3,8 @@ from random import SystemRandom
 from discord import Color, Embed, Interaction
 from discord.app_commands import choices, command, describe
 from django.conf import settings
-from django.core.cache import cache
 
+from ..api.internal import Api
 from ..handlers.hourly import hourly_handler
 from ..utils import escape_quote, get_group_choices
 
@@ -59,12 +59,7 @@ async def spam(itx: Interaction, number: int, group: str, person: str):
 
 @command(name="list")
 async def list_(itx: Interaction):
-    supp_groups = []
-    for group in cache.get("groups"):
-        without_source = [len(member["twitterMediaSources"]) == 0 for member in group["members"]]
-        if any(without_source):
-            continue
-        supp_groups.append(group["name"])
+    supp_groups = [group["name"] for group in Api.sync_groups()]
     embed = Embed(
         title="Groups/artists in database:",
         description="\n".join(supp_groups),

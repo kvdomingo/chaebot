@@ -4,9 +4,7 @@ import logging
 import sentry_sdk
 from discord import Intents
 from django.conf import settings
-from django.core.cache import cache
 
-from bot.api.internal import Api
 from kvisualbot.logging import logger
 
 from .client import KClient
@@ -20,10 +18,6 @@ if not settings.DEBUG:
 
 @logger.catch
 async def main():
-    groups = Api.sync_groups()
-    cache.set("groups", groups)
-    logger.info(f"Cached {len(groups)} groups")
-
     intents = Intents.default()
     intents.message_content = True
     bot = KClient(intents=intents)
