@@ -28,7 +28,7 @@ function Commands({ header, commands, labeledCommand, labelColor, labelName }: C
               <Row key={i}>
                 <Col sm="4">
                   <code>
-                    !{command.command}
+                    /{command.command}
                     {command.required?.map((req, i) => (
                       <Fragment key={i}>{` [${req}]`}</Fragment>
                     ))}

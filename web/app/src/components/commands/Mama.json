@@ -1,26 +1,8 @@
 [
   {
-    "command": "mama top",
-    "required": [],
-    "optional": [],
-    "description": "Show top-voted artist for each award category."
-  },
-  {
     "command": "mama worldwide",
     "required": [],
     "optional": [],
-    "description": "Show top 25 voted artists for Worldwide Fans' Choice award category."
-  },
-  {
-    "command": "mama soty",
-    "required": [],
-    "optional": [],
-    "description": "Show top 25 voted artists for Song of the Year award category."
-  },
-  {
-    "command": "mama aoty",
-    "required": [],
-    "optional": [],
-    "description": "Show top 25 voted artists for Artist of the Year award category."
+    "description": "Show top 10 voted artists for Worldwide Fans' Choice award category."
   }
 ]

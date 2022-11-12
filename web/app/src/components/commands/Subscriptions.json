@@ -1,30 +1,30 @@
 [
   {
-    "command": "hourly subscribe|sub",
+    "command": "twitter subscribe",
     "required": ["group"],
     "optional": [],
     "description": "Subscribe the current channel to hourly media posts of the selected group."
   },
   {
-    "command": "hourly unsubscribe|usub",
+    "command": "twitter unsubscribe",
     "required": ["group"],
     "optional": [],
     "description": "Unsubscribe the current channel to hourly media posts of the selected group."
   },
   {
-    "command": "hourly list",
+    "command": "twitter list",
     "required": [],
     "optional": [],
     "description": "List all hourly media subscriptions for the current channel."
   },
   {
-    "command": "vlive subscribe|sub",
+    "command": "vlive subscribe",
     "required": ["group"],
     "optional": [],
     "description": "Subscribe the current channel to VLIVE notifications of the selected group."
   },
   {
-    "command": "vlive unsubscribe|usub",
+    "command": "vlive unsubscribe",
     "required": ["group"],
     "optional": [],
     "description": "Unsubscribe the current channel to VLIVE notifications of the selected group."

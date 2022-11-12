@@ -7,7 +7,7 @@ function Legend() {
       <CardBody>
         <ListGroup>
           <ListGroupItem>
-            <code>!command|alias1|alias2 [required-argument] (optional-argument)</code>
+            <code>/command [required-argument] (optional-argument)</code>
           </ListGroupItem>
         </ListGroup>
       </CardBody>
