@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
+from urllib.parse import unquote
 
 import dj_database_url
 import sentry_sdk
@@ -104,15 +105,14 @@ WSGI_APPLICATION = "kvisualbot.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-_DATABASE_CONFIG = os.environ.get("DATABASE_URL")
-
-if _DATABASE_CONFIG:
-    _DATABASE_CONFIG = dj_database_url.config()
+if PYTHON_ENV == "production":
+    DATABASE_URL = os.environ.get("DATABASE_URL")
+    DATABASE_CONFIG = dj_database_url.parse(DATABASE_URL)
+    DATABASE_CONFIG["HOST"] = unquote(DATABASE_CONFIG["HOST"])
 else:
-    _DATABASE_URL = "postgres://postgres:postgres@localhost:5432/postgres"
-    _DATABASE_CONFIG = dj_database_url.parse(_DATABASE_URL)
+    DATABASE_CONFIG = dj_database_url.config()
 
-DATABASES = {"default": _DATABASE_CONFIG}
+DATABASES = {"default": DATABASE_CONFIG}
 
 
 REST_FRAMEWORK = {
