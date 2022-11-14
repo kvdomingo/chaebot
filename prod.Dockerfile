@@ -40,8 +40,6 @@ COPY ./*.sh ./
 COPY supervisord.conf ./
 COPY --from=build /web/build ./web/app/
 
-RUN chmod +x ./docker-entrypoint.sh
+RUN chmod +x ./docker-release.sh
 
 EXPOSE $PORT
-
-ENTRYPOINT [ "./docker-entrypoint.sh" ]

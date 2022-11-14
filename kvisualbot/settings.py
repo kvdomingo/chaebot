@@ -105,14 +105,15 @@ WSGI_APPLICATION = "kvisualbot.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-if PYTHON_ENV == "production":
-    DATABASE_URL = os.environ.get("DATABASE_URL")
-    DATABASE_CONFIG = dj_database_url.parse(DATABASE_URL)
-    DATABASE_CONFIG["HOST"] = urllib.parse.unquote(DATABASE_CONFIG["HOST"])
-else:
-    DATABASE_CONFIG = dj_database_url.config()
+_DATABASE_CONFIG = os.environ.get("DATABASE_URL")
 
-DATABASES = {"default": DATABASE_CONFIG}
+if _DATABASE_CONFIG:
+    _DATABASE_CONFIG = dj_database_url.config()
+else:
+    _DATABASE_URL = "postgres://postgres:postgres@localhost:5432/postgres"
+    _DATABASE_CONFIG = dj_database_url.parse(_DATABASE_URL)
+
+DATABASES = {"default": _DATABASE_CONFIG}
 
 
 REST_FRAMEWORK = {

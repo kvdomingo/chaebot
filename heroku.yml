@@ -1,0 +1,11 @@
+build:
+  docker:
+    web:
+      dockerfile: prod.Dockerfile
+
+run:
+  release:
+    command:
+      - ./docker-release.sh
+    image: web
+  web: /usr/bin/supervisord -c /bot/supervisord.conf
