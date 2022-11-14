@@ -1,5 +1,6 @@
 FROM python:3.10-bullseye AS base
 
+ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV POETRY_VERSION 1.2.2
@@ -67,3 +68,5 @@ COPY --from=build /web/build ./web/app/
 RUN chmod +x ./docker-release.sh
 
 EXPOSE $PORT
+
+ENTRYPOINT [ "/usr/bin/supervisord", "-c", "/bot/supervisord.conf" ]

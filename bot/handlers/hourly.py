@@ -146,7 +146,7 @@ async def hourly_handler(
                     vid = variants[max_bitrate_loc]
                     link = vid["url"]
                     async with session.get(link) as res:
-                        if res.status != 200:
+                        if not res.ok:
                             continue
                         buffer = io.BytesIO(await res.read())
                         buffer.seek(0)
@@ -157,7 +157,7 @@ async def hourly_handler(
                     variants = video_info["variants"]
                     url = variants[0]["url"]
                     async with session.get(url) as res:
-                        if res.status != 200:
+                        if not res.ok:
                             continue
                         buffer = io.BytesIO(await res.read())
                         buffer.seek(0)
@@ -167,7 +167,7 @@ async def hourly_handler(
                     links = [media.media_url_https for media in media_post]
                     for i, link in enumerate(links):
                         async with session.get(link) as res:
-                            if res.status != 200:
+                            if not res.ok:
                                 continue
                             buffer = io.BytesIO(await res.read())
                             buffer.seek(0)

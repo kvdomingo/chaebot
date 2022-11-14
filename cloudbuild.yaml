@@ -1,23 +1,21 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: gcr.io/cloud-builders/docker
     args:
-      - 'build'
+      - build
+      - "--target"
+      - prod
       - '--no-cache'
-      - '--target'
-      - 'prod'
       - '-t'
       - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
       - .
       - '-f'
       - Dockerfile
     id: Build
-
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: gcr.io/cloud-builders/docker
     args:
       - push
       - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
     id: Push
-
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     args:
       - run
@@ -33,7 +31,12 @@ steps:
     id: Deploy
     entrypoint: gcloud
 
-timeout: 1200s
+timeout: 1500s
 
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+
+tags:
+  - gcp-cloud-build-deploy-cloud-run
+  - gcp-cloud-build-deploy-cloud-run-managed
+  - kvisualbot
