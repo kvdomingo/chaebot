@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
+import urllib
 from pathlib import Path
-from urllib.parse import unquote
 
 import dj_database_url
 import sentry_sdk
@@ -41,7 +41,7 @@ DEBUG_PROPAGATE_EXCEPTIONS = True
 
 ALLOWED_HOSTS = ["*"]
 
-API_PORT = os.environ.get("PORT", "5000")
+API_PORT = os.environ.get("PORT", "8080")
 
 # Sentry logging
 
@@ -108,7 +108,7 @@ WSGI_APPLICATION = "kvisualbot.wsgi.application"
 if PYTHON_ENV == "production":
     DATABASE_URL = os.environ.get("DATABASE_URL")
     DATABASE_CONFIG = dj_database_url.parse(DATABASE_URL)
-    DATABASE_CONFIG["HOST"] = unquote(DATABASE_CONFIG["HOST"])
+    DATABASE_CONFIG["HOST"] = urllib.parse.unquote(DATABASE_CONFIG["HOST"])
 else:
     DATABASE_CONFIG = dj_database_url.config()
 
