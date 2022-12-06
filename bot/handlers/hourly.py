@@ -48,6 +48,8 @@ async def group_name_matcher(name: str, random_on_no_match: bool = True) -> dict
 
 
 async def member_name_matcher(_member: list[str], group: str, hourly: bool) -> tuple[list, dict]:
+    if len(_member) == 1 and not _member[0]:
+        _member = None
     group = await group_name_matcher(group)
     members = group["members"]
     if hourly or not _member:
@@ -84,13 +86,19 @@ async def member_name_matcher(_member: list[str], group: str, hourly: bool) -> t
 
 
 async def hourly_handler(
-    group: str,
+    group_: str,
     member: list[str] = None,
     hourly: bool = False,
     spam_number: int = 1,
     max_retries: int = 10,
 ) -> tuple[list, dict]:
-    account_cat, group = await member_name_matcher(member, group, hourly)
+    account_cat, group = await member_name_matcher(member, group_, hourly)
+    retries = 0
+    while len(account_cat) == 0:
+        account_cat, group = await member_name_matcher(member, group_, hourly)
+        retries += 1
+        if retries == max_retries:
+            return [], {}
     screen_name = random.choice(account_cat)["account_name"]
     spam_number = min(spam_number, 50)
 
@@ -133,35 +141,29 @@ async def hourly_handler(
         if media_post is None or len(media_post) == 0:
             for _ in range(max_retries):
                 media_post = (random.choice(tl)).media
-                if media_post:
+                if media_post and len(media_post) > 0:
                     break
 
         async with aiohttp.ClientSession() as session:
-            match media_post[0].type:
-                case "video":
+            match type_ := media_post[0].type:
+                case "video" | "animated_gif":
                     video_info = media_post[0].video_info
                     variants = video_info["variants"]
-                    bitrates = [variant.get("bit_rate") or 0 for variant in variants]
-                    max_bitrate_loc = bitrates.index(max(bitrates))
-                    vid = variants[max_bitrate_loc]
-                    link = vid["url"]
+                    if type_ == "video":
+                        bitrates = [variant.get("bit_rate") or 0 for variant in variants]
+                        max_bitrate_loc = bitrates.index(max(bitrates))
+                        vid = variants[max_bitrate_loc]
+                        link = vid["url"]
+                        prefix = "video"
+                    else:
+                        link = variants[0]["url"]
+                        prefix = "gif"
                     async with session.get(link) as res:
                         if not res.ok:
                             continue
                         buffer = io.BytesIO(await res.read())
                         buffer.seek(0)
-                        file = discord.File(buffer, f"video_{len(files)}.mp4")
-                        files.append(file)
-                case "animated_gif":
-                    video_info = media_post[0].video_info
-                    variants = video_info["variants"]
-                    url = variants[0]["url"]
-                    async with session.get(url) as res:
-                        if not res.ok:
-                            continue
-                        buffer = io.BytesIO(await res.read())
-                        buffer.seek(0)
-                        file = discord.File(buffer, f"gif_{len(files)}.mp4")
+                        file = discord.File(buffer, f"{prefix}_{len(files)}.mp4")
                         files.append(file)
                 case "photo":
                     links = [media.media_url_https for media in media_post]

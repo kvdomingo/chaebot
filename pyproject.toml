@@ -30,6 +30,8 @@ vlive = "^0.1.1"
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"
 isort = "^5.10.1"
+jupyter = "^1.0.0"
+notebook = "^6.5.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

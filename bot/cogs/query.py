@@ -21,19 +21,21 @@ async def arange(count):
 @choices(group=get_group_choices())
 @describe(person="Name or alias for a group member/idol")
 async def query(itx: Interaction, group: str, person: str = ""):
+    await itx.response.defer()
     person = escape_quote([person])
     response, _ = await hourly_handler(group, person)
-    timeout = 0
+    retries = 0
     while not len(response):
-        if timeout == 5:
+        if retries == 5:
+            await itx.followup.send("No media sources available for this group/member 😢")
             return
         response, _ = await hourly_handler(group, person)
-        timeout += 1
+        retries += 1
 
     if isinstance(response, list):
-        await itx.response.send_message(files=response)
+        await itx.followup.send(files=response)
     elif isinstance(response, str):
-        await itx.response.send_message(response)
+        await itx.followup.send(response)
 
 
 @command(description="Spam the channel with media of a group member/idol (maximum of 10)")
@@ -42,6 +44,7 @@ async def query(itx: Interaction, group: str, person: str = ""):
 @choices(group=get_group_choices())
 @describe(person="Name or alias for a group member/idol")
 async def spam(itx: Interaction, number: int, group: str, person: str):
+    await itx.response.defer()
     if itx.message.author.id != settings.DISCORD_ADMIN_ID:
         number = min([number, 10])
     person = escape_quote([person])
@@ -51,7 +54,7 @@ async def spam(itx: Interaction, number: int, group: str, person: str):
         response, _ = await do()
         while not response:
             response, _ = await do()
-        await itx.response.send_message(files=response)
+        await itx.followup.send(files=response)
         sent += len(response)
         if sent >= number:
             break
@@ -59,10 +62,11 @@ async def spam(itx: Interaction, number: int, group: str, person: str):
 
 @command(name="list")
 async def list_(itx: Interaction):
+    await itx.response.defer()
     supp_groups = [group["name"] for group in Api.sync_groups()]
     embed = Embed(
         title="Groups/artists in database:",
         description="\n".join(supp_groups),
         color=Color.green(),
     )
-    await itx.response.send_message(embed=embed)
+    await itx.followup.send(embed=embed)

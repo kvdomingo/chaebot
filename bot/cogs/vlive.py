@@ -8,22 +8,24 @@ from ..utils import get_group_choices
 
 
 class Vlive(Group):
-    @command(description="Search for a group name using the VLIVE API")
+    @command(description="(DEPRECATED) Search for a group name using the VLIVE API")
     async def search(self, itx: Interaction, search: str = ""):
+        await itx.response.defer()
         if not search:
-            return await itx.response.send_message("Error: missing search query")
+            return await itx.followup.defer("Error: missing search query")
         channels = vlive.search.channels(search)
         if len(channels) > 0:
             channels = [channel for channel in channels if "+" not in channel.name]
             message = Embed(title=f'Search results for "{search}"')
             for channel in channels:
                 message.add_field(name=channel.name, value=channel.code, inline=False)
-            await itx.response.send_message(embed=message)
+            await itx.followup.send(embed=message)
         else:
-            await itx.response.send_message("No results matched.")
+            await itx.followup.send("No results matched.")
 
-    @command(name="list", description="List all VLIVE subscriptions for the channel")
+    @command(name="list", description="(DEPRECATED) List all VLIVE subscriptions for the channel")
     async def list_(self, itx: Interaction):
+        await itx.response.defer()
         groups = Api.sync_groups() or []
         subs_exist = list(filter(lambda x: len(x["vliveSubscribedChannels"]) > 0, groups))
         subbed_groups = []
@@ -43,12 +45,16 @@ class Vlive(Group):
                 description="None",
                 color=Color.gold(),
             )
-        await itx.response.send_message(embed=message)
+        message.set_footer(
+            text="**NOTICE**: VLIVE will be deactivating its services by the end of 2022. Consequently, the VLIVE functionality of this bot will also be removed by the end of this year."
+        )
+        await itx.followup.send(embed=message)
 
-    @command(description="Subscribe to notifications when a group goes live")
+    @command(description="(DEPRECATED) Subscribe to notifications when a group goes live")
     @describe(group="Name or alias for a group")
     @choices(group=get_group_choices())
     async def subscribe(self, itx: Interaction, group: str):
+        await itx.response.defer()
         matched_group = await group_name_matcher(group, random_on_no_match=False)
         if len(matched_group.values()) == 0:
             channels: list = await api.vlive.search_channels(group)
@@ -66,6 +72,9 @@ class Vlive(Group):
                     description=f'This channel has been subscribed to VLIVE updates from {matched_group["name"]}',
                     color=Color.green(),
                 )
+                message.set_footer(
+                    text="**NOTICE**: VLIVE will be deactivating its services by the end of 2022. Consequently, the VLIVE functionality of this bot will also be removed by the end of this year."
+                )
             else:
                 message = Embed(
                     title="Adding VLIVE subscription failed",
@@ -78,13 +87,16 @@ class Vlive(Group):
                         value=str(val),
                         inline=False,
                     )
-                message.set_footer(text="Please check the errors above or try again later.")
-            await itx.response.send_message(embed=message)
+                message.set_footer(
+                    text="Please check the errors above or try again later.\n**NOTICE**: VLIVE will be deactivating its services by the end of 2022. Consequently, the VLIVE functionality of this bot will also be removed by the end of this year."
+                )
+            await itx.followup.send(embed=message)
 
-    @command(description="Unsubscribe from notifications when a group goes live")
+    @command(description="(DEPRECATED) Unsubscribe from notifications when a group goes live")
     @describe(group="Name or alias for a group")
     @choices(group=get_group_choices())
     async def vlive_unsubscribe(self, itx: Interaction, group: str):
+        await itx.response.defer()
         group = await group_name_matcher(group)
         channels = group["vliveSubscribedChannels"]
         channel = list(
@@ -106,7 +118,10 @@ class Vlive(Group):
                 description=f'This channel is not subscribed to VLIVE updates from {group["name"]}',
                 color=Color.red(),
             )
-        await itx.response.send_message(embed=message)
+        message.set_footer(
+            text="**NOTICE**: VLIVE will be deactivating its services by the end of 2022. Consequently, the VLIVE functionality of this bot will also be removed by the end of this year."
+        )
+        await itx.followup.send(embed=message)
 
 
 vlive = Vlive()
