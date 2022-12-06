@@ -3,10 +3,24 @@ services:
     build:
       context: .
       target: api-dev
+      dockerfile: dev.Dockerfile
     image: kvdomingo/kvisualapi:latest
     env_file: .env
     volumes:
       - .:/bot
+
+  bot:
+    build:
+      context: .
+      target: dev
+      dockerfile: dev.Dockerfile
+    image: kvdomingo/kvisualbot:latest
+    env_file: .env
+    volumes:
+      - .:/bot
+    restart: unless-stopped
+    depends_on:
+      - api
 
   docs:
     image: node:16-alpine
@@ -24,18 +38,6 @@ services:
       - "yarn install && yarn start"
     volumes:
       - ./web/app:/web
-
-  bot:
-    build:
-      context: .
-      target: dev
-    image: kvdomingo/kvisualbot:latest
-    env_file: .env
-    volumes:
-      - .:/bot
-    restart: unless-stopped
-    depends_on:
-      - api
 
   proxy:
     image: bitnami/nginx:latest

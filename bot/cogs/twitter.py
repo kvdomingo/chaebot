@@ -9,6 +9,7 @@ from ..utils import get_group_choices
 class Twitter(Group):
     @command(name="list", description="View all hourly update subscriptions for this channel")
     async def list_(self, itx: Interaction):
+        await itx.response.defer()
         groups = Api.sync_groups()
         subs_exist = list(filter(lambda x: len(x["twitterMediaSubscribedChannels"]) > 0, groups))
         subbed_groups = []
@@ -28,15 +29,16 @@ class Twitter(Group):
                 description="None",
                 color=Color.gold(),
             )
-        await itx.response.send_message(embed=message)
+        await itx.followup.send(embed=message)
 
     @command(description="Subscribe to hourly updates for a group")
     @describe(group="Name or alias for a group")
     @choices(group=get_group_choices())
-    async def subscribe(self, ctx, group: str):
+    async def subscribe(self, itx: Interaction, group: str):
+        await itx.response.defer()
         group = await group_name_matcher(group)
         body = dict(
-            channel_id=ctx.channel.id,
+            channel_id=itx.channel.id,
             group=group["id"],
         )
         res, status = await Api.twitter_media_subscribed_channels(None, "post", body)
@@ -59,17 +61,18 @@ class Twitter(Group):
                     inline=False,
                 )
             message.set_footer(text="Please check the errors above or try again later.")
-        await ctx.send(embed=message)
+        await itx.followup.send(embed=message)
 
     @command(description="Unsubscribe from hourly updates for a group")
     @describe(group="Name or alias for a group")
     @choices(group=get_group_choices())
-    async def unsubscribe(self, ctx, group: str):
+    async def unsubscribe(self, itx: Interaction, group: str):
+        await itx.response.defer()
         group = await group_name_matcher(group)
         channels = group["twitterMediaSubscribedChannels"]
         channel = list(
             filter(
-                lambda x: x["channel_id"] == ctx.channel.id and x["group"] == group["id"],
+                lambda x: x["channel_id"] == itx.channel.id and x["group"] == group["id"],
                 channels,
             )
         )
@@ -86,7 +89,7 @@ class Twitter(Group):
                 description=f'This channel is not subscribed to hourly media from {group["name"]}',
                 color=Color.red(),
             )
-        await ctx.send(embed=message)
+        await itx.followup.send(embed=message)
 
 
 twitter = Twitter()
