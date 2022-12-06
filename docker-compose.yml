@@ -1,3 +1,7 @@
+networks:
+  gateway:
+    external: true
+
 services:
   api:
     build:
@@ -21,7 +25,7 @@ services:
     entrypoint:
       - /bin/sh
       - "-c"
-      - "yarn install && yarn start"
+      - "yarn install && exec yarn start"
     volumes:
       - ./web/app:/web
 
@@ -53,7 +57,3 @@ services:
     networks:
       - default
       - gateway
-
-networks:
-  gateway:
-    external: true

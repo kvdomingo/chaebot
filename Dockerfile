@@ -1,33 +1,43 @@
-FROM python:3.10-bullseye AS base
+FROM node:16-alpine AS build
+
+WORKDIR /tmp
+
+COPY ./web/app/public/ ./public/
+COPY ./web/app/src/ ./src/
+COPY ./web/app/package.json ./web/app/tsconfig.json ./web/app/yarn.lock ./
+
+RUN yarn install && yarn build
+
+FROM python:3.10-bullseye
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV POETRY_VERSION 1.2.2
-ENV VERSION $VERSION
-ARG PORT
-
-FROM base AS base-dev
-
-RUN pip install "poetry==$POETRY_VERSION"
 
 WORKDIR /tmp
 
-COPY poetry.lock pyproject.toml gunicorn.conf.py ./
+RUN apt update && apt install supervisor -y && mkdir -p /var/log/supervisor
 
-RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi
+RUN pip install "poetry==$POETRY_VERSION"
 
-ENV VERSION $VERSION
+COPY poetry.lock pyproject.toml ./
 
-FROM base-dev AS dev
-
-WORKDIR /bot
-
-ENTRYPOINT [ "watchmedo", "auto-restart", "--directory", "./bot/", "--recursive", "--debug-force-polling", "python", "--", "main.py", "runbot" ]
-
-FROM base-dev as api-dev
+RUN poetry export --without-hashes -f requirements.txt | pip install --no-cache-dir -r /dev/stdin
 
 WORKDIR /bot
 
-ENTRYPOINT [ "gunicorn", "kvisualbot.wsgi", "--bind", "0.0.0.0:5000", "--config", "./gunicorn.conf.py", "--pid", "/tmp/gunicorn", "--reload" ]
+COPY ./bot/ ./bot/
+COPY ./kvisualbot/ ./kvisualbot/
+COPY ./*.py ./
+COPY supervisord.conf ./
+COPY --from=build /tmp/build ./web/app/
+
+EXPOSE $PORT
+
+ENTRYPOINT [ "/bin/sh", \
+             "-c", \
+             "python manage.py collectstatic --noinput && \
+              python manage.py migrate && \
+              exec /usr/bin/supervisord -c /bot/supervisord.conf" ]
+

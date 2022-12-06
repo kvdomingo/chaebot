@@ -2,7 +2,7 @@ services:
   bot:
     build:
       context: .
-      dockerfile: prod.Dockerfile
+      dockerfile: Dockerfile
     image: kvdomingo/kvisualbot-prod:latest
     env_file: .env
     ports:
