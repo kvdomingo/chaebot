@@ -1,8 +1,0 @@
-[
-  {
-    "command": "admin status|meta",
-    "required": [],
-    "optional": [],
-    "description": "Get technical data on the status of the bot, including uptime and last commit. This command is restricted to the bot owner only."
-  }
-]

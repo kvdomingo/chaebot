@@ -6,7 +6,7 @@ export default function Footer() {
       <Container className="text-center text-muted">
         &copy; {`${new Date().getFullYear()} `}
         <a href="https://kvdomingo.xyz" target="_blank" rel="noopener noreferrer">
-          Kenneth V. Domingo
+          KVD Studio
         </a>
       </Container>
     </footer>

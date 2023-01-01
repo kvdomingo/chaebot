@@ -50,10 +50,6 @@ class Api:
         return await _arequest(f"group/{group_id}/twitterMediaSubscribedChannels")
 
     @staticmethod
-    async def group_vlive_subscribed_channels(group_id: int):
-        return await _arequest(f"group/{group_id}/vliveSubscribedChannels")
-
-    @staticmethod
     async def members():
         return await _arequest("members")
 
@@ -74,9 +70,3 @@ class Api:
         if pk is None:
             return await _arequest(f"twitterMediaSubscribedChannels", method, body)
         return await _arequest(f"twitterMediaSubscribedChannel/{pk}", method, body)
-
-    @staticmethod
-    async def vlive_subscribed_channels(pk=None, method="get", body=None):
-        if pk is None:
-            return await _arequest(f"vliveSubscribedChannels", method, body)
-        return await _arequest(f"vliveSubscribedChannel/{pk}", method, body)

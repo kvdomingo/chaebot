@@ -3,7 +3,6 @@ from django.contrib import admin
 from ..models import GroupAlias
 from .member import MemberInline
 from .twitter import TwitterMediaSubscribedChannelInline
-from .vlive import VliveSubscribedChannelInline
 
 
 class GroupAliasInline(admin.TabularInline):
@@ -11,9 +10,4 @@ class GroupAliasInline(admin.TabularInline):
 
 
 class GroupAdmin(admin.ModelAdmin):
-    inlines = [
-        GroupAliasInline,
-        MemberInline,
-        VliveSubscribedChannelInline,
-        TwitterMediaSubscribedChannelInline,
-    ]
+    inlines = [GroupAliasInline, MemberInline, TwitterMediaSubscribedChannelInline]

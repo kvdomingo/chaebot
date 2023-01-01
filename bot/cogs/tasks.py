@@ -3,13 +3,11 @@ from datetime import datetime
 
 import discord
 from discord.ext import commands, tasks
-from django.conf import settings
 
 from kvisualbot.logging import logger
 
 from ..api.internal import Api
 from ..handlers.hourly import hourly_handler
-from ..handlers.vlive import vlive_handler
 
 
 class Tasks(commands.Cog):
@@ -22,7 +20,6 @@ class Tasks(commands.Cog):
         self.hourly_twice.cancel()
         self.hourly_blackpink.cancel()
         self.hourly_red_velvet.cancel()
-        self.vlive_listener.cancel()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -30,7 +27,6 @@ class Tasks(commands.Cog):
         self.hourly_twice.start()
         self.hourly_blackpink.start()
         self.hourly_red_velvet.start()
-        self.vlive_listener.start()
 
     async def send_hourly_to_channels(self, group: str, max_retries=10):
         media, _group = [], []
@@ -70,20 +66,6 @@ class Tasks(commands.Cog):
     async def hourly_red_velvet(self):
         group = "red-velvet"
         await self.send_hourly_to_channels(group)
-
-    @tasks.loop(seconds=30)
-    async def vlive_listener(self):
-        for group in self.groups:
-            embed = await vlive_handler(group)
-            if embed:
-                self.groups = await Api.groups()
-                channels = group["vliveSubscribedChannels"]
-                for channel in channels:
-                    if settings.DEBUG and not channel["dev_channel"]:
-                        return
-                    ch = self.client.get_channel(channel["channel_id"])
-                    if ch:
-                        await ch.send(embed=embed)
 
     @hourly_itzy.before_loop
     async def itzy_hour(self):

@@ -6,7 +6,6 @@ urlpatterns = [
     path("group/<int:pk>/aliases", views.GroupAliasView.as_view()),
     path("group/<int:pk>/members", views.GroupMembersView.as_view()),
     path("group/<int:pk>/twitterMediaSubscribedChannels", views.GroupTwitterSubscribedChannelsView.as_view()),
-    path("group/<int:pk>/vliveSubscribedChannels", views.GroupVliveSubscribedChannelsView.as_view()),
     path("group/<int:pk>", views.GroupView.as_view()),
     path("groups", views.GroupView.as_view()),
     path("member/<int:pk>/aliases", views.MemberAliasView.as_view()),
@@ -17,6 +16,4 @@ urlpatterns = [
     path("twitterMediaSources", views.TwitterMediaSourceView.as_view()),
     path("twitterMediaSubscribedChannel/<int:pk>", views.TwitterMediaSubscribedChannelView.as_view()),
     path("twitterMediaSubscribedChannels", views.TwitterMediaSubscribedChannelView.as_view()),
-    path("vliveSubscribedChannel/<int:channel_id>", views.VliveSubscribedChannelView.as_view()),
-    path("vliveSubscribedChannels", views.VliveSubscribedChannelView.as_view()),
 ]

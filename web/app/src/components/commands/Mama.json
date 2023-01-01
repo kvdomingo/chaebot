@@ -1,8 +1,0 @@
-[
-  {
-    "command": "mama worldwide",
-    "required": [],
-    "optional": [],
-    "description": "Show top 10 voted artists for Worldwide Fans' Choice award category."
-  }
-]

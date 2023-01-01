@@ -8,7 +8,6 @@ from ..serializers import (
     GroupSerializer,
     MemberSerializer,
     TwitterMediaSubscribedChannelSerializer,
-    VliveSubscribedChannelSerializer,
 )
 
 
@@ -19,7 +18,6 @@ class GroupView(APIView):
         "members__twitter_media_sources",
         "members__aliases",
         "twitter_media_subscribed_channels",
-        "vlive_subscribed_channels",
     ).all()
 
     def get(self, request, pk=None):
@@ -65,13 +63,4 @@ class GroupTwitterSubscribedChannelsView(APIView):
     def get(self, request, pk):
         query = self.queryset.get(pk=pk).twitter_media_subscribed_channels.all()
         serializer = TwitterMediaSubscribedChannelSerializer(query, many=True)
-        return Response(serializer.data)
-
-
-class GroupVliveSubscribedChannelsView(APIView):
-    queryset = Group.objects.prefetch_related("vlive_subscribed_channels").all()
-
-    def get(self, request, pk):
-        query = self.queryset.get(pk=pk).vlive_subscribed_channels.all()
-        serializer = VliveSubscribedChannelSerializer(query, many=True)
         return Response(serializer.data)

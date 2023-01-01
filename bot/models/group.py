@@ -3,9 +3,6 @@ from django.db import models
 
 class Group(models.Model):
     name = models.CharField(max_length=32, unique=True)
-    vlive_channel_code = models.CharField(max_length=32, blank=True, null=True)
-    vlive_channel_seq = models.BigIntegerField(blank=True, null=True)
-    vlive_last_seq = models.BigIntegerField(blank=True, null=True)
     twitter_user_name = models.CharField(max_length=16, blank=True)
     instagram_user_name = models.CharField(max_length=32, blank=True)
 
