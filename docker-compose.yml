@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   api:
     build:
@@ -44,7 +46,7 @@ services:
     environment:
       - NGINX_HTTP_PORT_NUMBER=${HTTP_PORT}
     volumes:
-      - ./proxy/nginx.conf:/opt/bitnami/nginx/conf/server_blocks/time_machine.conf:ro
+      - ./proxy:/opt/bitnami/nginx/conf/server_blocks:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.kvisualbot.rule=Host(`kvisualbot.localhost`)"
@@ -56,6 +58,18 @@ services:
       - default
       - gateway
 
+  postgres:
+    image: bitnami/postgresql:13
+    environment:
+      - POSTGRESQL_USERNAME=${POSTGRESQL_USERNAME}
+      - POSTGRESQL_DATABASE=${POSTGRESQL_DATABASE}
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - db-data:/bitnami/postgresql
+
 networks:
   gateway:
     external: true
+
+volumes:
+  db-data:

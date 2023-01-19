@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 PYTHON_ENV = os.environ.get("PYTHON_ENV", "production")
 
-PRODUCTION = PYTHON_ENV == "production"
+IN_PRODUCTION = PYTHON_ENV == "production"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", default=get_random_secret_key())
@@ -105,15 +105,19 @@ WSGI_APPLICATION = "kvisualbot.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-_DATABASE_CONFIG = os.environ.get("DATABASE_URL")
 
-if _DATABASE_CONFIG:
-    _DATABASE_CONFIG = dj_database_url.config()
-else:
-    _DATABASE_URL = "postgres://postgres:postgres@localhost:5432/postgres"
-    _DATABASE_CONFIG = dj_database_url.parse(_DATABASE_URL)
+def _get_database_config():
+    if IN_PRODUCTION:
+        config = dj_database_url.config()
+    else:
+        username = os.environ.get("POSTGRESQL_USERNAME")
+        db = os.environ.get("POSTGRESQL_DATABASE")
+        url = f"postgres://{username}@postgres:5432/{db}"
+        config = dj_database_url.parse(url)
+    return config
 
-DATABASES = {"default": _DATABASE_CONFIG}
+
+DATABASES = {"default": _get_database_config()}
 
 
 REST_FRAMEWORK = {
@@ -198,4 +202,4 @@ TWITTER_ACCESS_SECRET = os.environ.get("TWITTER_ACCESS_SECRET")
 
 # Bot
 
-BOT_PREFIX = "!" if PYTHON_ENV == "production" else "$"
+BOT_PREFIX = "!" if IN_PRODUCTION else "$"

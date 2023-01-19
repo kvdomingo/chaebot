@@ -24,10 +24,10 @@ FROM base-dev AS dev
 
 WORKDIR /bot
 
-ENTRYPOINT [ "watchmedo", "auto-restart", "--directory", "./bot/", "--recursive", "--debug-force-polling", "python", "--", "main.py", "runbot" ]
+ENTRYPOINT [ "watchmedo", "auto-restart", "--directory", "./bot/", "--recursive", "python", "--", "main.py", "runbot" ]
 
 FROM base-dev as api-dev
 
 WORKDIR /bot
 
-ENTRYPOINT [ "gunicorn", "kvisualbot.wsgi", "--bind", "0.0.0.0:5000", "--config", "./gunicorn.conf.py", "--pid", "/tmp/gunicorn", "--reload" ]
+ENTRYPOINT [ "./docker-entrypoint-api.sh" ]
