@@ -1,6 +1,5 @@
 import { Fragment } from "react";
-import { Badge, Card, CardHeader, CardBody, Row, Col, ListGroup, ListGroupItem } from "reactstrap";
-import PropTypes from "prop-types";
+import { Badge, Card, CardBody, CardHeader, Col, ListGroup, ListGroupItem, Row } from "reactstrap";
 
 interface CommandsProps {
   header: string;
@@ -46,18 +45,5 @@ function Commands({ header, commands, labeledCommand, labelColor, labelName }: C
     </Card>
   );
 }
-
-Commands.propTypes = {
-  header: PropTypes.string.isRequired,
-  commands: PropTypes.shape({
-    command: PropTypes.string.isRequired,
-    required: PropTypes.arrayOf(PropTypes.string),
-    optional: PropTypes.arrayOf(PropTypes.string),
-    description: PropTypes.arrayOf(PropTypes.string.isRequired),
-  }).isRequired,
-  labeledCommand: PropTypes.bool,
-  labelColor: PropTypes.string,
-  labelName: PropTypes.string,
-};
 
 export default Commands;

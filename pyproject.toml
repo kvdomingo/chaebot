@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "kvisualbot"
+name = "chaebot"
 version = "1.2.0"
 description = ""
 authors = ["Kenneth V. Domingo <hello@kvdomingo.xyz>"]

@@ -27,17 +27,12 @@ services:
   docs:
     image: node:16-alpine
     environment:
-      - HOST=0.0.0.0
-      - PORT=3000
       - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
-      - TSC_WATCHFILE=UseFsEventsWithFallbackDynamicPolling
-      - WDS_SOCKET_PORT=0
     working_dir: /web
     entrypoint:
       - /bin/sh
       - "-c"
-      - "yarn install && yarn start"
+      - "yarn install && exec yarn dev --host 0.0.0.0 --port 3000"
     volumes:
       - ./web/app:/web
 

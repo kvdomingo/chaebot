@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
+  UncontrolledDropdown as Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
   Nav,
   NavItem,
   NavLink,
+  Navbar,
+  NavbarBrand,
   NavbarText,
-  UncontrolledDropdown as Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
+  NavbarToggler,
 } from "reactstrap";
+import axios from "axios";
 import { Image } from "cloudinary-react";
 import { commands as menuItems } from "../commands/Content";
-import axios from "axios";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +23,7 @@ export default function Navigation() {
 
   useEffect(() => {
     axios
-      .get("https://api.github.com/repos/kvdomingo/discord-kbot/tags", {
+      .get("https://api.github.com/repos/kvdomingo/chaebot/tags", {
         headers: {
           Accept: "application/vnd.github.v3+json",
         },
@@ -53,7 +53,7 @@ export default function Navigation() {
           />
         </NavbarBrand>
         <NavbarText className="mr-3">
-          <NavLink href="/">KVISUALBOT</NavLink>
+          <NavLink href="/">ChaeBot</NavLink>
         </NavbarText>
         <NavbarToggler onClick={toggleNavbar} />
         <Collapse isOpen={isOpen} navbar>
@@ -96,7 +96,7 @@ export default function Navigation() {
             </NavItem>
             <NavItem className="mx-1">
               <a
-                href="https://github.com/kvdomingo/discord-kbot"
+                href="https://github.com/kvdomingo/chaebot"
                 className="btn btn-outline-secondary"
                 target="_blank"
                 rel="noopener noreferrer"
