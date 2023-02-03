@@ -1,4 +1,6 @@
-from discord import Client, Game, Intents, Object as DiscordObject, Status
+from discord import Client, Game, Intents
+from discord import Object as DiscordObject
+from discord import Status
 from discord.app_commands import CommandTree
 from django.conf import settings
 

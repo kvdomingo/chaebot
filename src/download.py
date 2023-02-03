@@ -8,8 +8,9 @@ django.setup()
 
 import os
 import sys
-from django.conf import settings
+
 from discord.ext import commands, tasks
+from django.conf import settings
 from tqdm import tqdm
 
 MEDIA_DIR = settings.BASE_DIR / "src" / "_media"

@@ -5,9 +5,6 @@ from .group import GroupAdmin, GroupAliasInline
 from .member import MemberAdmin, MemberAliasInline, MemberInline
 from .twitter import TwitterMediaSourceInline, TwitterMediaSubscribedChannelInline
 
-# admin.site.register(GroupAlias)
-# admin.site.register(MemberAlias)
-# admin.site.register(TwitterMediaSource)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Member, MemberAdmin)
 admin.site.register(TwitterMediaSubscribedChannel)

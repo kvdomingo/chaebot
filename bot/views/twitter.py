@@ -3,7 +3,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import TwitterMediaSource, TwitterMediaSubscribedChannel
-from ..serializers import TwitterMediaSourceSerializer, TwitterMediaSubscribedChannelSerializer
+from ..serializers import (
+    TwitterMediaSourceSerializer,
+    TwitterMediaSubscribedChannelSerializer,
+)
 
 
 class TwitterMediaSourceView(APIView):
