@@ -1,58 +1,65 @@
-from discord import Color, Embed, Interaction
-from discord.app_commands import Group, choices, command, describe
+import discord
+from discord.ext import commands
+from discord.ext.commands import Bot, Context
+from django.core.cache import cache
 
 from ..api.internal import Api
 from ..handlers.hourly import group_name_matcher
-from ..utils import get_group_choices
 
 
-class Twitter(Group):
-    @command(name="list", description="View all hourly update subscriptions for this channel")
-    async def list_(self, itx: Interaction):
-        await itx.response.defer()
-        groups = Api.sync_groups()
-        subs_exist = list(filter(lambda x: len(x["twitterMediaSubscribedChannels"]) > 0, groups))
+class Twitter(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+        self.groups = cache.get("groups")
+
+    @commands.group(hidden=True)
+    async def twitter(self, ctx: Context):
+        pass
+
+    @twitter.command(aliases=["list"], help="List all twitter subscriptions for the channel")
+    async def list_(self, ctx: Context):
+        subs_exist = list(filter(lambda x: len(x["twitterMediaSubscribedChannels"]) > 0, self.groups))
         subbed_groups = []
         for sub in subs_exist:
             for channel in sub["twitterMediaSubscribedChannels"]:
-                if channel["channel_id"] == itx.channel.id:
+                if channel["channel_id"] == ctx.channel.id:
                     subbed_groups.append(sub["name"])
         if len(subbed_groups):
-            message = Embed(
+            message = discord.Embed(
                 title="Hourly media subscriptions for this channel",
                 description="\n".join(subbed_groups),
-                color=Color.green(),
+                color=discord.Color.green(),
             )
         else:
-            message = Embed(
+            message = discord.Embed(
                 title="Hourly media subscriptions for this channel",
                 description="None",
-                color=Color.gold(),
+                color=discord.Color.gold(),
             )
-        await itx.followup.send(embed=message)
+        await ctx.send(embed=message)
 
-    @command(description="Subscribe to hourly updates for a group")
-    @describe(group="Name or alias for a group")
-    @choices(group=get_group_choices())
-    async def subscribe(self, itx: Interaction, group: str):
-        await itx.response.defer()
+    @twitter.command(
+        aliases=["subscribe", "sub"],
+        help="Subscribe the channel to twitter updates of the selected group",
+    )
+    async def subscribe(self, ctx: Context, group: str):
         group = await group_name_matcher(group)
         body = dict(
-            channel_id=itx.channel.id,
+            channel_id=ctx.channel.id,
             group=group["id"],
         )
         res, status = await Api.twitter_media_subscribed_channels(None, "post", body)
         if status == 201:
-            message = Embed(
-                title="Adding hourly subscription success",
-                description=f'This channel has been subscribed to hourly media from {group["name"]}',
-                color=Color.green(),
+            message = discord.Embed(
+                title="Adding twitter subscription success",
+                description=f'This channel has been subscribed to twitter media from {group["name"]}',
+                color=discord.Color.green(),
             )
         else:
-            message = Embed(
-                title="Adding hourly subscription failed",
+            message = discord.Embed(
+                title="Adding twitter subscription failed",
                 description="due to the following error(s):",
-                color=Color.red(),
+                color=discord.Color.red(),
             )
             for key, val in res.items():
                 message.add_field(
@@ -61,35 +68,36 @@ class Twitter(Group):
                     inline=False,
                 )
             message.set_footer(text="Please check the errors above or try again later.")
-        await itx.followup.send(embed=message)
+        await ctx.send(embed=message)
 
-    @command(description="Unsubscribe from hourly updates for a group")
-    @describe(group="Name or alias for a group")
-    @choices(group=get_group_choices())
-    async def unsubscribe(self, itx: Interaction, group: str):
-        await itx.response.defer()
+    @twitter.command(
+        aliases=["unsubscribe", "usub"],
+        help="Unsubscribe the channel to any twitter update",
+    )
+    async def unsubscribe(self, ctx: Context, group: str):
         group = await group_name_matcher(group)
         channels = group["twitterMediaSubscribedChannels"]
         channel = list(
             filter(
-                lambda x: x["channel_id"] == itx.channel.id and x["group"] == group["id"],
+                lambda x: x["channel_id"] == ctx.channel.id and x["group"] == group["id"],
                 channels,
             )
         )
         if channel:
             _, status = await Api.twitter_media_subscribed_channels(channel[0]["id"], "delete")
-            message = Embed(
+            message = discord.Embed(
                 title="Hourly media subscription removed",
-                description=f'This channel has been unsubscribed from hourly media from {group["name"]}',
-                color=Color.green(),
+                description=f'This channel has been unsubscribed from twitter media from {group["name"]}',
+                color=discord.Color.green(),
             )
         else:
-            message = Embed(
+            message = discord.Embed(
                 title="Hourly media subscription error",
-                description=f'This channel is not subscribed to hourly media from {group["name"]}',
-                color=Color.red(),
+                description=f'This channel is not subscribed to twitter media from {group["name"]}',
+                color=discord.Color.red(),
             )
-        await itx.followup.send(embed=message)
+        await ctx.send(embed=message)
 
 
-twitter = Twitter()
+async def setup(client: Bot):
+    await client.add_cog(Twitter(client))

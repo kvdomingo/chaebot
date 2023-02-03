@@ -3,6 +3,7 @@ from datetime import datetime
 
 import discord
 from discord.ext import commands, tasks
+from discord.ext.commands import Bot
 
 from kvisualbot.logging import logger
 
@@ -11,7 +12,7 @@ from ..handlers.hourly import hourly_handler
 
 
 class Tasks(commands.Cog):
-    def __init__(self, client):
+    def __init__(self, client: Bot):
         self.client = client
         self.groups = Api.sync_groups()
 

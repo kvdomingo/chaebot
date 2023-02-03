@@ -86,11 +86,7 @@ async def member_name_matcher(_member: list[str], group: str, hourly: bool) -> t
 
 
 async def hourly_handler(
-    group_: str,
-    member: list[str] = None,
-    hourly: bool = False,
-    spam_number: int = 1,
-    max_retries: int = 10,
+    group_: str, member: list[str] = None, hourly: bool = False, max_retries: int = 10
 ) -> tuple[list, dict]:
     account_cat, group = await member_name_matcher(member, group_, hourly)
     retries = 0
@@ -100,12 +96,7 @@ async def hourly_handler(
         if retries == max_retries:
             return [], {}
     screen_name = random.choice(account_cat)["account_name"]
-    spam_number = min(spam_number, 50)
-
-    if spam_number <= 25:
-        tl_count = 50
-    else:
-        tl_count = 100
+    tl_count = 50
 
     try:
         tl = api.GetUserTimeline(
@@ -136,7 +127,7 @@ async def hourly_handler(
         return [], {}
 
     files = []
-    while len(files) < spam_number:
+    while len(files) < 1:
         media_post = (random.choice(tl)).media
         if media_post is None or len(media_post) == 0:
             for _ in range(max_retries):

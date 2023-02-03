@@ -44,4 +44,8 @@ class Mama(Group):
         await itx.response.send_message(embed=embed)
 
 
-mama = Mama()
+# mama = Mama()
+
+
+async def setup(_):
+    pass

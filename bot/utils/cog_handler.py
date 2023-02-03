@@ -1,18 +1,24 @@
-from discord import Object as DiscordObject
+from discord.ext.commands import Bot
 from django.conf import settings
 
 from kvisualbot.logging import logger
 
-from ..client import KClient
-from ..cogs import COMMANDS_TO_LOAD
 
-
-def load_cogs(client: KClient):
-    for cog in COMMANDS_TO_LOAD:
+async def load_cogs(bot: Bot):
+    for f in (settings.BASE_DIR / "bot" / "cogs").glob("*.py"):
+        if f.name.startswith("_"):
+            continue
         try:
-            client.tree.add_command(
-                cog, guild=DiscordObject(id=settings.DISCORD_TEST_GUILD_ID) if not settings.IN_PRODUCTION else None
-            )
-            logger.info(f"Loaded command/group {cog.name}")
+            await bot.load_extension(f"bot.cogs.{f.stem}")
         except Exception as e:
-            logger.error(f"Failed to load command/group {cog.name}: {e}")
+            logger.exception(e)
+
+
+async def unload_cogs(bot: Bot):
+    for f in (settings.BASE_DIR / "bot" / "cogs").glob("*.py"):
+        if f.name.startswith("_"):
+            continue
+        try:
+            await bot.unload_extension(f"bot.cogs.{f.stem}")
+        except Exception as e:
+            logger.exception(e)
