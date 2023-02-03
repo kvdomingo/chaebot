@@ -11,15 +11,13 @@ FROM node:16-alpine AS build
 
 WORKDIR /web
 
-COPY ./web/app/public/ ./public/
-COPY ./web/app/src/ ./src/
-COPY ./web/app/package.json ./web/app/tsconfig.json ./web/app/yarn.lock ./
+COPY ./web/app/ ./
 
 RUN yarn install && yarn build
 
 FROM base as prod
 
-RUN apt update && apt install supervisor -y
+RUN apt update && apt install ffmpeg supervisor -y
 
 RUN mkdir -p /var/log/supervisor
 
@@ -38,7 +36,7 @@ COPY ./kvisualbot/ ./kvisualbot/
 COPY ./*.py ./
 COPY ./*.sh ./
 COPY supervisord.conf ./
-COPY --from=build /web/build ./web/app/
+COPY --from=build /web/dist ./web/app/
 
 RUN chmod +x ./docker-release.sh
 
