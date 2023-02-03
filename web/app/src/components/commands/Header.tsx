@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody } from "reactstrap";
+import { Card, CardBody, CardHeader } from "reactstrap";
 
 export default function Legend() {
   return (
@@ -7,7 +7,7 @@ export default function Legend() {
         <h1 className="display-5">Commands</h1>
       </CardHeader>
       <CardBody>
-        Listed here are the slash commands for <b>KVISUALBOT</b> that can be used within a server channel.
+        Listed here are the slash commands for <b>ChaeBot</b> that can be used within a server channel.
       </CardBody>
     </Card>
   );

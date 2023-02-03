@@ -13,5 +13,5 @@ admin.site.register(Member, MemberAdmin)
 admin.site.register(TwitterMediaSubscribedChannel)
 
 admin.site.index_title = "Admin"
-admin.site.site_title = "kvisualbot"
-admin.site.site_header = "kvisualbot administration"
+admin.site.site_title = "ChaeBot"
+admin.site.site_header = "ChaeBot Administration"
