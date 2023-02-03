@@ -2,6 +2,7 @@ from discord import Object as DiscordObject
 from django.conf import settings
 
 from kvisualbot.logging import logger
+
 from ..client import KClient
 from ..cogs import COMMANDS_TO_LOAD
 
