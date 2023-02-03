@@ -175,7 +175,10 @@ STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / "static"
 
-STATICFILES_DIRS = [BASE_DIR / "web" / "app" / "static"]
+STATICFILES_DIRS = [
+    BASE_DIR / "web" / "app" / "static",
+    BASE_DIR / "web" / "app" / "assets",
+]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
