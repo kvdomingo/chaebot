@@ -114,5 +114,5 @@ class Tasks(commands.Cog):
             logger.info("Starting hourly Red Velvet update...")
 
 
-async def setup(client):
-    await client.add_cog(Tasks(client))
+async def setup(_):
+    pass
