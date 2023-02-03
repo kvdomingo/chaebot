@@ -9,7 +9,7 @@ license = "GPLv3"
 python = "^3.10"
 Django = "4.0.4"
 aiohttp = "^3.8.1"
-"discord.py" = "2.0.1"
+"discord.py" = {extras = ["voice"], version = "^2.1.0"}
 django-filter = "^22.1"
 djangorestframework = "3.13.1"
 gunicorn = {extras = ["gevent"], version = "^20.1.0"}

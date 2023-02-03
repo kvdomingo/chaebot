@@ -7,7 +7,7 @@ ENV POETRY_VERSION 1.2.2
 ENV VERSION $VERSION
 ARG PORT
 
-RUN apt update && apt install ffmpeg -y
+RUN apt update && apt install libffi-dev libnacl-dev ffmpeg -y
 
 FROM base AS base-dev
 
