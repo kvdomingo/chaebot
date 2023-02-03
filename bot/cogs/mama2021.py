@@ -179,6 +179,5 @@ class Mama2021(commands.Cog):
         await ctx.send(embed=embed)
 
 
-async def setup(client):
-    # client.add_cog(Mama2021(client))
+async def setup(_):
     pass

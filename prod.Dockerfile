@@ -17,7 +17,7 @@ RUN yarn install && yarn build
 
 FROM base as prod
 
-RUN apt update && apt install ffmpeg supervisor -y
+RUN apt update && apt install libffi-dev libnacl-dev ffmpeg supervisor -y
 
 RUN mkdir -p /var/log/supervisor
 
