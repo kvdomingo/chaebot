@@ -16,4 +16,7 @@ urlpatterns = [
     path("twitterMediaSources", views.TwitterMediaSourceView.as_view()),
     path("twitterMediaSubscribedChannel/<int:pk>", views.TwitterMediaSubscribedChannelView.as_view()),
     path("twitterMediaSubscribedChannels", views.TwitterMediaSubscribedChannelView.as_view()),
+    path("scheduleSubscriberFromGuild/<int:guild_id>", views.ScheduleSubscriberFromGuildView.as_view()),
+    path("scheduleSubscribers/<int:pk>", views.ScheduleSubscriberView.as_view()),
+    path("scheduleSubscribers", views.ScheduleSubscriberView.as_view()),
 ]

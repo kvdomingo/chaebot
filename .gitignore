@@ -165,3 +165,4 @@ _media/
 db.bak.sql
 scratch.ipynb
 download.bat
+gcp_sa_key.json

@@ -5,4 +5,5 @@ from .group import (
     GroupView,
 )
 from .member import MemberAliasView, MemberTwitterMediaSourceView, MemberView
+from .schedule import ScheduleSubscriberFromGuildView, ScheduleSubscriberView
 from .twitter import TwitterMediaSourceView, TwitterMediaSubscribedChannelView
