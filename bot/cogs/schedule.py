@@ -73,7 +73,7 @@ class Schedule(commands.Cog):
 
         embed = Embed(
             title="Adding schedule subscription success",
-            description=f"The channel <#{channel}> has been subscribed to upcoming comebacks schedule.",
+            description=f"The channel {channel.mention} has been subscribed to upcoming comebacks schedule.",
             color=Color.green(),
         )
         return await ctx.send(embed=embed)
@@ -87,7 +87,7 @@ class Schedule(commands.Cog):
         await Api.schedule_subscribers(res["id"], "delete")
         embed = Embed(
             title="Unsubscribing to comeback schedule success",
-            description=f"The channel <#{channel}> has been unsubscribed from upcoming comebacks schedule.",
+            description=f"The channel {channel.mention} has been unsubscribed from upcoming comebacks schedule.",
             color=Color.green(),
         )
         await ctx.send(embed=embed)
