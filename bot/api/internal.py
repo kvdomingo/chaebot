@@ -12,7 +12,7 @@ BASE_URL = f"http://0.0.0.0:{PORT}/api/v1.0" if settings.IN_PRODUCTION else f"ht
 async def _arequest(endpoint: str, method: str = "get", body: dict = None) -> tuple[Union[list, dict], int]:
     async with aiohttp.ClientSession() as session:
         api = getattr(session, method)
-        async with api(f"{BASE_URL}/{endpoint}", data=body) as res:
+        async with api(f"{BASE_URL}/{endpoint}", json=body) as res:
             if method in ["post", "patch"]:
                 return await res.json(), res.status
             if method == "delete":
@@ -68,3 +68,13 @@ class Api:
         if pk is None:
             return await _arequest(f"twitterMediaSubscribedChannels", method, body)
         return await _arequest(f"twitterMediaSubscribedChannel/{pk}", method, body)
+
+    @staticmethod
+    async def schedule_subscribers(pk=None, method="get", body=None):
+        if pk is None:
+            return await _arequest(f"scheduleSubscribers", method, body)
+        return await _arequest(f"scheduleSubscribers/{pk}", method, body)
+
+    @staticmethod
+    async def schedule_subscriber_from_guild(guild_id: int):
+        return await _arequest(f"scheduleSubscriberFromGuild/{guild_id}", "get", None)
