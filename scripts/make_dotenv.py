@@ -19,6 +19,8 @@ def make_dotenv():
         TWITTER_ACCESS_SECRET=get_secret_string("TWITTER_ACCESS_SECRET"),
         TWITTER_CONSUMER_KEY=get_secret_string("TWITTER_CONSUMER_KEY"),
         TWITTER_CONSUMER_SECRET=get_secret_string("TWITTER_CONSUMER_SECRET"),
+        DISCORD_CLIENT_ID=get_secret_string("DISCORD_CLIENT_ID"),
+        DISCORD_CLIENT_SECRET=get_secret_string("DISCORD_CLIENT_SECRET"),
         DISCORD_TOKEN=get_secret_string("DISCORD_TOKEN"),
         DISCORD_ADMIN_ID=get_secret_string("DISCORD_ADMIN_ID"),
         DISCORD_TEST_GUILD_ID=get_secret_string("DISCORD_TEST_GUILD_ID"),

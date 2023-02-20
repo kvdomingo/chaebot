@@ -1,3 +1,5 @@
+import asyncio
+import random
 from datetime import datetime, time, timedelta
 from http import HTTPStatus
 
@@ -143,6 +145,11 @@ class Schedule(commands.Cog):
             embed = Embed(title="Upcoming comebacks", color=Color.blurple(), description="\n".join(schedule_strings))
             embed.set_footer(text="KST | Shows the next 30 days of events")
             await msg.edit(embed=embed)
+
+    @update_schedule.before_loop
+    async def before_update_schedule(self):
+        # wait between 5-10 minutes
+        await asyncio.sleep(random.randrange(5 * 60, 10 * 60))
 
 
 async def setup(client: Bot):
