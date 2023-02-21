@@ -132,7 +132,7 @@ class Schedule(commands.Cog):
             )
         return cb_strings
 
-    @tasks.loop(time=[time(h, tzinfo=timezone(settings.TIME_ZONE)) for h in [0, 6, 12, 18]])
+    @tasks.loop(time=[time(h, 0, 0, tzinfo=timezone(settings.TIME_ZONE)) for h in [0, 6, 12, 18]])
     async def update_schedule(self):
         schedule = await self.get_schedule()
         schedule_strings = self.to_schedule_strings(schedule)
