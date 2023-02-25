@@ -2,13 +2,13 @@ import asyncio
 import random
 from datetime import datetime, time, timedelta
 from http import HTTPStatus
+from zoneinfo import ZoneInfo
 
 from discord import Client, Color, Embed, TextChannel
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context
 from django.conf import settings
 from loguru import logger
-from pytz import timezone
 
 from bot.api.internal import Api
 
@@ -99,9 +99,9 @@ class Schedule(commands.Cog):
         logger.info("Fetching comeback schedule...")
         db = get_firestore_client()
         coll_ref = (
-            db.collection("comebacks")
+            db.collection("cb-reddit")
             .order_by("date")
-            .where("date", "<", datetime.now(timezone(settings.TIME_ZONE)) + timedelta(days=30))
+            .where("date", "<", datetime.now(ZoneInfo(settings.TIME_ZONE)) + timedelta(days=30))
         )
         return [doc.to_dict() async for doc in coll_ref.stream()]
 
@@ -112,19 +112,18 @@ class Schedule(commands.Cog):
             return ["None"]
         cb_strings = []
         for doc in schedule:
-            dt: datetime = doc["date"].astimezone(timezone(settings.TIME_ZONE))
+            dt: datetime = doc["date"].astimezone(ZoneInfo(settings.TIME_ZONE))
             dt_date = dt.strftime("%b %d")
             dt_time = dt.strftime("%H:%M")
-            if dt.date() == datetime.now(timezone(settings.TIME_ZONE)).date():
-                is_today = "`<today>`"
+            is_today = "`<today>`" if dt.date() == datetime.now(ZoneInfo(settings.TIME_ZONE)).date() else ""
+            if (descriptor := doc.get("album_type")) is not None:
+                descriptor = descriptor.title()
             else:
-                is_today = ""
-            descriptor = doc["album_type"]
-            if not descriptor:
-                if "japan" in doc["release"].lower():
-                    descriptor = "Japan"
-                elif doc["release"]:
-                    descriptor = doc["release"]
+                if (descriptor := doc.get("release")) is not None:
+                    if "japan" in descriptor.lower():
+                        descriptor = "Japan"
+                    else:
+                        descriptor = descriptor.title()
                 else:
                     descriptor = ""
             cb_strings.append(
@@ -132,7 +131,7 @@ class Schedule(commands.Cog):
             )
         return cb_strings
 
-    @tasks.loop(time=[time(h, 0, 0, tzinfo=timezone(settings.TIME_ZONE)) for h in [0, 6, 12, 18]])
+    @tasks.loop(time=[time(h, 0, 0, tzinfo=ZoneInfo(settings.TIME_ZONE)) for h in [0, 6, 12, 18]])
     async def update_schedule(self):
         schedule = await self.get_schedule()
         schedule_strings = self.to_schedule_strings(schedule)
@@ -143,7 +142,7 @@ class Schedule(commands.Cog):
             channel = guild.get_channel(sub["channel_id"])
             msg = channel.get_partial_message(sub["message_id"])
             embed = Embed(title="Upcoming comebacks", color=Color.blurple(), description="\n".join(schedule_strings))
-            embed.set_footer(text="KST | Shows the next 30 days of events")
+            embed.set_footer(text="KST (UTC+9) | Shows the next 30 days of events")
             await msg.edit(embed=embed)
 
     @update_schedule.before_loop

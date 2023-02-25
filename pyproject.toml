@@ -35,7 +35,6 @@ isort = "^5.10.1"
 jupyter = "^1.0.0"
 notebook = "^6.5.2"
 google-cloud-secret-manager = "^2.15.0"
-mako = "^1.2.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
