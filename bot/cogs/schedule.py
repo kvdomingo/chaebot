@@ -55,7 +55,7 @@ class Schedule(commands.Cog):
             color=Color.blurple(),
             description="\n".join(schedule_strings),
         )
-        embed.set_footer(text="KST | Shows the next 30 days of events")
+        embed.set_footer(text="KST (UTC+9) | Shows the next 30 days of events")
 
         channel = ctx.guild.get_channel(channel.id)
         msg = await channel.send(embed=embed)
@@ -93,6 +93,13 @@ class Schedule(commands.Cog):
             color=Color.green(),
         )
         await ctx.send(embed=embed)
+
+    @schedule.command(help="Manually invoke schedule update", hidden=True)
+    async def update(self, ctx: Context):
+        logger.info("Manual schedule update invoked.")
+        msg = await ctx.send("Updating schedule...")
+        await self.update_schedule()
+        await msg.delete()
 
     @staticmethod
     async def get_schedule():
