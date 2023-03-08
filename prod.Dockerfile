@@ -1,4 +1,4 @@
-FROM python:3.10-bullseye AS base
+FROM python:3.10-bullseye AS prod
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONUNBUFFERED 1
@@ -6,16 +6,6 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV POETRY_VERSION 1.3.2
 ENV VERSION $VERSION
 ARG PORT
-
-FROM node:16-alpine AS build
-
-WORKDIR /web
-
-COPY ./web/app/ ./
-
-RUN yarn install && yarn build
-
-FROM base as prod
 
 RUN apt update && apt install supervisor -y
 
@@ -36,7 +26,6 @@ COPY ./kvisualbot/ ./kvisualbot/
 COPY ./*.py ./
 COPY ./*.sh ./
 COPY supervisord.conf ./
-COPY --from=build /web/dist ./web/app/
 
 RUN chmod +x ./docker-release.sh
 
