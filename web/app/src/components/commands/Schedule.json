@@ -1,0 +1,14 @@
+[
+  {
+    "command": "sub",
+    "required": ["channel"],
+    "optional": [],
+    "description": "Subscribe the specified channel to the comeback schedule."
+  },
+  {
+    "command": "unsub",
+    "required": ["channel"],
+    "optional": [],
+    "description": "Unsubscribe the specified channel to the comeback schedule."
+  }
+]
