@@ -7,8 +7,6 @@ ENV POETRY_VERSION 1.3.2
 ENV VERSION $VERSION
 ARG PORT
 
-RUN apt update && apt install libffi-dev libnacl-dev ffmpeg -y
-
 FROM base AS base-dev
 
 RUN pip install "poetry==$POETRY_VERSION"
