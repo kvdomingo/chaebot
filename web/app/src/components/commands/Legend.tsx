@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, ListGroup, ListGroupItem } from "reactstrap";
+import { Card, CardBody, CardHeader, ListGroup, ListGroupItem } from "reactstrap";
 
 function Legend() {
   return (
@@ -7,7 +7,7 @@ function Legend() {
       <CardBody>
         <ListGroup>
           <ListGroupItem>
-            <code>/command [required-argument] (optional-argument)</code>
+            <code>!command [required-argument] (optional-argument)</code>
           </ListGroupItem>
         </ListGroup>
       </CardBody>
