@@ -1,7 +1,6 @@
 import asyncio
 import logging
 
-import sentry_sdk
 from discord import Intents
 from discord.ext.commands import Bot
 from django.conf import settings
@@ -11,9 +10,6 @@ from kvisualbot.logging import logger
 from .utils.cog_handler import load_cogs
 
 logging.basicConfig(level=logging.INFO)
-
-if not settings.DEBUG:
-    sentry_sdk.init(settings.SENTRY_DSN, traces_sample_rate=0.9)
 
 
 @logger.catch
