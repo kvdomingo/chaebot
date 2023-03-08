@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
-import urllib
 from pathlib import Path
 
 import dj_database_url
@@ -175,10 +174,7 @@ STATIC_URL = "/assets/"
 
 STATIC_ROOT = BASE_DIR / "static"
 
-STATICFILES_DIRS = [
-    BASE_DIR / "web" / "app" / "static",
-    BASE_DIR / "web" / "app" / "assets",
-]
+STATICFILES_DIRS = [BASE_DIR / "web" / "app" / "assets"]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
