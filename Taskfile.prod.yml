@@ -17,7 +17,7 @@ tasks:
 
   frontend-start:
     desc: Start frontend
-    dir: web/app
+    dir: docs
     cmds:
       - yarn install
       - yarn start

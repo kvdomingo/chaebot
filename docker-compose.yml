@@ -34,7 +34,7 @@ services:
       - "-c"
       - "yarn install && exec yarn dev --host 0.0.0.0 --port 3000"
     volumes:
-      - ./web/app:/web
+      - ./docs:/web
 
   proxy:
     image: bitnami/nginx:latest
@@ -44,10 +44,10 @@ services:
       - ./proxy:/opt/bitnami/nginx/conf/server_blocks:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.kvisualbot.rule=Host(`kvisualbot.localhost`)"
-      - "traefik.http.routers.kvisualbot.entrypoints=http"
+      - "traefik.http.routers.chaebot.rule=Host(`chaebot.localhost`)"
+      - "traefik.http.routers.chaebot.entrypoints=http"
       - "traefik.docker.network=gateway"
-      - "traefik.http.services.kvisualbot.loadbalancer.server.port=${HTTP_PORT}"
+      - "traefik.http.services.chaebot.loadbalancer.server.port=${HTTP_PORT}"
     restart: unless-stopped
     networks:
       - default
