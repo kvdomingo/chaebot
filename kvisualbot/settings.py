@@ -177,3 +177,5 @@ TWITTER_ACCESS_SECRET = os.environ.get("TWITTER_ACCESS_SECRET")
 # Bot
 
 BOT_PREFIX = "!" if IN_PRODUCTION else "$"
+
+WEBAPP_URL = "https://chaebot.kvdstudio.app" if IN_PRODUCTION else "/"
