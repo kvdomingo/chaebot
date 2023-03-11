@@ -4,15 +4,15 @@ from datetime import datetime, time, timedelta
 from http import HTTPStatus
 from zoneinfo import ZoneInfo
 
-from discord import Client, Color, Embed, TextChannel
+from discord import Client, TextChannel
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context
 from django.conf import settings
 from loguru import logger
 
 from bot.api.internal import Api
-
-from ..firestore import get_firestore_client
+from bot.firestore import get_firestore_client
+from bot.utils import SeverityLevel, generate_embed
 
 
 class Schedule(commands.Cog):
@@ -37,46 +37,43 @@ class Schedule(commands.Cog):
             body={"guild_id": ctx.guild.id, "channel_id": channel.id, "message_id": None},
         )
         if status != HTTPStatus.CREATED:
-            embed = Embed(
+            embed = generate_embed(
                 title="Adding schedule subscription failed",
-                description="due to the following error(s):",
-                color=Color.red(),
+                content="due to the following error(s):",
+                severity=SeverityLevel.ERROR,
+                footer="Please check the errors above or try again later.",
+                fields=subscriber,
             )
-            for key, val in subscriber.items():
-                embed.add_field(name=key, value=str(val), inline=False)
-            embed.set_footer(text="Please check the errors above or try again later.")
             await ctx.send(embed=embed)
             return
 
         schedule = await self.get_schedule()
         schedule_strings = self.to_schedule_strings(schedule)
-        embed = Embed(
+        embed = generate_embed(
             title="Upcoming comebacks",
-            color=Color.blurple(),
-            description="\n".join(schedule_strings),
+            severity=SeverityLevel.INFO,
+            content=schedule_strings,
+            footer="KST (UTC+9) | Shows the next 30 days of events",
         )
-        embed.set_footer(text="KST (UTC+9) | Shows the next 30 days of events")
-
         channel = ctx.guild.get_channel(channel.id)
         msg = await channel.send(embed=embed)
         res, status = await Api.schedule_subscribers(subscriber["id"], "patch", {"message_id": msg.id})
         if status != 200:
-            embed = Embed(
+            embed = generate_embed(
                 title="Adding schedule subscription failed",
-                description="due to the following error(s):",
-                color=Color.red(),
+                content="due to the following error(s):",
+                severity=SeverityLevel.ERROR,
+                footer="Please check the errors above or try again later.",
+                fields=res,
             )
-            embed.set_footer(text="Please check the errors above or try again later.")
-            for key, val in res.items():
-                embed.add_field(name=key, value=str(val), inline=False)
             await msg.delete()
             await ctx.send(embed=embed)
             return
 
-        embed = Embed(
+        embed = generate_embed(
             title="Adding schedule subscription success",
-            description=f"The channel {channel.mention} has been subscribed to upcoming comebacks schedule.",
-            color=Color.green(),
+            content=f"The channel {channel.mention} has been subscribed to upcoming comebacks schedule.",
+            severity=SeverityLevel.SUCCESS,
         )
         return await ctx.send(embed=embed)
 
@@ -87,10 +84,10 @@ class Schedule(commands.Cog):
         msg = channel.get_partial_message(res["message_id"])
         await msg.delete()
         await Api.schedule_subscribers(res["id"], "delete")
-        embed = Embed(
+        embed = generate_embed(
             title="Unsubscribing to comeback schedule success",
-            description=f"The channel {channel.mention} has been unsubscribed from upcoming comebacks schedule.",
-            color=Color.green(),
+            content=f"The channel {channel.mention} has been unsubscribed from upcoming comebacks schedule.",
+            severity=SeverityLevel.SUCCESS,
         )
         await ctx.send(embed=embed)
 
@@ -148,8 +145,12 @@ class Schedule(commands.Cog):
             guild = self.client.get_guild(sub["guild_id"])
             channel = guild.get_channel(sub["channel_id"])
             msg = channel.get_partial_message(sub["message_id"])
-            embed = Embed(title="Upcoming comebacks", color=Color.blurple(), description="\n".join(schedule_strings))
-            embed.set_footer(text="KST (UTC+9) | Shows the next 30 days of events")
+            embed = generate_embed(
+                title="Upcoming comebacks",
+                severity=SeverityLevel.INFO,
+                content=schedule_strings,
+                footer="KST (UTC+9) | Shows the next 30 days of events",
+            )
             await msg.edit(embed=embed)
 
     @update_schedule.before_loop

@@ -16,6 +16,7 @@ async def _arequest(endpoint: str, method: str = "get", body: dict = None) -> tu
         api = getattr(session, method)
         async with api(f"{BASE_URL}/{endpoint}", json=body) as res:
             res: ClientResponse
+            logger.debug(f"{res.request_info.method} {res.request_info.url}")
             logger.debug(await res.text())
             if method in ["post", "patch"]:
                 return await res.json(), res.status
