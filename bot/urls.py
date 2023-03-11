@@ -1,6 +1,11 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from . import views
+
+router = DefaultRouter(trailing_slash=False)
+router.register("scheduleSubscriberFromGuild", views.ScheduleSubscriberFromGuildView)
+router.register("scheduleSubscribers", views.ScheduleSubscriberView)
 
 urlpatterns = [
     path("group/<int:pk>/aliases", views.GroupAliasView.as_view()),
@@ -16,7 +21,5 @@ urlpatterns = [
     path("twitterMediaSources", views.TwitterMediaSourceView.as_view()),
     path("twitterMediaSubscribedChannel/<int:pk>", views.TwitterMediaSubscribedChannelView.as_view()),
     path("twitterMediaSubscribedChannels", views.TwitterMediaSubscribedChannelView.as_view()),
-    path("scheduleSubscriberFromGuild/<int:guild_id>", views.ScheduleSubscriberFromGuildView.as_view()),
-    path("scheduleSubscribers/<int:pk>", views.ScheduleSubscriberView.as_view()),
-    path("scheduleSubscribers", views.ScheduleSubscriberView.as_view()),
+    *router.urls,
 ]
