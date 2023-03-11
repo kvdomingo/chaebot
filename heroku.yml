@@ -6,6 +6,6 @@ build:
 run:
   release:
     command:
-      - ./docker-release.sh
+      - python manage.py migrate
     image: web
   web: /usr/bin/supervisord -c /bot/supervisord.conf

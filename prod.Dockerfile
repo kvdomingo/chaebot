@@ -29,6 +29,4 @@ COPY supervisord.conf ./
 
 RUN python manage.py collectstatic --noinput
 
-RUN chmod +x ./docker-release.sh
-
 EXPOSE $PORT

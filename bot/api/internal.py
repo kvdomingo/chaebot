@@ -2,7 +2,9 @@ from typing import Union
 
 import aiohttp
 import requests
+from aiohttp import ClientResponse
 from django.conf import settings
+from loguru import logger
 
 PORT = settings.API_PORT
 
@@ -13,6 +15,8 @@ async def _arequest(endpoint: str, method: str = "get", body: dict = None) -> tu
     async with aiohttp.ClientSession() as session:
         api = getattr(session, method)
         async with api(f"{BASE_URL}/{endpoint}", json=body) as res:
+            res: ClientResponse
+            logger.debug(await res.text())
             if method in ["post", "patch"]:
                 return await res.json(), res.status
             if method == "delete":
@@ -66,13 +70,13 @@ class Api:
     @staticmethod
     async def twitter_media_subscribed_channels(pk=None, method="get", body=None):
         if pk is None:
-            return await _arequest(f"twitterMediaSubscribedChannels", method, body)
+            return await _arequest("twitterMediaSubscribedChannels", method, body)
         return await _arequest(f"twitterMediaSubscribedChannel/{pk}", method, body)
 
     @staticmethod
     async def schedule_subscribers(pk=None, method="get", body=None):
         if pk is None:
-            return await _arequest(f"scheduleSubscribers", method, body)
+            return await _arequest("scheduleSubscribers", method, body)
         return await _arequest(f"scheduleSubscribers/{pk}", method, body)
 
     @staticmethod
