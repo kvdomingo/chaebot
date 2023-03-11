@@ -6,9 +6,7 @@ from aiohttp import ClientResponse
 from django.conf import settings
 from loguru import logger
 
-PORT = settings.API_PORT
-
-BASE_URL = f"http://0.0.0.0:{PORT}/api/v1.0" if settings.IN_PRODUCTION else f"http://api:{PORT}/api/v1.0"
+BASE_URL = f"{settings.API_HOST}/api/v1.0"
 
 
 async def _arequest(endpoint: str, method: str = "get", body: dict = None) -> tuple[Union[list, dict], int]:
