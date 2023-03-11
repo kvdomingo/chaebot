@@ -1,12 +1,12 @@
 [
   {
-    "command": "sub",
+    "command": "schedule sub",
     "required": ["channel"],
     "optional": [],
     "description": "Subscribe the specified channel to the comeback schedule."
   },
   {
-    "command": "unsub",
+    "command": "schedule unsub",
     "required": ["channel"],
     "optional": [],
     "description": "Unsubscribe the specified channel to the comeback schedule."
