@@ -12,7 +12,7 @@ from loguru import logger
 
 from bot.api.internal import Api
 from bot.firestore import get_firestore_client
-from bot.utils import SeverityLevel, generate_embed
+from bot.utils import SeverityLevel, generate_embed, generate_schedule_fields
 
 
 class Schedule(commands.Cog):
@@ -48,11 +48,11 @@ class Schedule(commands.Cog):
             return
 
         schedule = await self.get_schedule()
-        schedule_strings = self.to_schedule_strings(schedule)
+        schedule_strings = generate_schedule_fields(schedule)
         embed = generate_embed(
             title="Upcoming comebacks",
             severity=SeverityLevel.INFO,
-            content=schedule_strings,
+            fields=schedule_strings,
             footer="KST (UTC+9) | Shows the next 30 days of events",
         )
         channel = ctx.guild.get_channel(channel.id)
@@ -109,36 +109,10 @@ class Schedule(commands.Cog):
         )
         return [doc.to_dict() async for doc in coll_ref.stream()]
 
-    @staticmethod
-    def to_schedule_strings(schedule: list[dict]) -> list[str]:
-        logger.info("Formatting schedule strings...")
-        if len(schedule) == 0:
-            return ["None"]
-        cb_strings = []
-        for doc in schedule:
-            dt: datetime = doc["date"].astimezone(ZoneInfo(settings.TIME_ZONE))
-            dt_date = dt.strftime("%b %d")
-            dt_time = dt.strftime("%H:%M")
-            is_today = "`<today>`" if dt.date() == datetime.now(ZoneInfo(settings.TIME_ZONE)).date() else ""
-            if (descriptor := doc.get("album_type")) is not None:
-                descriptor = descriptor.title()
-            else:
-                if (descriptor := doc.get("release")) is not None:
-                    if "japan" in descriptor.lower():
-                        descriptor = "Japan"
-                    else:
-                        descriptor = descriptor.title()
-                else:
-                    descriptor = ""
-            cb_strings.append(
-                f"`[{dt_date} | {dt_time}]` **{doc['artist']}** {descriptor} 『{doc['album_title']}』 {is_today}"
-            )
-        return cb_strings
-
     @tasks.loop(time=[time(h, 0, 0, tzinfo=ZoneInfo(settings.TIME_ZONE)) for h in [0, 6, 12, 18]])
     async def update_schedule(self):
         schedule = await self.get_schedule()
-        schedule_strings = self.to_schedule_strings(schedule)
+        schedule_fields = generate_schedule_fields(schedule)
         logger.info("Updating comeback schedule...")
         subscribers = await Api.schedule_subscribers()
         for sub in subscribers:
@@ -148,7 +122,7 @@ class Schedule(commands.Cog):
             embed = generate_embed(
                 title="Upcoming comebacks",
                 severity=SeverityLevel.INFO,
-                content=schedule_strings,
+                fields=schedule_fields,
                 footer="KST (UTC+9) | Shows the next 30 days of events",
             )
             await msg.edit(embed=embed)
