@@ -72,6 +72,8 @@ class Stats(commands.Cog):
                     e_match = self.client.get_emoji(int(id_match.group()))
                     e_body = {
                         "id": e_match.id,
+                        "guild_id": message.guild.id,
+                        "channel_id": message.channel.id,
                         "name": e_match.name,
                         "url": e_match.url,
                     }
@@ -84,6 +86,8 @@ class Stats(commands.Cog):
             for sticker in message.stickers:
                 s_body = {
                     "id": sticker.id,
+                    "guild_id": message.guild.id,
+                    "channel_id": message.channel.id,
                     "name": sticker.name,
                     "url": sticker.url,
                 }

@@ -11,6 +11,8 @@ def timestamp_factory():
 
 class MediaCache(models.Model):
     id = models.PositiveBigIntegerField(primary_key=True, unique=True, db_index=True)
+    guild_id = models.PositiveBigIntegerField(unique=True, db_index=True)
+    channel_id = models.PositiveBigIntegerField(unique=True, db_index=True)
     name = models.CharField(max_length=64)
     url = models.URLField()
 
