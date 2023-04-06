@@ -2,12 +2,11 @@ import asyncio
 import logging
 
 from discord import Intents
-from discord.ext.commands import Bot
 from django.conf import settings
 
+from bot.client import KBot
+from bot.utils.cog_handler import load_cogs
 from kvisualbot.logging import logger
-
-from .utils.cog_handler import load_cogs
 
 logging.basicConfig(level=logging.INFO)
 
@@ -16,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 async def main():
     intents = Intents.default()
     intents.message_content = True
-    bot = Bot(command_prefix=settings.BOT_PREFIX, intents=intents)
+    bot = KBot(command_prefix=settings.BOT_PREFIX, intents=intents)
     await load_cogs(bot)
     await bot.start(settings.DISCORD_TOKEN)
 

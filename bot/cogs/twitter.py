@@ -48,8 +48,9 @@ class Twitter(commands.Cog):
             channel_id=ctx.channel.id,
             group=group["id"],
         )
-        res, status = await Api.twitter_media_subscribed_channels(None, "post", body)
-        if status == 201:
+        res = await Api.twitter_media_subscribed_channels(None, "post", body)
+        data = await res.json()
+        if res.ok:
             message = discord.Embed(
                 title="Adding twitter subscription success",
                 description=f'This channel has been subscribed to twitter media from {group["name"]}',
@@ -61,7 +62,7 @@ class Twitter(commands.Cog):
                 description="due to the following error(s):",
                 color=discord.Color.red(),
             )
-            for key, val in res.items():
+            for key, val in data.items():
                 message.add_field(
                     name=key,
                     value=str(val),
@@ -84,7 +85,7 @@ class Twitter(commands.Cog):
             )
         )
         if channel:
-            _, status = await Api.twitter_media_subscribed_channels(channel[0]["id"], "delete")
+            await Api.twitter_media_subscribed_channels(channel[0]["id"], "delete")
             message = discord.Embed(
                 title="Hourly media subscription removed",
                 description=f'This channel has been unsubscribed from twitter media from {group["name"]}',

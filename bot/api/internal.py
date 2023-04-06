@@ -1,26 +1,20 @@
-from typing import Union
-
 import aiohttp
 import requests
 from aiohttp import ClientResponse
 from django.conf import settings
 from loguru import logger
 
-BASE_URL = f"{settings.API_HOST}/api/v1.0"
+BASE_URL = f"{settings.API_HOST}/api"
 
 
-async def _arequest(endpoint: str, method: str = "get", body: dict = None) -> tuple[Union[list, dict], int]:
+async def _arequest(endpoint: str, method: str = "get", body: dict = None):
     async with aiohttp.ClientSession() as session:
         api = getattr(session, method)
         async with api(f"{BASE_URL}/{endpoint}", json=body) as res:
             res: ClientResponse
             logger.debug(f"{res.request_info.method} {res.request_info.url}")
             logger.debug(await res.text())
-            if method in ["post", "patch"]:
-                return await res.json(), res.status
-            if method == "delete":
-                return [], res.status
-            return await res.json()
+            return res
 
 
 class Api:
@@ -81,3 +75,33 @@ class Api:
     @staticmethod
     async def schedule_subscriber_from_guild(guild_id: int):
         return await _arequest(f"scheduleSubscriberFromGuild/{guild_id}", "get", None)
+
+    @staticmethod
+    async def emote_cache(pk=None, method="get", body=None):
+        if pk is None:
+            return await _arequest("emoteCache", method, body)
+        return await _arequest(f"emoteCache/{pk}", method, body)
+
+    @staticmethod
+    async def emote_usage(pk=None, method="get", body=None):
+        if pk is None:
+            return await _arequest("emoteUsage", method, body)
+        return await _arequest(f"emoteUsage/{pk}", method, body)
+
+    @staticmethod
+    async def sticker_cache(pk=None, method="get", body=None):
+        if pk is None:
+            return await _arequest("stickerCache", method, body)
+        return await _arequest(f"stickerCache/{pk}", method, body)
+
+    @staticmethod
+    async def sticker_usage(pk=None, method="get", body=None):
+        if pk is None:
+            return await _arequest("stickerUsage", method, body)
+        return await _arequest(f"stickerUsage/{pk}", method, body)
+
+    @staticmethod
+    async def user_cache(pk=None, method="get", body=None):
+        if pk is None:
+            return await _arequest("userCache", method, body)
+        return await _arequest(f"userCache/{pk}", method, body)

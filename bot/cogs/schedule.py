@@ -32,11 +32,12 @@ class Schedule(commands.Cog):
 
     @schedule.command(aliases=["sub"], help="Subscribe to upcoming comebacks calendar")
     async def subscribe(self, ctx: Context, channel: TextChannel):
-        subscriber, status = await Api.schedule_subscribers(
+        res = await Api.schedule_subscribers(
             method="post",
             body={"guild_id": ctx.guild.id, "channel_id": channel.id, "message_id": None},
         )
-        if status != HTTPStatus.CREATED:
+        subscriber = await res.json()
+        if res.status != HTTPStatus.CREATED:
             embed = generate_embed(
                 title="Adding schedule subscription failed",
                 content="due to the following error(s):",
@@ -57,14 +58,14 @@ class Schedule(commands.Cog):
         )
         channel = ctx.guild.get_channel(channel.id)
         msg = await channel.send(embed=embed)
-        res, status = await Api.schedule_subscribers(subscriber["id"], "patch", {"message_id": msg.id})
-        if status != 200:
+        res = await Api.schedule_subscribers(subscriber["id"], "patch", {"message_id": msg.id})
+        if not res.ok:
             embed = generate_embed(
                 title="Adding schedule subscription failed",
                 content="due to the following error(s):",
                 severity=SeverityLevel.ERROR,
                 footer="Please check the errors above or try again later.",
-                fields=res,
+                fields=await res.json(),
             )
             await msg.delete()
             await ctx.send(embed=embed)
@@ -80,10 +81,11 @@ class Schedule(commands.Cog):
     @schedule.command(aliases=["unsub"], help="Unsubscribe to upcoming comebacks calendar")
     async def unsubscribe(self, ctx: Context, channel: TextChannel):
         res = await Api.schedule_subscriber_from_guild(ctx.guild.id)
+        data = await res.json()
         channel = self.client.get_channel(channel.id)
-        msg = channel.get_partial_message(res["message_id"])
+        msg = channel.get_partial_message(data["message_id"])
         await msg.delete()
-        await Api.schedule_subscribers(res["id"], "delete")
+        await Api.schedule_subscribers(data["id"], "delete")
         embed = generate_embed(
             title="Unsubscribing to comeback schedule success",
             content=f"The channel {channel.mention} has been unsubscribed from upcoming comebacks schedule.",
@@ -114,7 +116,8 @@ class Schedule(commands.Cog):
         schedule = await self.get_schedule()
         schedule_fields = generate_schedule_fields(schedule)
         logger.info("Updating comeback schedule...")
-        subscribers = await Api.schedule_subscribers()
+        res = await Api.schedule_subscribers()
+        subscribers = await res.json()
         for sub in subscribers:
             guild = self.client.get_guild(sub["guild_id"])
             channel = guild.get_channel(sub["channel_id"])
