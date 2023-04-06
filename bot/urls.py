@@ -1,11 +1,16 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from . import views
+from bot import views
 
 router = DefaultRouter(trailing_slash=False)
 router.register("scheduleSubscriberFromGuild", views.ScheduleSubscriberFromGuildView)
 router.register("scheduleSubscribers", views.ScheduleSubscriberView)
+router.register("emoteCache", views.EmoteCacheView)
+router.register("emoteUsage", views.EmoteUsageView)
+router.register("stickerCache", views.StickerCacheView)
+router.register("stickerUsage", views.StickerUsageView)
+router.register("userCache", views.UserCacheView)
 
 urlpatterns = [
     path("group/<int:pk>/aliases", views.GroupAliasView.as_view()),
