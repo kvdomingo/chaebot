@@ -20,11 +20,14 @@ IN_PRODUCTION = PYTHON_ENV == "production"
 SECRET_KEY = os.environ.get("SECRET_KEY", default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = PYTHON_ENV != "production"
+DEBUG = not IN_PRODUCTION
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
-ALLOWED_HOSTS = [".chaebot.kvdstudio.app" if IN_PRODUCTION else "*"]
+if IN_PRODUCTION:
+    ALLOWED_HOSTS = [".kvd.studio"]
+else:
+    ALLOWED_HOSTS = ["*"]
 
 API_PORT = os.environ.get("PORT", "8080")
 
@@ -188,4 +191,4 @@ TWITTER_ACCESS_SECRET = os.environ.get("TWITTER_ACCESS_SECRET")
 
 BOT_PREFIX = "!" if IN_PRODUCTION else "$"
 
-WEBAPP_URL = "https://chaebot.kvdstudio.app" if IN_PRODUCTION else "/"
+WEBAPP_URL = "https://chaebot.kvd.studio" if IN_PRODUCTION else "/"
