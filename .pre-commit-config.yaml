@@ -20,7 +20,7 @@ repos:
         files: (?i)\.(json|js|jsx|ts|tsx|html|css)$
         args:
           - "--config"
-          - "./docs/.prettierrc.json"
+          - "./docs/.prettierrc.cjs"
         additional_dependencies:
           - prettier@2.8.8
           - '@trivago/prettier-plugin-sort-imports@4.1.1'

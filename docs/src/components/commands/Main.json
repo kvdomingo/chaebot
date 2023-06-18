@@ -15,6 +15,6 @@
     "command": "query",
     "required": [],
     "optional": ["group", "member"],
-    "description": "Get a random picture of the specified member of the specified group. If group and/or member are unspecified, selects a random group/member. Group name must be typed as a single word (replace spaces with dashes or underscores). Member name can be typed out as multiple words. Group/member names have multiple aliases and should match the target group/member given sensible aliases (e.g. to query BTS, the following aliases will work: bts, bangtan, bangtan sonyeondan; to query RM, the following aliases should also work: rm, rap monster, namjoon, kim namjoon). Parameters are case-insensitive, but the command name itself is not."
+    "description": "Get a random picture of the specified member of the specified group. If group and/or member are unspecified, sends a random group/member. Group name must be typed as a single word (replace spaces with dashes or underscores). Member name can be typed out as multiple words. Group/member names are case-insensitive, have multiple aliases, and should match the target group/member, given sensible aliases (e.g. to query BTS, the following aliases will work: bts, bangtan; to query RM, the following aliases should also work: rm, namjoon)."
   }
 ]

@@ -1,14 +1,17 @@
-import { Container } from "reactstrap";
-
 export default function Footer() {
   return (
-    <footer className="footer bg-light py-4">
-      <Container className="text-center text-muted">
-        &copy; {`${new Date().getFullYear()} `}
-        <a href="https://kvdomingo.xyz" target="_blank" rel="noopener noreferrer">
+    <footer className="footer py-8">
+      <div className="container text-center text-neutral-500">
+        &copy; 2020-{`${new Date().getFullYear()} `}
+        <a
+          href="https://kvd.studio"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sky-500"
+        >
           KVD Studio
         </a>
-      </Container>
+      </div>
     </footer>
   );
 }

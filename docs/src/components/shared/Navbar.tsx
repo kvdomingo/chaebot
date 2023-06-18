@@ -1,115 +1,78 @@
 import { useEffect, useState } from "react";
-import {
-  Collapse,
-  UncontrolledDropdown as Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Nav,
-  NavItem,
-  NavLink,
-  Navbar,
-  NavbarBrand,
-  NavbarText,
-  NavbarToggler,
-} from "reactstrap";
-import axios from "axios";
-import { Image } from "cloudinary-react";
+
+import { AdvancedImage } from "@cloudinary/react";
+import { fill } from "@cloudinary/url-gen/actions/resize";
+import { max } from "@cloudinary/url-gen/actions/roundCorners";
+import { Github } from "lucide-react";
+
+import { cld } from "@/cloudinary";
+import ButtonLink from "@/components/shared/ButtonLink";
+
 import { commands as menuItems } from "../commands/Content";
 
+const navLogo = cld.image("kvisualbot/avatar");
+navLogo.resize(fill().height(60).width(60).gravity("face")).roundCorners(max());
+
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
   const [version, setVersion] = useState("");
 
   useEffect(() => {
-    axios
-      .get("https://api.github.com/repos/kvdomingo/chaebot/tags", {
-        headers: {
-          Accept: "application/vnd.github.v3+json",
+    (async () => {
+      const result = await fetch(
+        "https://api.github.com/repos/kvdomingo/chaebot/tags",
+        {
+          headers: {
+            Accept: "application/vnd.github.v3+json",
+          },
         },
-      })
-      .then(res => setVersion(res.data[0].name))
-      .catch(err => console.error(err.message));
+      );
+
+      if (result.ok) {
+        const data = await result.json();
+        setVersion(data[0].name);
+      } else {
+        console.error(await result.text());
+      }
+    })();
   }, []);
 
-  function toggleNavbar() {
-    setIsOpen(!isOpen);
-  }
-
   return (
-    <div>
-      <Navbar color="light" light expand="lg">
-        <NavbarBrand href="/">
-          <Image
-            cloudName="kdphotography-assets"
-            className="img-fluid"
-            publicId="kvisualbot/avatar"
-            secure
-            aspectRatio="1"
-            radius="max"
-            crop="fill"
-            gravity="face"
-            height={60}
-          />
-        </NavbarBrand>
-        <NavbarText className="mr-3">
-          <NavLink href="/">ChaeBot</NavLink>
-        </NavbarText>
-        <NavbarToggler onClick={toggleNavbar} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav navbar>
-            <NavItem>
-              <Dropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Commands
-                </DropdownToggle>
-                <DropdownMenu right>
-                  {menuItems.map(({ header }, i) => (
-                    <DropdownItem key={i}>
-                      <NavLink href={`#${header.toLowerCase()}`}>{header}</NavLink>
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-            </NavItem>
-          </Nav>
-          <Nav className="ml-auto d-flex align-items-center" navbar>
-            <NavItem className="mx-1">
-              <a
-                href="https://discord.com/api/oauth2/authorize?client_id=726835246892580865&permissions=256064&scope=bot"
-                className="btn btn-outline-primary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Add to Discord
-              </a>
-            </NavItem>
-            <NavItem className="mx-1">
-              <a
-                href="https://discord.gg/jQ5dpeN"
-                className="btn btn-outline-success"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Join Discord server
-              </a>
-            </NavItem>
-            <NavItem className="mx-1">
-              <a
-                href="https://github.com/kvdomingo/chaebot"
-                className="btn btn-outline-secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub
-              </a>
-            </NavItem>
-            <NavItem className="mx-3">
-              <div className="text-muted text-monospace">{version}</div>
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Navbar>
-    </div>
+    <nav className="flex place-content-between place-items-center  px-8">
+      <div className="flex items-center gap-4">
+        <a href="/" className="flex items-center gap-4">
+          <AdvancedImage cldImg={navLogo} className="rounded-[50%]" />
+          <h1 className="mr-6 text-2xl ">ChaeBot</h1>
+        </a>
+        {menuItems.map(({ header }) => (
+          <div key={header}>
+            <a href={`#${header.toLowerCase()}`}>{header}</a>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-4">
+        <ButtonLink
+          href="https://discord.com/api/oauth2/authorize?client_id=726835246892580865&permissions=256064&scope=bot"
+          className="border-sky-500 text-sky-500 hover:bg-sky-500"
+        >
+          Add to Discord
+        </ButtonLink>
+        <ButtonLink
+          href="https://discord.gg/jQ5dpeN"
+          className="border-emerald-500 text-emerald-500 hover:bg-emerald-500"
+        >
+          Join Discord server
+        </ButtonLink>
+        <a
+          href="https://github.com/kvdomingo/chaebot"
+          rel="noopener noreferrer"
+          target="_blank"
+          className="rounded-[50%] bg-white p-1 transition-all duration-100 ease-in-out hover:brightness-125"
+        >
+          <Github size="1.5rem" className="text-slate-800" />
+        </a>
+        <pre className="text-neutral-500">{version}</pre>
+      </div>
+    </nav>
   );
 }

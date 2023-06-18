@@ -1,15 +1,15 @@
-import { Card, CardBody, CardHeader, ListGroup, ListGroupItem } from "reactstrap";
+import Card from "@/components/shared/Card";
+import CardBody from "@/components/shared/CardBody";
+import CardHeader from "@/components/shared/CardHeader";
 
 function Legend() {
   return (
-    <Card className="my-3">
+    <Card>
       <CardHeader>Legend</CardHeader>
       <CardBody>
-        <ListGroup>
-          <ListGroupItem>
-            <code>!command [required-argument] (optional-argument)</code>
-          </ListGroupItem>
-        </ListGroup>
+        <div className="p-4">
+          <code>!command [required-argument] (optional-argument)</code>
+        </div>
       </CardBody>
     </Card>
   );

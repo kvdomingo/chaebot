@@ -1,4 +1,3 @@
-import { Container } from "reactstrap";
 import Commands from "./Commands";
 import Header from "./Header";
 import Legend from "./Legend";
@@ -14,13 +13,13 @@ export const commands = [
 
 function Content() {
   return (
-    <Container className="my-5">
+    <div className="container my-10">
       <Header />
       <Legend />
       {commands.map((command, i) => (
-        <Commands {...command} key={i} />
+        <Commands {...command} key={command.header} />
       ))}
-    </Container>
+    </div>
   );
 }
 

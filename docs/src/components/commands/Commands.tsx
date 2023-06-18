@@ -1,5 +1,8 @@
 import { Fragment } from "react";
-import { Badge, Card, CardBody, CardHeader, Col, ListGroup, ListGroupItem, Row } from "reactstrap";
+
+import Card from "@/components/shared/Card";
+import CardBody from "@/components/shared/CardBody";
+import CardHeader from "@/components/shared/CardHeader";
 
 interface CommandsProps {
   header: string;
@@ -9,38 +12,36 @@ interface CommandsProps {
     optional?: string[];
     description: string;
   }[];
-  labeledCommand?: boolean;
-  labelColor?: string;
-  labelName?: string;
 }
 
-function Commands({ header, commands, labeledCommand, labelColor, labelName }: CommandsProps) {
+function Commands({ header, commands }: CommandsProps) {
   return (
-    <Card className="my-3" id={header.toLowerCase()}>
-      <CardHeader>
-        {labeledCommand && <Badge color={labelColor}>{labelName}</Badge>} {header} commands
-      </CardHeader>
+    <Card id={header.toLowerCase()}>
+      <CardHeader>{header} commands</CardHeader>
       <CardBody>
-        <ListGroup>
-          {commands.map((command, i) => (
-            <ListGroupItem key={i}>
-              <Row key={i}>
-                <Col sm="4">
-                  <code>
-                    !{command.command}
-                    {command.required?.map((req, i) => (
-                      <Fragment key={i}>{` [${req}]`}</Fragment>
-                    ))}
-                    {command.optional?.map((opt, i) => (
-                      <Fragment key={i}>{` (${opt})`}</Fragment>
-                    ))}
-                  </code>
-                </Col>
-                <Col sm="8">{command.description}</Col>
-              </Row>
-            </ListGroupItem>
+        <ul>
+          {commands.map((command, index) => (
+            <Fragment key={command.command}>
+              {index > 0 && <hr className="border-slate-600" />}
+              <li className="p-4">
+                <div className="grid grid-cols-4">
+                  <div>
+                    <code>
+                      !{command.command}
+                      {command.required?.map((req, i) => (
+                        <Fragment key={req}>{` [${req}]`}</Fragment>
+                      ))}
+                      {command.optional?.map((opt, i) => (
+                        <Fragment key={opt}>{` (${opt})`}</Fragment>
+                      ))}
+                    </code>
+                  </div>
+                  <div className="col-span-3">{command.description}</div>
+                </div>
+              </li>
+            </Fragment>
           ))}
-        </ListGroup>
+        </ul>
       </CardBody>
     </Card>
   );
