@@ -2,8 +2,8 @@ services:
   bot:
     build:
       context: .
-      dockerfile: prod.Dockerfile
-    image: kvdomingo/kvisualbot-prod:latest
+      dockerfile: Dockerfile.prod
+    image: kvdomingo/chaebot:latest
     env_file: .env
     ports:
       - ${PORT}:${PORT}

@@ -13,7 +13,6 @@ tasks:
     desc: Build and start containers
     cmds:
       - docker compose -p {{.NAME}} up -d --build --remove-orphans {{.CLI_ARGS}}
-      - task logs
 
   setup:
     desc: Run initial setup

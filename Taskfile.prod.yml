@@ -13,7 +13,6 @@ tasks:
     desc: Build and start containers
     cmds:
       - docker compose -f docker-compose.prod.yml -p {{.NAME}} up -d --build --remove-orphans {{.CLI_ARGS}}
-      - task logs
 
   frontend-start:
     desc: Start frontend

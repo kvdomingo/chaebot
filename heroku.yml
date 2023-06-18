@@ -1,7 +1,7 @@
 build:
   docker:
     web:
-      dockerfile: prod.Dockerfile
+      dockerfile: Dockerfile.prod
 
 run:
   release:
