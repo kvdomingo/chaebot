@@ -18,6 +18,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/node": "^20.3.1",
     "@types/react": "^18.0.27",

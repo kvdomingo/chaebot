@@ -51,7 +51,7 @@ tasks:
     cmds:
       - docker compose -p {{.NAME}} logs --follow {{.CLI_ARGS}}
 
-  shutdown:
+  stop:
     desc: Stop all containers
     cmds:
       - docker compose -p {{.NAME}} stop {{.CLI_ARGS}}
