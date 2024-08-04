@@ -2,8 +2,8 @@ from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from ..models import ScheduleSubscriber
-from ..serializers import ScheduleSubscriberSerializer
+from bot.models import ScheduleSubscriber
+from bot.serializers import ScheduleSubscriberSerializer
 
 
 class ScheduleSubscriberView(ModelViewSet):

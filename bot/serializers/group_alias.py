@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from ..models import GroupAlias
+from bot.models import GroupAlias
 
 
 class GroupAliasSerializer(ModelSerializer):

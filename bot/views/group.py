@@ -2,8 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ..models import Group
-from ..serializers import (
+from bot.models import Group
+from bot.serializers import (
     GroupAliasSerializer,
     GroupSerializer,
     MemberSerializer,

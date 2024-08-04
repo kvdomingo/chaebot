@@ -5,10 +5,9 @@ import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot
 
+from bot.api.internal import Api
+from bot.handlers.hourly import hourly_handler
 from kvisualbot.logging import logger
-
-from ..api.internal import Api
-from ..handlers.hourly import hourly_handler
 
 
 class Tasks(commands.Cog):

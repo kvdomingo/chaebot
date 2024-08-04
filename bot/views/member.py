@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ..models import Member
-from ..serializers import (
+from bot.models import Member
+from bot.serializers import (
     MemberAliasSerializer,
     MemberSerializer,
     TwitterMediaSourceSerializer,

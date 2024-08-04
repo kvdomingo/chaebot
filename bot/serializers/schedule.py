@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import ScheduleSubscriber
+from bot.models import ScheduleSubscriber
 
 
 class ScheduleSubscriberSerializer(serializers.ModelSerializer):

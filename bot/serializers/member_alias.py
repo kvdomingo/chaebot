@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from ..models import MemberAlias
+from bot.models import MemberAlias
 
 
 class MemberAliasSerializer(ModelSerializer):

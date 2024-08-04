@@ -3,8 +3,8 @@ from discord.ext import commands
 from discord.ext.commands import Bot, Context
 from django.core.cache import cache
 
-from ..api.internal import Api
-from ..handlers.hourly import group_name_matcher
+from bot.api.internal import Api
+from bot.handlers.hourly import group_name_matcher
 
 
 class Twitter(commands.Cog):

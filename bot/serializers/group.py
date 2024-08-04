@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
-from ..models import Group
+from bot.models import Group
+
 from .group_alias import GroupAliasSerializer
 from .member import MemberSerializer
 from .twitter import TwitterMediaSubscribedChannelSerializer

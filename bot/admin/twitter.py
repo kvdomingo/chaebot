@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from ..models import TwitterMediaSource, TwitterMediaSubscribedChannel
+from bot.models import TwitterMediaSource, TwitterMediaSubscribedChannel
 
 
 class TwitterMediaSourceInline(admin.TabularInline):

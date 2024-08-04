@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from ..models import TwitterMediaSource, TwitterMediaSubscribedChannel
+from bot.models import TwitterMediaSource, TwitterMediaSubscribedChannel
 
 
 class TwitterMediaSourceSerializer(ModelSerializer):

@@ -4,8 +4,16 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 router = DefaultRouter(trailing_slash=False)
-router.register("scheduleSubscriberFromGuild", views.ScheduleSubscriberFromGuildView)
-router.register("scheduleSubscribers", views.ScheduleSubscriberView)
+router.register(
+    "scheduleSubscriberFromGuild",
+    views.ScheduleSubscriberFromGuildView,
+    basename="scheduleSubscriberFromGuild",
+)
+router.register(
+    "scheduleSubscribers",
+    views.ScheduleSubscriberView,
+    basename="scheduleSubscriber",
+)
 
 urlpatterns = [
     path("group/<int:pk>/aliases", views.GroupAliasView.as_view()),
