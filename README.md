@@ -14,4 +14,3 @@
 ## Usage
 
 - [Documentation](https://chaebot.kvd.studio)
-- Join the [Discord server](https://discord.gg/jQ5dpeN).

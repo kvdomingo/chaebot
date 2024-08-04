@@ -5,6 +5,7 @@ services:
       target: api-dev
       dockerfile: Dockerfile.dev
     image: kvdomingo/chaebot-api:latest
+    init: true
     env_file: .env
     volumes:
       - .:/bot
@@ -17,6 +18,7 @@ services:
       target: dev
       dockerfile: Dockerfile.dev
     image: kvdomingo/chaebot-dev:latest
+    init: true
     environment:
       CLOUDSDK_CONFIG: /opt/gcloud
     env_file: .env
@@ -29,6 +31,7 @@ services:
 
   docs:
     image: oven/bun:1.1-alpine
+    init: true
     environment:
       NODE_ENV: development
     working_dir: /app
