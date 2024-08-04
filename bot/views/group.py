@@ -49,7 +49,9 @@ class GroupAliasView(APIView):
 
 
 class GroupMembersView(APIView):
-    queryset = Group.objects.prefetch_related("members", "members__twitter_media_sources", "members__aliases").all()
+    queryset = Group.objects.prefetch_related(
+        "members", "members__twitter_media_sources", "members__aliases"
+    ).all()
 
     def get(self, request, pk):
         query = self.queryset.get(pk=pk).members.all()

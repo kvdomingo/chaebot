@@ -34,7 +34,11 @@ class Schedule(commands.Cog):
     async def subscribe(self, ctx: Context, channel: TextChannel):
         subscriber, status = await Api.schedule_subscribers(
             method="post",
-            body={"guild_id": ctx.guild.id, "channel_id": channel.id, "message_id": None},
+            body={
+                "guild_id": ctx.guild.id,
+                "channel_id": channel.id,
+                "message_id": None,
+            },
         )
         if status != HTTPStatus.CREATED:
             embed = generate_embed(
@@ -57,7 +61,9 @@ class Schedule(commands.Cog):
         )
         channel = ctx.guild.get_channel(channel.id)
         msg = await channel.send(embed=embed)
-        res, status = await Api.schedule_subscribers(subscriber["id"], "patch", {"message_id": msg.id})
+        res, status = await Api.schedule_subscribers(
+            subscriber["id"], "patch", {"message_id": msg.id}
+        )
         if status != 200:
             embed = generate_embed(
                 title="Adding schedule subscription failed",
@@ -77,7 +83,9 @@ class Schedule(commands.Cog):
         )
         return await ctx.send(embed=embed)
 
-    @schedule.command(aliases=["unsub"], help="Unsubscribe to upcoming comebacks calendar")
+    @schedule.command(
+        aliases=["unsub"], help="Unsubscribe to upcoming comebacks calendar"
+    )
     async def unsubscribe(self, ctx: Context, channel: TextChannel):
         res = await Api.schedule_subscriber_from_guild(ctx.guild.id)
         channel = self.client.get_channel(channel.id)
@@ -105,11 +113,19 @@ class Schedule(commands.Cog):
         coll_ref = (
             db.collection("cb-reddit")
             .order_by("date")
-            .where("date", "<", datetime.now(ZoneInfo(settings.TIME_ZONE)) + timedelta(days=30))
+            .where(
+                "date",
+                "<",
+                datetime.now(ZoneInfo(settings.TIME_ZONE)) + timedelta(days=30),
+            )
         )
         return [doc.to_dict() async for doc in coll_ref.stream()]
 
-    @tasks.loop(time=[time(h, 0, 0, tzinfo=ZoneInfo(settings.TIME_ZONE)) for h in [0, 6, 12, 18]])
+    @tasks.loop(
+        time=[
+            time(h, 0, 0, tzinfo=ZoneInfo(settings.TIME_ZONE)) for h in [0, 6, 12, 18]
+        ]
+    )
     async def update_schedule(self):
         schedule = await self.get_schedule()
         schedule_fields = generate_schedule_fields(schedule)

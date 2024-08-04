@@ -10,8 +10,8 @@ export default function Legend() {
       </CardHeader>
       <CardBody>
         <p className="p-4">
-          Listed here are the slash commands for <b>ChaeBot</b> that can be used
-          within a server channel. The default prefix is <kbd>!</kbd>.
+          Listed here are the slash commands for <b>ChaeBot</b> that can be used within
+          a server channel. The default prefix is <kbd>!</kbd>.
         </p>
       </CardBody>
     </Card>

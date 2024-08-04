@@ -28,10 +28,10 @@ function Commands({ header, commands }: CommandsProps) {
                   <div>
                     <code>
                       !{command.command}
-                      {command.required?.map((req, i) => (
+                      {command.required?.map(req => (
                         <Fragment key={req}>{` [${req}]`}</Fragment>
                       ))}
-                      {command.optional?.map((opt, i) => (
+                      {command.optional?.map(opt => (
                         <Fragment key={opt}>{` (${opt})`}</Fragment>
                       ))}
                     </code>

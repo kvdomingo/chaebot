@@ -16,7 +16,7 @@ function Content() {
     <div className="container my-10">
       <Header />
       <Legend />
-      {commands.map((command, i) => (
+      {commands.map(command => (
         <Commands {...command} key={command.header} />
       ))}
     </div>

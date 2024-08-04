@@ -1,5 +1,3 @@
-from typing import Union
-
 import aiohttp
 import requests
 from aiohttp import ClientResponse
@@ -9,7 +7,9 @@ from loguru import logger
 BASE_URL = f"{settings.API_HOST}/api/v1.0"
 
 
-async def _arequest(endpoint: str, method: str = "get", body: dict = None) -> tuple[Union[list, dict], int]:
+async def _arequest(
+    endpoint: str, method: str = "get", body: dict = None
+) -> tuple[list | dict, int]:
     async with aiohttp.ClientSession() as session:
         api = getattr(session, method)
         async with api(f"{BASE_URL}/{endpoint}", json=body) as res:

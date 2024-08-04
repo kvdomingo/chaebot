@@ -37,7 +37,7 @@ export default function Navigation() {
   }, []);
 
   return (
-    <nav className="flex place-content-between place-items-center  px-8">
+    <nav className="flex place-content-between place-items-center px-8">
       <div className="flex items-center gap-4">
         <a href="/" className="flex items-center gap-4">
           <AdvancedImage cldImg={navLogo} className="rounded-[50%]" />

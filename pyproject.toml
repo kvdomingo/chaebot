@@ -28,8 +28,6 @@ google-cloud-firestore = "^2.11.1"
 firebase-admin = "^6.1.0"
 
 [tool.poetry.group.dev.dependencies]
-jupyter = "^1.0.0"
-notebook = "^6.5.2"
 google-cloud-secret-manager = "^2.15.0"
 ruff = "^0.5.6"
 

@@ -47,7 +47,9 @@ async def group_name_matcher(name: str, random_on_no_match: bool = True) -> dict
         return {}
 
 
-async def member_name_matcher(_member: list[str], group: str, hourly: bool) -> tuple[list, dict]:
+async def member_name_matcher(
+    _member: list[str], group: str, hourly: bool
+) -> tuple[list, dict]:
     if len(_member) == 1 and not _member[0]:
         _member = None
     group = await group_name_matcher(group)
@@ -77,15 +79,19 @@ async def member_name_matcher(_member: list[str], group: str, hourly: bool) -> t
             logger.info(f'Member query matched: {key["stage_name"]} of {group["name"]}')
             return key["twitterMediaSources"], group
         for alias in key["aliases"]:
-            if re.search(alias["alias"], _member, re.I) or re.search(_member, alias["alias"], re.I):
-                logger.info(f'Member query matched: {key["stage_name"]} of {group["name"]}')
+            if re.search(alias["alias"], _member, re.I) or re.search(
+                _member, alias["alias"], re.I
+            ):
+                logger.info(
+                    f'Member query matched: {key["stage_name"]} of {group["name"]}'
+                )
                 return key["twitterMediaSources"], group
     logger.info("No member query matched, choosing random")
     accounts = random.choice(members)["twitterMediaSources"]
     return accounts, group
 
 
-async def hourly_handler(
+async def hourly_handler(  # noqa:C901
     group_: str, member: list[str] = None, hourly: bool = False, max_retries: int = 10
 ) -> tuple[list, dict]:
     account_cat, group = await member_name_matcher(member, group_, hourly)
@@ -141,7 +147,9 @@ async def hourly_handler(
                     video_info = media_post[0].video_info
                     variants = video_info["variants"]
                     if type_ == "video":
-                        bitrates = [variant.get("bit_rate") or 0 for variant in variants]
+                        bitrates = [
+                            variant.get("bit_rate") or 0 for variant in variants
+                        ]
                         max_bitrate_loc = bitrates.index(max(bitrates))
                         vid = variants[max_bitrate_loc]
                         link = vid["url"]
@@ -158,13 +166,15 @@ async def hourly_handler(
                         files.append(file)
                 case "photo":
                     links = [media.media_url_https for media in media_post]
-                    for i, link in enumerate(links):
+                    for link in links:
                         async with session.get(link) as res:
                             if not res.ok:
                                 continue
                             buffer = io.BytesIO(await res.read())
                             buffer.seek(0)
-                            files.append(discord.File(buffer, f"image_{len(files)}.jpg"))
+                            files.append(
+                                discord.File(buffer, f"image_{len(files)}.jpg")
+                            )
                 case _:
                     return [], {}
     return files, group

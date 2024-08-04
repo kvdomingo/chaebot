@@ -32,15 +32,21 @@ class Mama(Group):
             color=Color.gold(),
             description=f"Total number of votes: {top['voteCount']:,}",
         )
-        last_updated = datetime.strptime(top["voteCountUpdatedAt"], "%Y-%m-%dT%H:%M:%S.%fZ")
-        embed.set_footer(text=f"Last updated {last_updated.strftime('%Y-%m-%d %H:%M:%S')}")
+        last_updated = datetime.strptime(
+            top["voteCountUpdatedAt"], "%Y-%m-%dT%H:%M:%S.%fZ"
+        )
+        embed.set_footer(
+            text=f"Last updated {last_updated.strftime('%Y-%m-%d %H:%M:%S')}"
+        )
         for i, artist in enumerate(top["pollOptions"]):
             embed.add_field(
                 name=f"{i+1}. {artist['name_en']}",
                 value=f"{artist['votePercentage']}%",
                 inline=True,
             )
-        embed.set_image(url=f"https://2022mama.com{top['pollOptions'][0]['featuredImage']}")
+        embed.set_image(
+            url=f"https://2022mama.com{top['pollOptions'][0]['featuredImage']}"
+        )
         await itx.response.send_message(embed=embed)
 
 

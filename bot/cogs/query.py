@@ -37,7 +37,9 @@ class Query(commands.Cog):
     async def list_(self, ctx):
         supp_groups = [group["name"] for group in Api.sync_groups()]
         for group in self.groups:
-            without_source = [len(member["twitterMediaSources"]) == 0 for member in group["members"]]
+            without_source = [
+                len(member["twitterMediaSources"]) == 0 for member in group["members"]
+            ]
             if any(without_source):
                 continue
             supp_groups.append(group["name"])

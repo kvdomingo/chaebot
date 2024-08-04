@@ -3,7 +3,9 @@ from django.db import models
 
 class TwitterMediaSource(models.Model):
     account_name = models.CharField(max_length=16, unique=True)
-    member = models.ForeignKey("Member", related_name="twitter_media_sources", on_delete=models.CASCADE)
+    member = models.ForeignKey(
+        "Member", related_name="twitter_media_sources", on_delete=models.CASCADE
+    )
     last_tweet_id = models.BigIntegerField(blank=True, null=True)
 
     def __str__(self):

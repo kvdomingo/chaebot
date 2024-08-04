@@ -16,9 +16,13 @@ class Twitter(commands.Cog):
     async def twitter(self, ctx: Context):
         pass
 
-    @twitter.command(aliases=["list"], help="List all twitter subscriptions for the channel")
+    @twitter.command(
+        aliases=["list"], help="List all twitter subscriptions for the channel"
+    )
     async def list_(self, ctx: Context):
-        subs_exist = list(filter(lambda x: len(x["twitterMediaSubscribedChannels"]) > 0, self.groups))
+        subs_exist = list(
+            filter(lambda x: len(x["twitterMediaSubscribedChannels"]) > 0, self.groups)
+        )
         subbed_groups = []
         for sub in subs_exist:
             for channel in sub["twitterMediaSubscribedChannels"]:
@@ -44,10 +48,10 @@ class Twitter(commands.Cog):
     )
     async def subscribe(self, ctx: Context, group: str):
         group = await group_name_matcher(group)
-        body = dict(
-            channel_id=ctx.channel.id,
-            group=group["id"],
-        )
+        body = {
+            "channel_id": ctx.channel.id,
+            "group": group["id"],
+        }
         res, status = await Api.twitter_media_subscribed_channels(None, "post", body)
         if status == 201:
             message = discord.Embed(
@@ -79,12 +83,15 @@ class Twitter(commands.Cog):
         channels = group["twitterMediaSubscribedChannels"]
         channel = list(
             filter(
-                lambda x: x["channel_id"] == ctx.channel.id and x["group"] == group["id"],
+                lambda x: x["channel_id"] == ctx.channel.id
+                and x["group"] == group["id"],
                 channels,
             )
         )
         if channel:
-            _, status = await Api.twitter_media_subscribed_channels(channel[0]["id"], "delete")
+            _, status = await Api.twitter_media_subscribed_channels(
+                channel[0]["id"], "delete"
+            )
             message = discord.Embed(
                 title="Hourly media subscription removed",
                 description=f'This channel has been unsubscribed from twitter media from {group["name"]}',

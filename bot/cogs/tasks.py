@@ -73,7 +73,9 @@ class Tasks(commands.Cog):
         now = datetime.now()
         if now.minute != 0:
             delta_min = 60 - now.minute
-            logger.info(f"Waiting for {delta_min} minutes to start hourly ITZY update...")
+            logger.info(
+                f"Waiting for {delta_min} minutes to start hourly ITZY update..."
+            )
             await asyncio.sleep(delta_min * 60)
             logger.info("Starting hourly ITZY update...")
 
@@ -85,7 +87,9 @@ class Tasks(commands.Cog):
                 delta_min = 30 - now.minute
             else:
                 delta_min = 90 - now.minute
-            logger.info(f"Waiting for {delta_min} minutes to start hourly BLACKPINK update...")
+            logger.info(
+                f"Waiting for {delta_min} minutes to start hourly BLACKPINK update..."
+            )
             await asyncio.sleep(delta_min * 60)
             logger.info("Starting hourly BLACKPINK update...")
 
@@ -97,7 +101,9 @@ class Tasks(commands.Cog):
                 delta_min = 29 - now.minute
             else:
                 delta_min = (60 + 29) - now.minute
-            logger.info(f"Waiting for {delta_min} minutes to start hourly TWICE update...")
+            logger.info(
+                f"Waiting for {delta_min} minutes to start hourly TWICE update..."
+            )
             await asyncio.sleep(delta_min * 60)
             logger.info("Starting hourly TWICE update...")
 
@@ -109,7 +115,9 @@ class Tasks(commands.Cog):
                 delta_min = 5 - now.minute
             else:
                 delta_min = (60 + 5) - now.minute
-            logger.info(f"Waiting for {delta_min} minutes to start hourly Red Velvet update...")
+            logger.info(
+                f"Waiting for {delta_min} minutes to start hourly Red Velvet update..."
+            )
             await asyncio.sleep(delta_min * 60)
             logger.info("Starting hourly Red Velvet update...")
 

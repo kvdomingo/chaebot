@@ -35,7 +35,9 @@ class DownloaderBot(commands.Cog):
                 ext = attachment.url.split(".")[-1]
                 existing_files = os.listdir(MEDIA_DIR)
                 for folder in folders:
-                    existing_files.extend(os.listdir(MEDIA_DIR / group.lower() / folder))
+                    existing_files.extend(
+                        os.listdir(MEDIA_DIR / group.lower() / folder)
+                    )
                 if len(existing_files) > 0:
                     existing_files = [f.split(".")[0] for f in existing_files]
                 if m_id not in existing_files:

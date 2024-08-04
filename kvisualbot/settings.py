@@ -31,7 +31,11 @@ else:
 
 API_PORT = os.environ.get("PORT", "8080")
 
-API_HOST = os.environ.get("API_HOST", f"http://0.0.0.0:{API_PORT})") if IN_PRODUCTION else f"http://api:{API_PORT}"
+API_HOST = (
+    os.environ.get("API_HOST", f"http://0.0.0.0:{API_PORT})")
+    if IN_PRODUCTION
+    else f"http://api:{API_PORT}"
+)
 
 # Application definition
 

@@ -6,7 +6,7 @@ from django.conf import settings
 
 def extract_unique_dates(dt_strings: list[datetime]) -> list[date]:
     dates = [d.astimezone(ZoneInfo(settings.TIME_ZONE)).date() for d in dt_strings]
-    return sorted(list(set(dates)))
+    return sorted(set(dates))
 
 
 def generate_schedule_fields(schedule: list[dict]) -> dict[str, str]:
@@ -26,11 +26,17 @@ def generate_schedule_fields(schedule: list[dict]) -> dict[str, str]:
                     descriptor = descriptor.title()
             else:
                 descriptor = ""
-        cb_fields_date[dt.date()].append(f"`[{dt_time}]` **{doc['artist']}** {descriptor} 『{doc['album_title']}』")
+        cb_fields_date[dt.date()].append(
+            f"`[{dt_time}]` **{doc['artist']}** {descriptor} 『{doc['album_title']}』"
+        )
 
     cb_fields_str: dict[str, str] = {}
     for key in cb_fields_date.keys():
-        is_today = " `<today>`" if key == datetime.now(ZoneInfo(settings.TIME_ZONE)).date() else ""
+        is_today = (
+            " `<today>`"
+            if key == datetime.now(ZoneInfo(settings.TIME_ZONE)).date()
+            else ""
+        )
         str_key = f'{key.strftime("%b %d (%a)")}{is_today}'
         cb_fields_str[str_key] = "\n".join(cb_fields_date[key])
 

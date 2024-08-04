@@ -1,4 +1,4 @@
-import { AnchorHTMLAttributes, DetailedHTMLProps } from "react";
+import type { AnchorHTMLAttributes, DetailedHTMLProps } from "react";
 
 import { cn } from "@/utils";
 
@@ -8,11 +8,7 @@ interface ButtonLinkProps
     HTMLAnchorElement
   > {}
 
-export default function ButtonLink({
-  className,
-  children,
-  ...props
-}: ButtonLinkProps) {
+export default function ButtonLink({ className, children, ...props }: ButtonLinkProps) {
   return (
     <a
       target="_blank"

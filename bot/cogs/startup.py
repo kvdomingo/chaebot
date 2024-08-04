@@ -19,7 +19,9 @@ class Startup(commands.Cog):
         else:
             activity_name = "under development"
             status = discord.Status.do_not_disturb
-        await self.client.change_presence(status=status, activity=discord.Game(name=activity_name))
+        await self.client.change_presence(
+            status=status, activity=discord.Game(name=activity_name)
+        )
 
 
 async def setup(client: Bot):

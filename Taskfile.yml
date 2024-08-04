@@ -1,9 +1,9 @@
 version: '3'
 
 env:
-  NAME: kvisualbot-dev
+  NAME: chaebot
   VERSION:
-    sh: git show --format="%aI %h" --no-patch
+    sh: git rev-parse --short HEAD
 
 dotenv:
   - .env
@@ -21,18 +21,8 @@ tasks:
       - poetry run python -m scripts.make_dotenvrc
       - task exec -- api python manage.py createsuperuser
 
-  sqlproxy:
-    desc: Run the GCP Cloud SQL proxy
-    cmds:
-      - cloud_sql_proxy -instances="my-projects-306716:asia-east1:schedule-bot"=tcp:0.0.0.0:3306
-
-  reload-proxy:
-    desc: Reload proxy config
-    cmds:
-      - docker compose -p {{.NAME}} exec -- proxy nginx -s reload
-
   psql:
-    desc: Access postgres cli
+    desc: Access Postgres CLI
     cmds:
       - docker compose -p {{.NAME}} exec -- postgres psql -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE
 

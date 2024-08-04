@@ -21,7 +21,9 @@ class Member(models.Model):
 
 class MemberAlias(models.Model):
     alias = models.CharField(max_length=32)
-    member = models.ForeignKey("Member", related_name="aliases", on_delete=models.CASCADE)
+    member = models.ForeignKey(
+        "Member", related_name="aliases", on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return f"{self.alias} ({self.member.stage_name} of {self.member.group.name})"

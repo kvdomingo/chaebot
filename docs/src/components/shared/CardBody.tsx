@@ -1,9 +1,7 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export default function CardBody({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-b-xl border border-solid border-slate-600">
-      {children}
-    </div>
+    <div className="rounded-b-xl border border-slate-600 border-solid">{children}</div>
   );
 }
