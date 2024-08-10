@@ -7,6 +7,9 @@ ENV POETRY_VERSION 1.7.1
 ENV VERSION $VERSION
 ARG PORT
 
+# hadolint ignore=DL3002
+USER root
+
 WORKDIR /tmp
 
 COPY poetry.lock pyproject.toml ./
@@ -31,3 +34,5 @@ COPY supervisord.conf ./
 RUN python manage.py collectstatic --noinput
 
 EXPOSE $PORT
+
+ENTRYPOINT [ "/usr/bin/supervisord", "-c", "/bot/supervisord.conf" ]
