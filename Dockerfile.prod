@@ -1,4 +1,4 @@
-FROM python:3.11-bullseye AS prod
+FROM python:3.11-bullseye AS base
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV PYTHONUNBUFFERED 1
@@ -6,9 +6,6 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV POETRY_VERSION 1.7.1
 ENV VERSION $VERSION
 ARG PORT
-
-# hadolint ignore=DL3002
-USER root
 
 WORKDIR /tmp
 
@@ -35,4 +32,10 @@ RUN python manage.py collectstatic --noinput
 
 EXPOSE $PORT
 
-ENTRYPOINT [ "/usr/bin/supervisord", "-c", "/bot/supervisord.conf" ]
+FROM base AS api
+
+ENTRYPOINT [ "/bin/sh", "-c", "gunicorn --config /bot/gunicorn.conf.py --pid /tmp/gunicorn" ]
+
+FROM base AS bot
+
+ENTRYPOINT [ "/bin/sh", "-c", "python main.py runbot" ]

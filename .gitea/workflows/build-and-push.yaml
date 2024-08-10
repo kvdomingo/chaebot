@@ -39,6 +39,16 @@ jobs:
           push: true
           tags: git.lab.kvd.studio/${{ gitea.repository }}:${{ gitea.sha }}
           context: main
+          target: bot
+          file: main/Dockerfile.prod
+
+      - name: Build and push Hannibot API
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: git.lab.kvd.studio/${{ gitea.repository }}-api:${{ gitea.sha }}
+          context: main
+          target: api
           file: main/Dockerfile.prod
 
       - name: Update ssh config
