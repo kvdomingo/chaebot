@@ -39,7 +39,7 @@ jobs:
           push: true
           tags: git.lab.kvd.studio/${{ gitea.repository }}:${{ gitea.sha }}
           context: main
-          file: Dockerfile.prod
+          file: main/Dockerfile.prod
 
       - name: Update ssh config
         run: |
