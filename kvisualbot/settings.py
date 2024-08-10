@@ -88,22 +88,17 @@ WSGI_APPLICATION = "kvisualbot.wsgi.application"
 
 
 def _get_database_config():
-    if IN_PRODUCTION:
-        config = dj_database_url.config()
-    else:
-        username = os.environ.get("POSTGRESQL_USERNAME")
-        db = os.environ.get("POSTGRESQL_DATABASE")
-        url = f"postgres://{username}@postgres:5432/{db}"
-        config = dj_database_url.parse(url)
+    username = os.environ.get("POSTGRESQL_USERNAME")
+    password = os.environ.get("POSTGRESQL_PASSWORD")
+    db = os.environ.get("POSTGRESQL_DATABASE")
+    host = os.environ.get("POSTGRESQL_HOST")
+    port = os.environ.get("POSTGRESQL_PORT", 5432)
+    url = f"postgres://{username}:{password}@{host}:{port}/{db}"
+    config = dj_database_url.parse(url)
     return config
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        **_get_database_config(),
-    },
-}
+DATABASES = {"default": _get_database_config()}
 
 
 REST_FRAMEWORK = {
