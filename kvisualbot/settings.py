@@ -98,7 +98,12 @@ def _get_database_config():
     return config
 
 
-DATABASES = {"default": _get_database_config()}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        **_get_database_config(),
+    },
+}
 
 
 REST_FRAMEWORK = {
