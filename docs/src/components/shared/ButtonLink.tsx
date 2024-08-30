@@ -6,9 +6,16 @@ interface ButtonLinkProps
   extends DetailedHTMLProps<
     AnchorHTMLAttributes<HTMLAnchorElement>,
     HTMLAnchorElement
-  > {}
+  > {
+  disabled?: boolean;
+}
 
-export default function ButtonLink({ className, children, ...props }: ButtonLinkProps) {
+export default function ButtonLink({
+  className,
+  children,
+  disabled = false,
+  ...props
+}: ButtonLinkProps) {
   return (
     <a
       target="_blank"
@@ -17,6 +24,9 @@ export default function ButtonLink({ className, children, ...props }: ButtonLink
         "rounded border border-solid px-4 py-1 active:brightness-125",
         "transition-all duration-100 ease-in-out hover:text-slate-800",
         className,
+        {
+          "pointer-events-none border-gray-500 text-gray-500": disabled,
+        },
       )}
       {...props}
     >

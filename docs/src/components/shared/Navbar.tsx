@@ -60,6 +60,7 @@ export default function Navigation() {
         <ButtonLink
           href="https://discord.gg/jQ5dpeN"
           className="border-emerald-500 text-emerald-500 hover:bg-emerald-500"
+          disabled
         >
           Join Discord server
         </ButtonLink>
