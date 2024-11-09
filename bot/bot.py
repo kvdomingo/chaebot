@@ -3,9 +3,9 @@ import logging
 
 from discord import Intents
 from discord.ext.commands import Bot
-from django.conf import settings
+from loguru import logger
 
-from kvisualbot.logging import logger
+from common.settings import settings
 
 from .utils.cog_handler import load_cogs
 

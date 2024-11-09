@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import Bot
-from django.conf import settings
+from loguru import logger
 
-from kvisualbot.logging import logger
+from common.settings import settings
 
 
 class Startup(commands.Cog):

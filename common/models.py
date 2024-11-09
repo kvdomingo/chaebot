@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import TIMESTAMP, VARCHAR
+from sqlalchemy import BIGINT, TIMESTAMP, VARCHAR
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -27,3 +27,11 @@ class Comeback(BaseModel):
     album_type: Mapped[str] = mapped_column()
     title_track: Mapped[str] = mapped_column()
     artist_type: Mapped[str] = mapped_column()
+
+
+class ScheduleSubscriber(BaseModel):
+    __tablename__ = "schedule_subscribers"
+
+    guild_id: Mapped[int] = mapped_column(BIGINT(), nullable=False)
+    channel_id: Mapped[int] = mapped_column(BIGINT(), nullable=False)
+    message_id: Mapped[int] = mapped_column(BIGINT(), unique=True, index=True)

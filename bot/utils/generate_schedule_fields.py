@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
 
-from django.conf import settings
+from common.settings import settings
 
 
 def extract_unique_dates(dt_strings: list[datetime]) -> list[date]:

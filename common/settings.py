@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     DISCORD_ADMIN_ID: int
     DISCORD_TEST_GUILD_ID: int
     DISCORD_TOKEN: str
+    DISCORD_MESSAGE_PURGE_LIMIT: int = 10
 
     POSTGRESQL_USERNAME: str
     POSTGRESQL_PASSWORD: str

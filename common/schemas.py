@@ -16,3 +16,12 @@ class Comeback(BaseModel):
     album_type: str | None = Field(None)
     title_track: str | None = Field(None)
     artist_type: str | None = Field(None)
+
+
+class ScheduleSubscriber(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: ULID | None = Field(default_factory=ULID)
+    guild_id: int
+    channel_id: int
+    message_id: int | None = Field(None)

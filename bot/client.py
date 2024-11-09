@@ -1,12 +1,7 @@
-from discord import (
-    Client,
-    Game,
-    Intents,
-    Object as DiscordObject,
-    Status,
-)
+from discord import Client, Game, Intents, Object, Status
 from discord.app_commands import CommandTree
-from django.conf import settings
+
+from common.settings import settings
 
 
 class KClient(Client):
@@ -24,11 +19,9 @@ class KClient(Client):
 
     async def setup_hook(self):
         if not settings.IN_PRODUCTION:
-            self.tree.copy_global_to(
-                guild=DiscordObject(id=settings.DISCORD_TEST_GUILD_ID)
-            )
+            self.tree.copy_global_to(guild=Object(id=settings.DISCORD_TEST_GUILD_ID))
         await self.tree.sync(
-            guild=DiscordObject(id=settings.DISCORD_TEST_GUILD_ID)
+            guild=Object(id=settings.DISCORD_TEST_GUILD_ID)
             if not settings.IN_PRODUCTION
             else None
         )

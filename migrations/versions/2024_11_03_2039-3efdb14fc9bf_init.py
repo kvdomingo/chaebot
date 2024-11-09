@@ -40,6 +40,19 @@ def upgrade() -> None:
         CREATE INDEX comebacks_id_ix ON comebacks (id);
         CREATE INDEX comebacks_date_ix ON comebacks (date);
         CREATE INDEX comebacks_artist_ix ON comebacks (artist);
+        
+        CREATE TABLE schedule_subscribers (
+            id VARCHAR(26) NOT NULL,
+            guild_id BIGINT NOT NULL,
+            channel_id BIGINT NOT NULL,
+            message_id BIGINT,
+            
+            CONSTRAINT schedule_subscribers_pk PRIMARY KEY (id),
+            CONSTRAINT schedule_subscribers_id_uq UNIQUE (id)    
+        );
+        
+        CREATE INDEX schedule_subscribers_id_ix ON comebacks (id); 
+        CREATE INDEX schedule_subscribers_message_id_ix ON comebacks (message_id); 
         """)
     )
 
@@ -48,10 +61,13 @@ def downgrade() -> None:
     conn = op.get_bind()
     conn.execute(
         sa.text("""
+        DROP INDEX schedule_subscribers_message_id_ix;
+        DROP INDEX schedule_subscribers_id_ix;
         DROP INDEX comebacks_artist_ix;
         DROP INDEX comebacks_date_ix;
         DROP INDEX comebacks_id_ix;
 
+        DROP TABLE schedule_subscribers;  
         DROP TABLE comebacks;
         """)
     )

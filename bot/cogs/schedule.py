@@ -1,18 +1,19 @@
 import asyncio
 import random
 from datetime import datetime, time, timedelta
-from http import HTTPStatus
 from zoneinfo import ZoneInfo
 
 from discord import Client, TextChannel
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context
-from django.conf import settings
 from loguru import logger
+from sqlalchemy import select
 
-from bot.api.internal import Api
-from bot.firestore import get_firestore_client
 from bot.utils import SeverityLevel, generate_embed, generate_schedule_fields
+from common.db import get_db_context
+from common.models import ScheduleSubscriber
+from common.schemas import ScheduleSubscriber as ScheduleSubscriberSchema
+from common.settings import settings
 
 
 class Schedule(commands.Cog):
@@ -32,56 +33,62 @@ class Schedule(commands.Cog):
 
     @schedule.command(aliases=["sub"], help="Subscribe to upcoming comebacks calendar")
     async def subscribe(self, ctx: Context, channel: TextChannel):
-        subscriber, status = await Api.schedule_subscribers(
-            method="post",
-            body={
-                "guild_id": ctx.guild.id,
-                "channel_id": channel.id,
-                "message_id": None,
-            },
-        )
-        if status != HTTPStatus.CREATED:
-            embed = generate_embed(
-                title="Adding schedule subscription failed",
-                content="due to the following error(s):",
-                severity=SeverityLevel.ERROR,
-                footer="Please check the errors above or try again later.",
-                fields=subscriber,
-            )
-            await ctx.send(embed=embed)
-            return
+        async with get_db_context() as db:
+            try:
+                subscriber = ScheduleSubscriberSchema(
+                    guild_id=ctx.guild.id, channel_id=channel.id
+                )
+                db.add(subscriber)
+                await db.commit()
+            except Exception as e:
+                logger.error(e)
+                embed = generate_embed(
+                    title="Adding schedule subscription failed",
+                    content="due to errors.",
+                    severity=SeverityLevel.ERROR,
+                    footer="Please try again later.",
+                )
+                await ctx.send(embed=embed)
+                return
 
-        schedule = await self.get_schedule()
-        schedule_strings = generate_schedule_fields(schedule)
-        embed = generate_embed(
-            title="Upcoming comebacks",
-            severity=SeverityLevel.INFO,
-            fields=schedule_strings,
-            footer="KST (UTC+9) | Shows the next 30 days of events",
-        )
-        channel = ctx.guild.get_channel(channel.id)
-        msg = await channel.send(embed=embed)
-        res, status = await Api.schedule_subscribers(
-            subscriber["id"], "patch", {"message_id": msg.id}
-        )
-        if status != 200:
+            schedule = await self.get_schedule()
+            schedule_strings = generate_schedule_fields(schedule)
             embed = generate_embed(
-                title="Adding schedule subscription failed",
-                content="due to the following error(s):",
-                severity=SeverityLevel.ERROR,
-                footer="Please check the errors above or try again later.",
-                fields=res,
+                title="Upcoming comebacks",
+                severity=SeverityLevel.INFO,
+                fields=schedule_strings,
+                footer="KST (UTC+9) | Shows the next 30 days of events",
             )
-            await msg.delete()
-            await ctx.send(embed=embed)
-            return
+            channel = ctx.guild.get_channel(channel.id)
+            msg = await channel.send(embed=embed)
 
-        embed = generate_embed(
-            title="Adding schedule subscription success",
-            content=f"The channel {channel.mention} has been subscribed to upcoming comebacks schedule.",
-            severity=SeverityLevel.SUCCESS,
-        )
-        return await ctx.send(embed=embed)
+            res = await db.scalar(
+                select(ScheduleSubscriber).where(ScheduleSubscriber.id == subscriber.id)
+            )
+
+            try:
+                res.message_id = msg.id
+                res.save()
+                await db.commit()
+            except Exception as e:
+                logger.error(e)
+                embed = generate_embed(
+                    title="Adding schedule subscription failed",
+                    content="due to the following error(s):",
+                    severity=SeverityLevel.ERROR,
+                    footer="Please check the errors above or try again later.",
+                    fields=res,
+                )
+                await msg.delete()
+                await ctx.send(embed=embed)
+                return
+
+            embed = generate_embed(
+                title="Adding schedule subscription success",
+                content=f"The channel {channel.mention} has been subscribed to upcoming comebacks schedule.",
+                severity=SeverityLevel.SUCCESS,
+            )
+            return await ctx.send(embed=embed)
 
     @schedule.command(
         aliases=["unsub"], help="Unsubscribe to upcoming comebacks calendar"
