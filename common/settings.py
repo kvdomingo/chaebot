@@ -3,7 +3,7 @@ from zoneinfo import ZoneInfo
 from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from autocomeback import __version__
+from common import __version__
 
 
 class Settings(BaseSettings):
@@ -12,9 +12,13 @@ class Settings(BaseSettings):
     REDDIT_CLIENT_ID: str
     REDDIT_CLIENT_SECRET: str
     REDDIT_API_USER_AGENT: str = (
-        f"cloudfunctions:autocomeback:v{__version__} (by /u/arockentothemoon)"
+        f"kvdstudio:chaebot:v{__version__} (by /u/arockentothemoon)"
     )
     DEFAULT_TZ: ZoneInfo = ZoneInfo("Asia/Seoul")
+
+    DISCORD_ADMIN_ID: int
+    DISCORD_TEST_GUILD_ID: int
+    DISCORD_TOKEN: str
 
     POSTGRESQL_USERNAME: str
     POSTGRESQL_PASSWORD: str

@@ -1,6 +1,6 @@
 from asyncpraw import Reddit
 
-from autocomeback.config import settings
+from common.settings import settings
 
 
 async def get_reddit_client():

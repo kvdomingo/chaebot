@@ -7,16 +7,10 @@ license = "LICENSE"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-Django = "^5.1.3"
 aiohttp = "^3.10.10"
 "discord.py" = "^2.4.0"
-django-filter = "^24.3"
-djangorestframework = "^3.15.2"
-gunicorn = { extras = ["gevent"], version = "^23.0.0" }
 requests = "^2.32.3"
 tqdm = "^4.67.0"
-whitenoise = { extras = ["brotli"], version = "^6.8.2" }
-dj-database-url = "^2.3.0"
 python-dotenv = "^1.0.1"
 loguru = "^0.7.2"
 watchdog = "^6.0.0"

@@ -11,19 +11,17 @@ from sqlalchemy import (
 )
 
 from autocomeback.adapters.base import BaseAdapter
-from autocomeback.config import settings
-from autocomeback.db import get_db_context
-from autocomeback.models import Comeback
 from autocomeback.reddit import get_reddit_client
-from autocomeback.schemas import Comeback as ComebackSchema
+from common.db import get_db_context
+from common.models import Comeback
+from common.schemas import Comeback as ComebackSchema
+from common.settings import settings
 
 LISTING_TITLE_PATTERN = re.compile(r"^\w+\s+2\d{3}$")
 
 NUMBER_FROM_ORDINAL_PATTERN = re.compile(r"\d{1,2}")
 
 TODAY = datetime.now().date()
-
-DEFAULT_TZ = settings.DEFAULT_TZ
 
 
 class RedditAdapter(BaseAdapter):
@@ -118,13 +116,13 @@ class RedditAdapter(BaseAdapter):
                 dt_time.hour,
                 dt_time.minute,
                 0,
-                tzinfo=DEFAULT_TZ,
+                tzinfo=settings.DEFAULT_TZ,
             )
             for key in ["day", "time", "streaming", "year", "month"]:
                 if key in cb.keys():
                     cb.pop(key)
 
-            if cb["date"] < datetime.now(DEFAULT_TZ):
+            if cb["date"] < datetime.now(settings.DEFAULT_TZ):
                 continue
 
             for key in cb.keys():

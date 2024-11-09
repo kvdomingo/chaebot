@@ -4,7 +4,7 @@ from loguru import logger
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from autocomeback.config import settings
+from common.settings import settings
 
 engine = create_async_engine(
     settings.DATABASE_URL,

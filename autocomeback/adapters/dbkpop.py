@@ -9,10 +9,10 @@ from loguru import logger
 from sqlalchemy import delete, select
 
 from autocomeback.adapters.base import BaseAdapter
-from autocomeback.config import settings
-from autocomeback.db import get_db_context
-from autocomeback.models import Comeback
-from autocomeback.schemas import Comeback as ComebackSchema
+from common.db import get_db_context
+from common.models import Comeback
+from common.schemas import Comeback as ComebackSchema
+from common.settings import settings
 
 LISTINGS_URL = "https://dbkpop.com/tag/comebacks/"
 

@@ -6,10 +6,7 @@
 
 ## Features
 
-- `!query` to get a random post from a specific idol
 - Upcoming comebacks schedule
-- (deprecated) Notifications when a group/idol starts streaming on VLIVE
-- ++ more in progress...
 
 ## Usage
 
