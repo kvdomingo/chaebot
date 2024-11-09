@@ -1,0 +1,4 @@
+[tools]
+poetry = "latest"
+bun = "latest"
+python = "3.12"
