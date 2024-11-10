@@ -1,18 +1,13 @@
 services:
   bot:
-    build:
-      context: .
-      target: dev
-      dockerfile: Dockerfile.dev
-    image: kvdomingo/chaebot
+    build: .
+    image: ghcr.io/kvdomingo/hannibot
     restart: unless-stopped
     init: true
     env_file: .env
     volumes:
       - .:/bot
       - venv-data:/bot/.venv
-    depends_on:
-      - api
 
   docs:
     image: oven/bun:1.1-alpine
@@ -23,7 +18,8 @@ services:
     working_dir: /app
     entrypoint:
       - /bin/sh
-      - "-c"
+      - -eu
+      - -c
       - "bun install && exec bun run dev"
     volumes:
       - ./docs:/app
@@ -31,14 +27,28 @@ services:
       - 3000:3000
 
   db:
-    image: bitnami/postgresql:16.4.0-debian-12-r21
+    image: bitnami/postgresql:13.6.0-debian-10-r19
     restart: unless-stopped
     env_file: .env
+    environment:
+      ALLOW_EMPTY_PASSWORD: yes
     volumes:
       - db-data:/bitnami/postgresql
     ports:
       - 5432:5432
 
+  pgadmin:
+    image: dpage/pgadmin4:8.12
+    env_file: .env
+    environment:
+      PGADMIN_LISTEN_ADDRESS: 0.0.0.0
+      PGADMIN_LISTEN_PORT: 5000
+    volumes:
+      - pgadmin-data:/pgadmin4
+    ports:
+      - 5000:5000
+
 volumes:
   db-data:
-  venv_data:
+  venv-data:
+  pgadmin-data:

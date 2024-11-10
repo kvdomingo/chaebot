@@ -1,18 +1,21 @@
 import asyncio
+import json
 import random
-from datetime import datetime, time, timedelta
-from zoneinfo import ZoneInfo
+from datetime import time, timedelta
 
 from discord import Client, TextChannel
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context
 from loguru import logger
-from sqlalchemy import select
+from sqlalchemy import DATE, Interval, cast, delete, func, select
 
 from bot.utils import SeverityLevel, generate_embed, generate_schedule_fields
 from common.db import get_db_context
-from common.models import ScheduleSubscriber
-from common.schemas import ScheduleSubscriber as ScheduleSubscriberSchema
+from common.models import Comeback, ScheduleSubscriber
+from common.schemas import (
+    Comeback as ComebackSchema,
+    ScheduleSubscriber as ScheduleSubscriberSchema,
+)
 from common.settings import settings
 
 
@@ -38,15 +41,14 @@ class Schedule(commands.Cog):
                 subscriber = ScheduleSubscriberSchema(
                     guild_id=ctx.guild.id, channel_id=channel.id
                 )
-                db.add(subscriber)
+                db.add(ScheduleSubscriber(**subscriber.model_dump(mode="json")))
                 await db.commit()
             except Exception as e:
                 logger.error(e)
                 embed = generate_embed(
                     title="Adding schedule subscription failed",
-                    content="due to errors.",
+                    content="Please try again later.",
                     severity=SeverityLevel.ERROR,
-                    footer="Please try again later.",
                 )
                 await ctx.send(embed=embed)
                 return
@@ -63,21 +65,20 @@ class Schedule(commands.Cog):
             msg = await channel.send(embed=embed)
 
             res = await db.scalar(
-                select(ScheduleSubscriber).where(ScheduleSubscriber.id == subscriber.id)
+                select(ScheduleSubscriber).where(
+                    ScheduleSubscriber.id == str(subscriber.id)
+                )
             )
 
             try:
                 res.message_id = msg.id
-                res.save()
                 await db.commit()
             except Exception as e:
                 logger.error(e)
                 embed = generate_embed(
                     title="Adding schedule subscription failed",
-                    content="due to the following error(s):",
+                    content="Please check the errors above or try again later.",
                     severity=SeverityLevel.ERROR,
-                    footer="Please check the errors above or try again later.",
-                    fields=res,
                 )
                 await msg.delete()
                 await ctx.send(embed=embed)
@@ -94,17 +95,55 @@ class Schedule(commands.Cog):
         aliases=["unsub"], help="Unsubscribe to upcoming comebacks calendar"
     )
     async def unsubscribe(self, ctx: Context, channel: TextChannel):
-        res = await Api.schedule_subscriber_from_guild(ctx.guild.id)
-        channel = self.client.get_channel(channel.id)
-        msg = channel.get_partial_message(res["message_id"])
-        await msg.delete()
-        await Api.schedule_subscribers(res["id"], "delete")
-        embed = generate_embed(
-            title="Unsubscribing to comeback schedule success",
-            content=f"The channel {channel.mention} has been unsubscribed from upcoming comebacks schedule.",
-            severity=SeverityLevel.SUCCESS,
-        )
-        await ctx.send(embed=embed)
+        async with get_db_context() as db:
+            res = await db.scalar(
+                select(ScheduleSubscriber).where(
+                    ScheduleSubscriber.guild_id == ctx.guild.id
+                )
+            )
+            channel = self.client.get_channel(channel.id)
+
+            if res.message_id is not None:
+                msg = channel.get_partial_message(res.message_id)
+
+            try:
+                await db.execute(
+                    delete(ScheduleSubscriber).where(
+                        ScheduleSubscriber.id == str(res.id)
+                    )
+                )
+                await db.commit()
+            except Exception as e:
+                logger.error(e)
+                return
+
+            if res.message_id is not None:
+                await msg.delete()
+
+            embed = generate_embed(
+                title="Unsubscribing to comeback schedule success",
+                content=f"The channel {channel.mention} has been unsubscribed from upcoming comebacks schedule.",
+                severity=SeverityLevel.SUCCESS,
+            )
+            await ctx.send(embed=embed)
+
+    @schedule.command(
+        aliases=["list"], help="List all schedule subscribers", hidden=True
+    )
+    async def list_subscribers(self, ctx: Context):
+        if ctx.author.id != settings.DISCORD_ADMIN_ID:
+            return
+
+        async with get_db_context() as db:
+            res = (await db.scalars(select(ScheduleSubscriber))).all()
+            subscribers = [ScheduleSubscriberSchema.model_validate(r) for r in res]
+            return await ctx.send(
+                "## Schedule subscribers\n\n"
+                + f"**Count**: {len(subscribers)}\n"
+                + "```json\n"
+                + json.dumps([s.model_dump(mode="json") for s in subscribers], indent=2)
+                + "\n```"
+            )
 
     @schedule.command(help="Manually invoke schedule update", hidden=True)
     async def update(self, ctx: Context):
@@ -114,41 +153,42 @@ class Schedule(commands.Cog):
         await msg.delete()
 
     @staticmethod
-    async def get_schedule():
+    async def get_schedule() -> list[ComebackSchema]:
         logger.info("Fetching comeback schedule...")
-        db = get_firestore_client()
-        coll_ref = (
-            db.collection("cb-reddit")
-            .order_by("date")
-            .where(
-                "date",
-                "<",
-                datetime.now(ZoneInfo(settings.TIME_ZONE)) + timedelta(days=30),
+
+        async with get_db_context() as db:
+            res = await db.scalars(
+                select(Comeback)
+                .where(
+                    cast(Comeback.date, DATE)
+                    <= (func.now() + cast(timedelta(days=30), Interval))
+                )
+                .order_by(Comeback.date)
             )
-        )
-        return [doc.to_dict() async for doc in coll_ref.stream()]
+            return [ComebackSchema.model_validate(r) for r in res.all()]
 
     @tasks.loop(
-        time=[
-            time(h, 0, 0, tzinfo=ZoneInfo(settings.TIME_ZONE)) for h in [0, 6, 12, 18]
-        ]
+        time=[time(h, 0, 0, tzinfo=settings.DEFAULT_TZ) for h in [0, 6, 12, 18]]
     )
     async def update_schedule(self):
         schedule = await self.get_schedule()
         schedule_fields = generate_schedule_fields(schedule)
         logger.info("Updating comeback schedule...")
-        subscribers = await Api.schedule_subscribers()
-        for sub in subscribers:
-            guild = self.client.get_guild(sub["guild_id"])
-            channel = guild.get_channel(sub["channel_id"])
-            msg = channel.get_partial_message(sub["message_id"])
-            embed = generate_embed(
-                title="Upcoming comebacks",
-                severity=SeverityLevel.INFO,
-                fields=schedule_fields,
-                footer="KST (UTC+9) | Shows the next 30 days of events",
-            )
-            await msg.edit(embed=embed)
+
+        async with get_db_context() as db:
+            subscribers = (await db.scalars(select(ScheduleSubscriber))).all()
+
+            for sub in subscribers:
+                guild = self.client.get_guild(sub.guild_id)
+                channel = guild.get_channel(sub.channel_id)
+                msg = channel.get_partial_message(sub.message_id)
+                embed = generate_embed(
+                    title="Upcoming comebacks",
+                    severity=SeverityLevel.INFO,
+                    fields=schedule_fields,
+                    footer="KST (UTC+9) | Shows the next 30 days of events",
+                )
+                await msg.edit(embed=embed)
 
     @update_schedule.before_loop
     async def before_update_schedule(self):

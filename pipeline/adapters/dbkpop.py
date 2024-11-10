@@ -8,11 +8,11 @@ from bs4 import BeautifulSoup
 from loguru import logger
 from sqlalchemy import delete, select
 
-from autocomeback.adapters.base import BaseAdapter
 from common.db import get_db_context
 from common.models import Comeback
 from common.schemas import Comeback as ComebackSchema
 from common.settings import settings
+from pipeline.adapters.base import BaseAdapter
 
 LISTINGS_URL = "https://dbkpop.com/tag/comebacks/"
 

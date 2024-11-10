@@ -10,12 +10,12 @@ from sqlalchemy import (
     select,
 )
 
-from autocomeback.adapters.base import BaseAdapter
-from autocomeback.reddit import get_reddit_client
 from common.db import get_db_context
 from common.models import Comeback
 from common.schemas import Comeback as ComebackSchema
 from common.settings import settings
+from pipeline.adapters.base import BaseAdapter
+from pipeline.reddit import get_reddit_client
 
 LISTING_TITLE_PATTERN = re.compile(r"^\w+\s+2\d{3}$")
 

@@ -1,41 +1,22 @@
-FROM python:3.11-bullseye AS base
+FROM python:3.12-slim
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV POETRY_VERSION 1.7.1
-ENV VERSION $VERSION
-ARG PORT
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV POETRY_VERSION=1.8.3
 
 WORKDIR /tmp
 
 COPY poetry.lock pyproject.toml ./
 
-SHELL [ "/bin/bash", "-o", "pipefail", "-c" ]
+SHELL [ "/bin/bash", "-euxo", "pipefail", "-c" ]
 
-RUN apt-get update && apt-get install --no-install-recommends -y supervisor && \
-    mkdir -p /var/log/supervisor && \
-    pip install --no-cache-dir "poetry==$POETRY_VERSION" && \
-    poetry export --without-hashes -f requirements.txt | pip install --no-cache-dir -r /dev/stdin && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir "poetry==$POETRY_VERSION" && \
+    poetry export --without-hashes --without dev --format requirements.txt | pip install --no-cache-dir -r /dev/stdin
 
 WORKDIR /bot
 
-COPY ./bot/ ./bot/
-COPY ./kvisualbot/ ./kvisualbot/
-COPY ./*.py ./
-COPY ./*.sh ./
-COPY supervisord.conf ./
+COPY . .
 
-RUN python manage.py collectstatic --noinput
-
-EXPOSE $PORT
-
-FROM base AS api
-
-ENTRYPOINT [ "/bin/sh", "-c", "gunicorn --config /bot/gunicorn.conf.py --pid /tmp/gunicorn" ]
-
-FROM base AS bot
-
-ENTRYPOINT [ "/bin/sh", "-c", "python main.py runbot" ]
+ENTRYPOINT [ "/bin/sh", "-eu", "-c" ]
+CMD [ "python", "-m", "bot" ]

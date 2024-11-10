@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Any
 
 from discord import Color, Embed
 
@@ -14,7 +15,7 @@ def generate_embed(
     title: str,
     severity: SeverityLevel,
     content: str | list[str] = "",
-    fields: dict = None,
+    fields: dict[str, Any] = None,
     footer: str = None,
     inline: bool = False,
 ) -> Embed:

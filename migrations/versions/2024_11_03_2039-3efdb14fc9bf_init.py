@@ -51,8 +51,8 @@ def upgrade() -> None:
             CONSTRAINT schedule_subscribers_id_uq UNIQUE (id)    
         );
         
-        CREATE INDEX schedule_subscribers_id_ix ON comebacks (id); 
-        CREATE INDEX schedule_subscribers_message_id_ix ON comebacks (message_id); 
+        CREATE INDEX schedule_subscribers_id_ix ON schedule_subscribers (id); 
+        CREATE INDEX schedule_subscribers_message_id_ix ON schedule_subscribers (message_id); 
         """)
     )
 

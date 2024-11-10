@@ -5,7 +5,7 @@ from pathlib import Path
 
 from loguru import logger
 
-from autocomeback.adapters import adapters
+from pipeline.adapters import adapters
 
 BASE_DIR = Path(__file__).parent.parent
 

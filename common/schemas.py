@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime, time
 
 from pydantic import BaseModel, ConfigDict, Field
 from ulid import ULID
@@ -16,6 +16,16 @@ class Comeback(BaseModel):
     album_type: str | None = Field(None)
     title_track: str | None = Field(None)
     artist_type: str | None = Field(None)
+
+
+class FormattedComeback(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: ULID
+    date: date
+    time: time
+    is_today: bool
+    description: str
 
 
 class ScheduleSubscriber(BaseModel):

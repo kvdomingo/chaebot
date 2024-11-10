@@ -1,7 +1,7 @@
 version: '3'
 
 env:
-  NAME: chaebot
+  NAME: hannibot
   VERSION:
     sh: git rev-parse --short HEAD
 
@@ -24,7 +24,7 @@ tasks:
   psql:
     desc: Access Postgres CLI
     cmds:
-      - docker compose -p {{.NAME}} exec -- postgres psql -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE
+      - docker compose -p {{.NAME}} exec -- db psql -U $POSTGRESQL_USERNAME -d $POSTGRESQL_DATABASE
 
   exec:
     desc: Execute command in specified container
