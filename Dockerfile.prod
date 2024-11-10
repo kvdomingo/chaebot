@@ -18,5 +18,5 @@ WORKDIR /bot
 
 COPY . .
 
-ENTRYPOINT [ "/bin/sh", "-eu", "-c" ]
-CMD [ "python", "-m", "bot" ]
+ENTRYPOINT [ "python" ]
+CMD [ "-m", "bot" ]
