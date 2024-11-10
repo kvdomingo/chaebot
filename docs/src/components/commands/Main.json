@@ -9,12 +9,6 @@
     "command": "purge",
     "required": [],
     "optional": ["limit"],
-    "description": "Delete the specified amount of messages in the channel. The command itself is excluded from the count. Defaults to 1 if limit is not specified."
-  },
-  {
-    "command": "query",
-    "required": [],
-    "optional": ["group", "member"],
-    "description": "Get a random picture of the specified member of the specified group. If group and/or member are unspecified, sends a random group/member. Group name must be typed as a single word (replace spaces with dashes or underscores). Member name can be typed out as multiple words. Group/member names are case-insensitive, have multiple aliases, and should match the target group/member, given sensible aliases (e.g. to query BTS, the following aliases will work: bts, bangtan; to query RM, the following aliases should also work: rm, namjoon)."
+    "description": "Delete the specified amount of messages in the channel. The command itself is excluded from the count. Defaults to 1 if limit is not specified. Limit is capped at 10 messages per request."
   }
 ]

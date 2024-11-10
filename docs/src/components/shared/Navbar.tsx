@@ -1,76 +1,55 @@
-import { useEffect, useState } from "react";
-
-import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "@/cloudinary";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { api } from "@/lib/api.ts";
 import { fill } from "@cloudinary/url-gen/actions/resize";
 import { max } from "@cloudinary/url-gen/actions/roundCorners";
-import { Github } from "lucide-react";
-
-import { cld } from "@/cloudinary";
-import ButtonLink from "@/components/shared/ButtonLink";
-
+import { SiGithub } from "@icons-pack/react-simple-icons";
+import { useQuery } from "@tanstack/react-query";
 import { commands as menuItems } from "../commands/Content";
 
 const navLogo = cld.image("kvisualbot/avatar");
 navLogo.resize(fill().height(60).width(60).gravity("face")).roundCorners(max());
 
 export default function Navigation() {
-  const [version, setVersion] = useState("");
+  const query = useQuery({
+    queryKey: ["tags"],
+    queryFn: api.tags,
+  });
 
-  useEffect(() => {
-    (async () => {
-      const result = await fetch(
-        "https://api.github.com/repos/kvdomingo/chaebot/tags",
-        {
-          headers: {
-            Accept: "application/vnd.github.v3+json",
-          },
-        },
-      );
-
-      if (result.ok) {
-        const data = await result.json();
-        setVersion(data[0].name);
-      } else {
-        console.error(await result.text());
-      }
-    })();
-  }, []);
+  const version = query.data?.data[0].name ?? "";
 
   return (
-    <nav className="flex place-content-between place-items-center px-8">
+    <nav className="flex place-content-between place-items-center px-8 py-4">
       <div className="flex items-center gap-4">
         <a href="/" className="flex items-center gap-4">
-          <AdvancedImage cldImg={navLogo} className="rounded-[50%]" />
-          <h1 className="mr-6 text-2xl ">ChaeBot</h1>
+          <Avatar>
+            <AvatarImage src={navLogo.toURL()} alt="HanniBot" />
+            <AvatarFallback>HB</AvatarFallback>
+          </Avatar>
+          <h1 className="mr-6 text-2xl ">HanniBot</h1>
         </a>
         {menuItems.map(({ header }) => (
-          <div key={header}>
-            <a href={`#${header.toLowerCase()}`}>{header}</a>
-          </div>
+          <a key={header} href={`#${header.toLowerCase()}`}>
+            <Button variant="ghost">{header}</Button>
+          </a>
         ))}
       </div>
 
       <div className="flex items-center gap-4">
-        <ButtonLink
-          href="https://discord.com/api/oauth2/authorize?client_id=726835246892580865&permissions=256064&scope=bot"
-          className="border-sky-500 text-sky-500 hover:bg-sky-500"
-        >
-          Add to Discord
-        </ButtonLink>
-        <ButtonLink
-          href="https://discord.gg/jQ5dpeN"
-          className="border-emerald-500 text-emerald-500 hover:bg-emerald-500"
-          disabled
-        >
-          Join Discord server
-        </ButtonLink>
         <a
-          href="https://github.com/kvdomingo/chaebot"
+          href="https://discord.com/api/oauth2/authorize?client_id=726835246892580865&permissions=256064&scope=bot"
           rel="noopener noreferrer"
           target="_blank"
-          className="rounded-[50%] bg-white p-1 transition-all duration-100 ease-in-out hover:brightness-125"
         >
-          <Github size="1.5rem" className="text-slate-800" />
+          <Button variant="default">Add to Discord</Button>
+        </a>
+        <a
+          href="https://github.com/kvdomingo/hannibot"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <SiGithub size="1.5rem" className="text-primary" />
         </a>
         <pre className="text-neutral-500">{version}</pre>
       </div>

@@ -1,4 +1,5 @@
 kbd {
+  font-family: "Fira Code Variable", monospace;
   border: 2px solid gray;
   border-radius: 5px;
   padding: 4px;
@@ -6,5 +7,10 @@ kbd {
 }
 
 code {
+  font-family: "Fira Code Variable", monospace;
   color: rgb(192 132 252);
+}
+
+pre {
+  font-family: "Fira Code Variable", monospace;
 }

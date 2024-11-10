@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     REDDIT_CLIENT_ID: str
     REDDIT_CLIENT_SECRET: str
     REDDIT_API_USER_AGENT: str = (
-        f"kvdstudio:chaebot:v{__version__} (by /u/arockentothemoon)"
+        f"kvdstudio:hannibot:v{__version__} (by /u/arockentothemoon)"
     )
 
     DISCORD_ADMIN_ID: int

@@ -1,8 +1,8 @@
 # HanniBot
 
-![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/kvdomingo/chaebot?logo=discord&style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/kvdomingo/chaebot?style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/kvdomingo/chaebot?style=for-the-badge)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/kvdomingo/hannibot?logo=discord&style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/kvdomingo/hannibot?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/kvdomingo/hannibot?style=for-the-badge)
 
 ## Features
 
@@ -10,4 +10,4 @@
 
 ## Usage
 
-- [Documentation](https://chaebot.kvd.studio)
+- [Documentation](https://hannibot.kvd.studio)
