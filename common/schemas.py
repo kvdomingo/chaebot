@@ -1,4 +1,4 @@
-from datetime import date, datetime, time
+from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 from ulid import ULID
@@ -21,10 +21,7 @@ class Comeback(BaseModel):
 class FormattedComeback(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: ULID
-    date: date
-    time: time
-    is_today: bool
+    date: str
     description: str
 
 

@@ -1,19 +1,19 @@
 import asyncio
 import json
 import random
-from datetime import time, timedelta
+from datetime import time
 
 from discord import Client, TextChannel
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context
 from loguru import logger
-from sqlalchemy import DATE, Interval, cast, delete, func, select
+from sqlalchemy import delete, select, text
 
-from bot.utils import SeverityLevel, generate_embed, generate_schedule_fields
+from bot.utils import SeverityLevel, generate_embed
 from common.db import get_db_context
-from common.models import Comeback, ScheduleSubscriber
+from common.models import ScheduleSubscriber
 from common.schemas import (
-    Comeback as ComebackSchema,
+    FormattedComeback,
     ScheduleSubscriber as ScheduleSubscriberSchema,
 )
 from common.settings import settings
@@ -53,12 +53,11 @@ class Schedule(commands.Cog):
                 await ctx.send(embed=embed)
                 return
 
-            schedule = await self.get_schedule()
-            schedule_strings = generate_schedule_fields(schedule)
+            schedule = await self.get_schedule_fields()
             embed = generate_embed(
                 title="Upcoming comebacks",
                 severity=SeverityLevel.INFO,
-                fields=schedule_strings,
+                fields=schedule,
                 footer="KST (UTC+9) | Shows the next 30 days of events",
             )
             channel = ctx.guild.get_channel(channel.id)
@@ -147,32 +146,76 @@ class Schedule(commands.Cog):
 
     @schedule.command(help="Manually invoke schedule update", hidden=True)
     async def update(self, ctx: Context):
+        if ctx.author.id != settings.DISCORD_ADMIN_ID:
+            return
+
         logger.info("Manual schedule update invoked.")
         msg = await ctx.send("Updating schedule...")
         await self.update_schedule()
         await msg.delete()
 
     @staticmethod
-    async def get_schedule() -> list[ComebackSchema]:
+    async def get_schedule() -> list[FormattedComeback]:
         logger.info("Fetching comeback schedule...")
 
         async with get_db_context() as db:
-            res = await db.scalars(
-                select(Comeback)
-                .where(
-                    cast(Comeback.date, DATE)
-                    <= (func.now() + cast(timedelta(days=30), Interval))
+            res = (
+                (
+                    await db.execute(
+                        text(
+                            """
+                            SELECT
+                                TO_CHAR(DATE::DATE, 'Mon DD (Dy)') || CASE
+                                    WHEN DATE::DATE = NOW()::DATE THEN ' `<today>`'
+                                    ELSE ''
+                                END AS DATE,
+                                DATE::DATE = NOW()::DATE AS IS_TODAY,
+                                STRING_AGG(
+                                    CONCAT_WS(
+                                        ' ',
+                                        '[<t:' || EXTRACT(
+                                            EPOCH
+                                            FROM
+                                                DATE
+                                        ) || '\:t>]',
+                                        '**' || ARTIST || '**',
+                                        CASE
+                                            WHEN ALBUM_TYPE IS NOT NULL THEN INITCAP(ALBUM_TYPE)
+                                            ELSE CASE
+                                                WHEN RELEASE IS NOT NULL THEN CASE
+                                                    WHEN RELEASE ILIKE '%japan%' THEN 'Japan'
+                                                    ELSE INITCAP(RELEASE)
+                                                END
+                                                ELSE ''
+                                            END
+                                        END,
+                                        '『' || ALBUM_TITLE || '』'
+                                    ),
+                                    '\n'
+                                ) AS DESCRIPTION
+                            FROM COMEBACKS
+                            WHERE DATE::DATE <= NOW() + INTERVAL '30' DAY
+                            GROUP BY DATE::DATE
+                            ORDER BY DATE::DATE
+                        """
+                        )
+                    )
                 )
-                .order_by(Comeback.date)
+                .mappings()
+                .all()
             )
-            return [ComebackSchema.model_validate(r) for r in res.all()]
+            logger.debug(res)
+            return [FormattedComeback.model_validate(r) for r in res]
+
+    async def get_schedule_fields(self) -> dict[str, str]:
+        schedule = await self.get_schedule()
+        return {s.date: s.description for s in schedule}
 
     @tasks.loop(
         time=[time(h, 0, 0, tzinfo=settings.DEFAULT_TZ) for h in [0, 6, 12, 18]]
     )
     async def update_schedule(self):
-        schedule = await self.get_schedule()
-        schedule_fields = generate_schedule_fields(schedule)
+        schedule = await self.get_schedule_fields()
         logger.info("Updating comeback schedule...")
 
         async with get_db_context() as db:
@@ -185,8 +228,8 @@ class Schedule(commands.Cog):
                 embed = generate_embed(
                     title="Upcoming comebacks",
                     severity=SeverityLevel.INFO,
-                    fields=schedule_fields,
-                    footer="KST (UTC+9) | Shows the next 30 days of events",
+                    fields=schedule,
+                    footer="All times displayed in your local time | Shows the next 30 days of events",
                 )
                 await msg.edit(embed=embed)
 

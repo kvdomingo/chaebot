@@ -1,5 +1,4 @@
 from bot.utils.generate_embed import SeverityLevel, generate_embed
-from bot.utils.generate_schedule_fields import generate_schedule_fields
 
 
 def escape_quote(queries: list[str] | tuple[str]) -> list[str]:
@@ -9,9 +8,4 @@ def escape_quote(queries: list[str] | tuple[str]) -> list[str]:
     ]
 
 
-__all__ = [
-    "escape_quote",
-    "generate_embed",
-    "generate_schedule_fields",
-    "SeverityLevel",
-]
+__all__ = ["escape_quote", "generate_embed", "SeverityLevel"]
